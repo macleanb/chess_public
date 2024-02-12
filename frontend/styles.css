@@ -1,0 +1,13 @@
+#container {
+  border: 2px solid lightskyblue;
+  height: 408px;
+  width: 408px;
+  margin: auto;
+}
+
+.tile {
+  height: 100px;
+  width: 100px;
+  float: left;
+  border: 1px solid black;
+}
