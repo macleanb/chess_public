@@ -36,3 +36,33 @@
     transform: rotate(360deg);
   }
 }
+
+/* Colors */
+.board {
+  border: 2px solid lightskyblue;
+}
+
+.darksquare {
+  background-color: tan;
+}
+
+.lightsquare {
+  background-color: white;
+}
+
+.square {
+  border: 1px solid black;
+}
+
+/* Size */
+.board {
+  height: 808px;
+  width: 808px;
+}
+
+.square {
+  height: 100px;
+  width: 100px;
+}
+
+
