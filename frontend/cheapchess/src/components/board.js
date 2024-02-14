@@ -4,7 +4,6 @@
 //import { useContext } from 'react';
 
 /* Internal Imports */
-//import ImportContext from '../contexts/ImportProvider';
    
   ////////////////////////
   /// Helper Functions ///
@@ -21,7 +20,6 @@ const Board = (
   ////////////////////
 
   /* Context Declarations */
-  //const { imports } = useContext(ImportContext);
 
    
   ///////////////////
@@ -38,11 +36,29 @@ const Board = (
         parentState?.imports
         ?
           <parentState.imports.Container className={ `board` }>
-            <parentState.imports.Row>
-              <parentState.imports.Col>
-                1 of 1
-              </parentState.imports.Col>
-            </parentState.imports.Row>
+            {
+              parentState?.boardData
+              ?
+                parentState.boardData.map((row, rowIndex) => {
+                  return (
+                    <parentState.imports.Row className="row gx-0" key={ rowIndex }>
+                      {
+                        row.map((squareData, colIndex) => {
+                          return (
+                            <parentState.imports.Col className="column" key={ colIndex }>
+                              <parentState.imports.Square parentState={{
+                                ...parentState,
+                                squareData : squareData
+                              }}/>
+                            </parentState.imports.Col>
+                          )
+                        })
+                      }
+                    </parentState.imports.Row>
+                  )
+                })
+              : '1 of 1'
+            }
           </parentState.imports.Container>
         : 'Loading page...'
       }

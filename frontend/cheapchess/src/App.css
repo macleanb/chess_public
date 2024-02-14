@@ -56,13 +56,38 @@
 
 /* Size */
 .board {
-  height: 808px;
-  width: 808px;
+  height: 804px;
+  width: 804px;
+}
+
+.pieceicon {
+  height:0;
+  min-height:100%;
+  width: auto;
+  max-width: min-content;
+}
+
+.row {
+  width: 800px !important;
 }
 
 .square {
   height: 100px;
   width: 100px;
 }
+
+/* Position */
+.board {
+  margin: auto;
+  padding: 0px;
+}
+
+.column {
+  padding: 0px;
+}
+
+
+
+
 
 

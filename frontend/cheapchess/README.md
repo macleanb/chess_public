@@ -2,14 +2,6 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Create an app the easy way
-Navigate to frontend directory
-npx create-react-app cheapchess
-cd into cheapchess directory and run:
-  - npm install axios
-  - npm install react-router-dom
-  - npm install react-bootstrap
-
 ## Available Scripts
 
 In the project directory (/frontend/cheapchess), you can run:

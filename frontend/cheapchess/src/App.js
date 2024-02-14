@@ -1,4 +1,5 @@
 /* External Imports */
+import "bootstrap/dist/css/bootstrap.min.css";
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import React from 'react';
@@ -8,13 +9,19 @@ import { useContext, useState } from "react";
 
 /* Internal Imports */
 import './App.css';
-import constants from './constants';
 import Board from './components/board';
+import boardDataIsInitialized from "./utils/board_dataIsInitialized";
+import constants from './constants';
+import convertArrayToDict from './utils/convertArrayToDict';
 import Game from './pages/game';
+import getRankFileStr from "./utils/getRankFileStr";
+import initializeBoardData from "./utils/board_initializeBoardData";
+import api_GetIcons from './utils/api_GetIcons';
 import MessageDisplay from './components/messageDisplay';
 import MessageContext from './contexts/MessageProvider';
 import { MessageProvider } from './contexts/MessageProvider';
 import Square from './components/square';
+import validateStrArg from './utils/validateStrArg';
 
 function App() {
   ////////////////////
@@ -24,14 +31,20 @@ function App() {
   /* Enable dependency injection by creating a standard list
      of imports that can easily be overridden in each component. */
   const standardImports = {
-    Board          : Board,
-    Col            : Col,
-    constants      : constants,
-    Container      : Container,
-    Game           : Game,
-    MessageDisplay : MessageDisplay,
-    Row            : Row,
-    Square         : Square,
+    Board                         : Board,
+    boardDataIsInitialized        : boardDataIsInitialized,
+    Col                           : Col,
+    constants                     : constants,
+    Container                     : Container,
+    convertArrayToDict            : convertArrayToDict,
+    Game                          : Game,
+    getIcons                      : api_GetIcons,
+    getRankFileStr                : getRankFileStr,
+    initializeBoardData           : initializeBoardData,
+    MessageDisplay                : MessageDisplay,
+    Row                           : Row,
+    Square                        : Square,
+    validateStrArg                : validateStrArg,
   }
 
   /* Placeholders for custom import list for each component.

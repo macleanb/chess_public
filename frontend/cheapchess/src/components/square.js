@@ -2,11 +2,8 @@
    chess board . */
 
 /* External Imports */
-import { useState, useEffect, useContext, useRef } from 'react';
 
 /* Internal Imports */
-//import ImportContext from '../contexts/ImportProvider';
-import MessageContext from '../contexts/MessageProvider';
    
   ////////////////////////
   /// Helper Functions ///
@@ -34,8 +31,12 @@ const Square = (
   //////////////
 
   return (
-    <div className={ `${ parentState?.color ? parentState.color : ''} square` }>
-
+    <div className={ `${ parentState?.squareData?.color ? parentState.squareData.color : ''} square` }>
+      <img
+        src={ parentState?.squareData?.piece ? parentState.squareData.piece.icon : ''}
+        alt={ parentState?.squareData?.piece ? parentState.squareData.piece.description : ''}
+        className="pieceicon"
+      />
     </div>
   );
 }
