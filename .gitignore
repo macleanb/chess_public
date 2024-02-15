@@ -5,6 +5,7 @@ images/
 data/
 
 # secrets
+.env
 secrets.js
 secrets.py
 

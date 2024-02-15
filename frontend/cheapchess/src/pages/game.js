@@ -48,7 +48,22 @@ const Game = (
         }
       });
     }
-  }, [appState?.imports]);
+  }, []); // shouldn't need to watch appState?.imports
+
+  /* Initialize OpenAI API tools after page load */
+  // useEffect(() => {
+  //   if (appState?.imports) {
+      
+  //     const apiKey = appState.imports.openAIKey;
+  //     // test
+  //     console.log(`Here in   game.js 0: open AI key:  ${ appState.imports.openAIKey }`);
+
+  //     appState.imports.postOpenAIRequest('Hello!  Please say "good test."', apiKey).then((response) => {
+  //       // test
+  //       console.log(`Here in   game.js 1: open AI response:  ${ JSON.stringify(response) }`);
+  //     });
+  //   }
+  // }, [appState?.imports]);
 
   /* Once icons have been received from icon server, initialize
      boardData. */
@@ -58,6 +73,7 @@ const Game = (
       setBoardData(initializedBoardData);
     }
   }, [iconData]);
+
 
   ////////////
   /* Render */
@@ -77,7 +93,13 @@ const Game = (
           <div>
             Board icons sourced from:
             <div>
-              <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by apien - Flaticon</a> (Dark Rook)
+              <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by apien - Flaticon</a> (Dark Knight)
+              <a href="https://www.flaticon.com/free-icons/pawn" title="pawn icons">Pawn icons created by VectorPortal - Flaticon</a> (Dark Pawn, Light Pawn)
+              <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by deemakdaksina - Flaticon</a> (Dark Rook, Light Rook, Dark King)
+              <a href="https://www.flaticon.com/free-icons/chess-piece" title="chess piece icons">Chess piece icons created by Freepik - Flaticon</a> (Dark Bishop, Light King)
+              <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by Victoruler - Flaticon</a> (Dark Queen, Light Queen)
+              <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by SBTS2018 - Flaticon</a> (Light Knight)
+              <a href="https://www.flaticon.com/free-icons/chess-piece" title="chess piece icons">Chess piece icons created by rizal2109 - Flaticon</a> (Light Bishop)
             </div>
           </div>
         </div>

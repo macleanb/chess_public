@@ -2,12 +2,14 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+//import { Configuration, OpenAIApi } from 'openai';
 import React from 'react';
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Row from 'react-bootstrap/Row';
 import { useContext, useState } from "react";
 
 /* Internal Imports */
+import api_GetIcons from './utils/api_GetIcons';
 import './App.css';
 import Board from './components/board';
 import boardDataIsInitialized from "./utils/board_dataIsInitialized";
@@ -16,10 +18,10 @@ import convertArrayToDict from './utils/convertArrayToDict';
 import Game from './pages/game';
 import getRankFileStr from "./utils/getRankFileStr";
 import initializeBoardData from "./utils/board_initializeBoardData";
-import api_GetIcons from './utils/api_GetIcons';
 import MessageDisplay from './components/messageDisplay';
 import MessageContext from './contexts/MessageProvider';
 import { MessageProvider } from './contexts/MessageProvider';
+//import postOpenAIRequest from "./utils/api_PostOpenAIRequest";
 import Square from './components/square';
 import validateStrArg from './utils/validateStrArg';
 
@@ -42,6 +44,10 @@ function App() {
     getRankFileStr                : getRankFileStr,
     initializeBoardData           : initializeBoardData,
     MessageDisplay                : MessageDisplay,
+    //openAIKey                     : process.env.REACT_APP_OPEN_AI_KEY,
+    //OpenAIConfig                  : Configuration,
+    //OpenAIApi                     : OpenAIApi,
+    //postOpenAIRequest             : postOpenAIRequest,
     Row                           : Row,
     Square                        : Square,
     validateStrArg                : validateStrArg,

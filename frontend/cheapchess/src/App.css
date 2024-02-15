@@ -62,7 +62,7 @@
 
 .pieceicon {
   height:0;
-  min-height:100%;
+  min-height:90%;
   width: auto;
   max-width: min-content;
 }
@@ -84,6 +84,10 @@
 
 .column {
   padding: 0px;
+}
+
+.square {
+  padding-top: 10%;
 }
 
 
