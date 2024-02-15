@@ -21,11 +21,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 # Internal Imports
-from icons_app.views import IconViewSet
+#from icons_app.views import IconViewSet
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('icons/', include('icons_app.urls')),
+    path('help/', include('external_openai_app.urls')),
 ]
 
 if settings.DEBUG:

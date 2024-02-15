@@ -16,11 +16,13 @@ import boardDataIsInitialized from "./utils/board_dataIsInitialized";
 import constants from './constants';
 import convertArrayToDict from './utils/convertArrayToDict';
 import Game from './pages/game';
+import apiGetPossibleMoves from './utils/api_GetPossibleMoves';
 import getRankFileStr from "./utils/getRankFileStr";
 import initializeBoardData from "./utils/board_initializeBoardData";
 import MessageDisplay from './components/messageDisplay';
 import MessageContext from './contexts/MessageProvider';
 import { MessageProvider } from './contexts/MessageProvider';
+import Piece from './components/piece';
 //import postOpenAIRequest from "./utils/api_PostOpenAIRequest";
 import Square from './components/square';
 import validateStrArg from './utils/validateStrArg';
@@ -33,6 +35,7 @@ function App() {
   /* Enable dependency injection by creating a standard list
      of imports that can easily be overridden in each component. */
   const standardImports = {
+    apiGetPossibleMoves           : apiGetPossibleMoves,
     Board                         : Board,
     boardDataIsInitialized        : boardDataIsInitialized,
     Col                           : Col,
@@ -48,6 +51,7 @@ function App() {
     //OpenAIConfig                  : Configuration,
     //OpenAIApi                     : OpenAIApi,
     //postOpenAIRequest             : postOpenAIRequest,
+    Piece                         : Piece,
     Row                           : Row,
     Square                        : Square,
     validateStrArg                : validateStrArg,

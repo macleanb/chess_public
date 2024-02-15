@@ -14,6 +14,14 @@ cd into cheapchess directory and run:
 Create .env file inside app directory (same directory as src) and paste api key (make sure .gitignore ignores this file!)
 
 ### OpenAPI guide
+Create a .env file on the backend and add .env to .gitignore (your API key
+will be stored here with one line - export OPEN_AI_KEY="abcdefg...")
+To access this api key in your env variables, install python-dotenv:
+pip install python-dotenv
+In your view, access the key with:
+from dotenv import load_dotenv
+load_dotenv()
+api_key = os.environ.get("OPEN_AI_KEY")
 https://www.youtube.com/watch?v=_tYuhnlw7OU
 https://www.youtube.com/watch?v=JJ9fkYX7q4A
 
@@ -38,3 +46,5 @@ Make sure to attribute the icons to flaticon.com wherever you display them by pu
 <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by Victoruler - Flaticon</a> (Dark Queen, Light Queen)
 <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by SBTS2018 - Flaticon</a> (Light Knight)
 <a href="https://www.flaticon.com/free-icons/chess-piece" title="chess piece icons">Chess piece icons created by rizal2109 - Flaticon</a> (Light Bishop)
+
+

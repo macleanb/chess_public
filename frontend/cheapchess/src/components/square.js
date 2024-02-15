@@ -5,11 +5,6 @@
 
 /* Internal Imports */
    
-  ////////////////////////
-  /// Helper Functions ///
-  ////////////////////////
-   
-   
 const Square = (
   {
     parentState
@@ -19,8 +14,9 @@ const Square = (
   /// Declarations ///
   ////////////////////
 
-  /* Context Declarations */
-  //const { imports } = useContext(ImportContext);
+  ////////////////////////
+  /// Helper Functions ///
+  ////////////////////////
    
   ///////////////////
   /// Use Effects ///
@@ -32,15 +28,21 @@ const Square = (
 
   return (
     <div className={ `${ parentState?.squareData?.color ? parentState.squareData.color : ''} square` }>
-      <img
+      {/* <img
         src={ parentState?.squareData?.piece ? parentState.squareData.piece.icon : ''}
         alt={ parentState?.squareData?.piece ? parentState.squareData.piece.description : ''}
         className="pieceicon"
-      />
+      /> */}
+
+      {
+        parentState?.squareData?.piece && parentState?.imports?.Piece ?
+          <parentState.imports.Piece parentState={ parentState } />
+        : ''
+      }
+
+
     </div>
   );
 }
 
 export default Square;
-   
-   

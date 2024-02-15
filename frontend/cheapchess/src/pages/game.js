@@ -29,6 +29,27 @@ const Game = (
   /// Helper Functions ///
   ////////////////////////
 
+  //////////////////////
+  /// Event Handlers ///
+  //////////////////////
+
+  const handlePieceClicked = async (e, pieceData) => {
+    e.preventDefault()
+    e.stopPropagation();
+    const pieceDescription = pieceData?.description ? pieceData.description : 'some piece';
+
+    if (appState?.imports?.apiGetPossibleMoves) {
+      const response = await appState.imports.apiGetPossibleMoves(
+        'some board description',
+        pieceDescription
+      );
+
+      console.log(`A piece was clicked in game: ${ JSON.stringify(response) }`);
+    }
+
+
+  };
+
   /////////////////
   /* Use Effects */
   /////////////////
@@ -88,7 +109,8 @@ const Game = (
           <appState.imports.MessageDisplay />
           <appState.imports.Board parentState={{
             ...appState,
-            boardData : boardData,
+            boardData          : boardData,
+            handlePieceClicked : handlePieceClicked,
           }}/>
           <div>
             Board icons sourced from:

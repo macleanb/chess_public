@@ -1,13 +1,8 @@
 /* This component represents a chessboard */
 
 /* External Imports */
-//import { useContext } from 'react';
 
 /* Internal Imports */
-   
-  ////////////////////////
-  /// Helper Functions ///
-  ////////////////////////
    
    
 const Board = (
@@ -19,9 +14,10 @@ const Board = (
   /// Declarations ///
   ////////////////////
 
-  /* Context Declarations */
+  ////////////////////////
+  /// Helper Functions ///
+  ////////////////////////
 
-   
   ///////////////////
   /// Use Effects ///
   ///////////////////

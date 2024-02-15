@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'games_app',
     'icons_app',
+    'external_openai_app',
 ]
 
 MIDDLEWARE = [

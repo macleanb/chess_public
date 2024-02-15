@@ -60,7 +60,14 @@
   width: 804px;
 }
 
-.pieceicon {
+/* .pieceicon {
+  height:0;
+  min-height:90%;
+  width: auto;
+  max-width: min-content;
+} */
+
+.piece {
   height:0;
   min-height:90%;
   width: auto;
