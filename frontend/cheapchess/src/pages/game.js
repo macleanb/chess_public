@@ -1,9 +1,7 @@
 /* External Libraries */
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 /* Internal Libraries */
-//import ImportContext from '../contexts/ImportProvider';
 import MessageContext from '../contexts/MessageProvider';
 
 const Game = (
@@ -22,9 +20,6 @@ const Game = (
   const [ boardData, setBoardData ] = useState(null);
   const [ highlightedSquares, setHighlightedSquares ] = useState([]);
   const [ iconData, setIconData ] = useState();
-
-  /* Other Declarations */
-  const navigate = useNavigate();
 
   ////////////////////////
   /// Helper Functions ///
@@ -58,7 +53,8 @@ const Game = (
       tempHighlightedSquares = []; // reset before adding new squares
 
       /* For each square in the response (possible moves),
-         color the square on our board green */
+         color the square on our board green IF there isn't
+         already a piece on it */
       for (const responseSquare of response) {
         const rank = responseSquare[1];
         const file = responseSquare[0];
@@ -66,14 +62,18 @@ const Game = (
         const col = appState.imports.constants.MAPPING_FILE_TO_COLINDEX[file];
         const row = appState.imports.constants.MAPPING_RANK_TO_ROWINDEX[rank];
         const boardSquareData = tempBoardData[row][col];
-        const originalSquareColor = boardSquareData.color;
-        boardSquareData.color = 'greensquare';
 
-        tempHighlightedSquares.push({
-          col            : col,
-          row            : row,
-          originalColor  : originalSquareColor
-        });
+        /* Make sure there is no piece before highlighting */
+        if (boardSquareData.piece === null) {
+          const originalSquareColor = boardSquareData.color;
+          boardSquareData.color = 'greensquare';
+  
+          tempHighlightedSquares.push({
+            col            : col,
+            row            : row,
+            originalColor  : originalSquareColor
+          });
+        }
       }
 
       setBoardData(tempBoardData);

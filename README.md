@@ -2,6 +2,11 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_"The leading free chess tutor that leverages AI technology for guided, experiential learning."_\
                        - Unattributed Author
 
+Welcome to CheapChess, where beginners who don't want to pay the high cost of exquisite chess tutors can settle for the best
+that artificial intelligence can offer.  Of course, large-language models (LLMs) aren't perfect - they can be slow, and they
+can be wrong.  But, as beginners to the game of chess, we aren't aiming for perfect.  Mediocrity is just fine with us --
+as long as we have fun, and save some cash!
+
 ## Frontend - create an app the easy way
 Navigate to frontend directory
 npx create-react-app cheapchess
