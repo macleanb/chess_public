@@ -1,7 +1,7 @@
 /* Internal Imports */
-import constants from '../constants';
 import getClient from "./api_GetClient";
 import getURL_Help from './getURL_Help';
+import isSquare from './isSquare';
 
 ////////////////////////
 /// Helper Functions ///
@@ -21,23 +21,6 @@ const isCurrentPiecesSquare = (
   ) =>
 {
   const result = str === pieceCurrentPosFile + pieceCurrentPosRank;
-  return result;
-};
-
-/**
- * Returns true if the str argument is a square
- * @param {str} str
- * @returns {boolean}
- */
-const isSquare = (
-  str
-  ) =>
-{
-  const rank = str[1];
-  const file = str[0];
-  const allowedRanksArr = Object.keys(constants.MAPPING_RANK_TO_ROWINDEX);
-  const allowedFilesArr = Object.keys(constants.MAPPING_FILE_TO_COLINDEX);
-  const result = allowedRanksArr.includes(rank) && allowedFilesArr.includes(file);
   return result;
 };
 

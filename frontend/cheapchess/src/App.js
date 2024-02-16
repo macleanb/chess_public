@@ -10,20 +10,21 @@ import { useContext, useState } from "react";
 
 /* Internal Imports */
 import api_GetIcons from './utils/api_GetIcons';
+import apiGetPossibleMoves from './utils/api_GetPossibleMoves';
 import './App.css';
 import Board from './components/board';
 import boardDataIsInitialized from "./utils/board_dataIsInitialized";
 import constants from './constants';
 import convertArrayToDict from './utils/convertArrayToDict';
 import Game from './pages/game';
-import apiGetPossibleMoves from './utils/api_GetPossibleMoves';
+import getExclusiveRange from './utils/getExclusiveRange';
 import getRankFileStr from "./utils/getRankFileStr";
+import getSquaresBetween from './utils/board_getSquaresBetween';
 import initializeBoardData from "./utils/board_initializeBoardData";
 import MessageDisplay from './components/messageDisplay';
 import MessageContext from './contexts/MessageProvider';
 import { MessageProvider } from './contexts/MessageProvider';
 import Piece from './components/piece';
-//import postOpenAIRequest from "./utils/api_PostOpenAIRequest";
 import Square from './components/square';
 import validateStrArg from './utils/validateStrArg';
 
@@ -43,14 +44,12 @@ function App() {
     Container                     : Container,
     convertArrayToDict            : convertArrayToDict,
     Game                          : Game,
+    getExclusiveRange             : getExclusiveRange,
     getIcons                      : api_GetIcons,
     getRankFileStr                : getRankFileStr,
+    getSquaresBetween             : getSquaresBetween,
     initializeBoardData           : initializeBoardData,
     MessageDisplay                : MessageDisplay,
-    //openAIKey                     : process.env.REACT_APP_OPEN_AI_KEY,
-    //OpenAIConfig                  : Configuration,
-    //OpenAIApi                     : OpenAIApi,
-    //postOpenAIRequest             : postOpenAIRequest,
     Piece                         : Piece,
     Row                           : Row,
     Square                        : Square,

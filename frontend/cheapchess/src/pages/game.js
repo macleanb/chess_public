@@ -73,6 +73,11 @@ const Game = (
             row            : row,
             originalColor  : originalSquareColor
           });
+
+          // test
+          console.log(`Here in  game 0: squares between ${pieceData.currentFile + pieceData.currentRank} and ${file + rank} ${ JSON.stringify(  appState.imports.getSquaresBetween(pieceData.currentFile + pieceData.currentRank, file + rank)  ) }`);
+          
+          
         }
       }
 
