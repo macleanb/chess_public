@@ -1,7 +1,9 @@
 /* Internal Imports */
 import constants from '../constants';
 import emptySquareData from './square_emptySquareData';
+import getFileFromRankFileStr from './square_getFileFromRankFileStr';
 import getRankFileStr from './getRankFileStr';
+import getRankFromRankFileStr from './square_getRankFromRankFileStr';
 import pieceData from './piece_PieceData';
 
 /**
@@ -55,10 +57,15 @@ const initializeBoardData = (iconData) => {
             }
             
             const piece = pieceData(
-              pieceName,
               pieceColor,
+              getFileFromRankFileStr(squareRankFileStr), // current file
+              getRankFromRankFileStr(squareRankFileStr), // current rank
               singlePieceIconData[constants.FIELD_NAME_ICON_DESCRIPTION],
-              singlePieceIconData[constants.FIELD_NAME_ICON_IMAGE]
+              singlePieceIconData[constants.FIELD_NAME_ICON_IMAGE],
+              pieceName,
+              getFileFromRankFileStr(squareRankFileStr), // starting file
+              getRankFromRankFileStr(squareRankFileStr), // starting rank
+              pieceName.split(pieceColor)[1] // grabs just the piece type from pieceName
             );
 
             /* Add the pieceData to the squareData */

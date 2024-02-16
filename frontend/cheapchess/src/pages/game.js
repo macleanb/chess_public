@@ -20,6 +20,7 @@ const Game = (
 
   /* State Declarations */
   const [ boardData, setBoardData ] = useState(null);
+  const [ highlightedSquares, setHighlightedSquares ] = useState([]);
   const [ iconData, setIconData ] = useState();
 
   /* Other Declarations */
@@ -36,18 +37,48 @@ const Game = (
   const handlePieceClicked = async (e, pieceData) => {
     e.preventDefault()
     e.stopPropagation();
-    const pieceDescription = pieceData?.description ? pieceData.description : 'some piece';
 
     if (appState?.imports?.apiGetPossibleMoves) {
       const response = await appState.imports.apiGetPossibleMoves(
-        'some board description',
-        pieceDescription
+        pieceData.color,
+        pieceData.firstMoveMade,
+        pieceData.currentFile,
+        pieceData.currentRank,
+        pieceData.type
       );
 
-      console.log(`A piece was clicked in game: ${ JSON.stringify(response) }`);
+      /* First restore any highlighted squares to their original
+         color */
+      const tempBoardData = [...boardData]; // copy boardData
+      let tempHighlightedSquares = [...highlightedSquares]; // copy highlightedSquares
+      for (const highlightedSquare of highlightedSquares) {
+        const boardSquareData = tempBoardData[highlightedSquare.row][highlightedSquare.col];
+        boardSquareData.color = highlightedSquare.originalColor;
+      }
+      tempHighlightedSquares = []; // reset before adding new squares
+
+      /* For each square in the response (possible moves),
+         color the square on our board green */
+      for (const responseSquare of response) {
+        const rank = responseSquare[1];
+        const file = responseSquare[0];
+
+        const col = appState.imports.constants.MAPPING_FILE_TO_COLINDEX[file];
+        const row = appState.imports.constants.MAPPING_RANK_TO_ROWINDEX[rank];
+        const boardSquareData = tempBoardData[row][col];
+        const originalSquareColor = boardSquareData.color;
+        boardSquareData.color = 'greensquare';
+
+        tempHighlightedSquares.push({
+          col            : col,
+          row            : row,
+          originalColor  : originalSquareColor
+        });
+      }
+
+      setBoardData(tempBoardData);
+      setHighlightedSquares(tempHighlightedSquares);
     }
-
-
   };
 
   /////////////////
@@ -71,21 +102,6 @@ const Game = (
     }
   }, []); // shouldn't need to watch appState?.imports
 
-  /* Initialize OpenAI API tools after page load */
-  // useEffect(() => {
-  //   if (appState?.imports) {
-      
-  //     const apiKey = appState.imports.openAIKey;
-  //     // test
-  //     console.log(`Here in   game.js 0: open AI key:  ${ appState.imports.openAIKey }`);
-
-  //     appState.imports.postOpenAIRequest('Hello!  Please say "good test."', apiKey).then((response) => {
-  //       // test
-  //       console.log(`Here in   game.js 1: open AI response:  ${ JSON.stringify(response) }`);
-  //     });
-  //   }
-  // }, [appState?.imports]);
-
   /* Once icons have been received from icon server, initialize
      boardData. */
   useEffect(() => {
@@ -94,6 +110,19 @@ const Game = (
       setBoardData(initializedBoardData);
     }
   }, [iconData]);
+
+  // For troubleshooting: prints boardData whenever it changes
+  // useEffect(() => {
+  //   console.log(`here in game, board data updated!`);
+  //   if (Array.isArray(boardData)) {
+  //     for (const row of boardData) {
+  //       for (const squareData of row) {
+  //         console.log(`Square: ${JSON.stringify(squareData)}`);
+  //       }
+  //     }
+  //   }
+
+  // }, [boardData]);
 
 
   ////////////

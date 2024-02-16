@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from dotenv import load_dotenv
-#from openai import OpenAI
+from openai import OpenAI
 import openai
 import os
 import time
@@ -35,7 +35,7 @@ class PossibleMoves(APIView):
         message = client.beta.threads.messages.create(
             thread_id=thread.id,
             role="user",
-            content="are you able to help me understand how to make moves in the game of chess?",
+            content="Hello. Can you please say hello?"
         )
         # What squares can a pawn in position a2 move to? please provide the answer as a list of chess board squares that start with a single letter (a-h) to denote the file and end with a single integer (1-8) to denote the rank
 
@@ -76,7 +76,50 @@ class PossibleMoves(APIView):
         possible move information for a given chess piece.
         """
         data = request.data
-        test_post_response = ['hello', 'this is a post response', 'a', 'b', 'c', {
+        piece_color = request.data['pieceColor']
+        piece_first_move_made = bool(request.data['pieceFirstMoveMade'])
+        piece_current_pos_file = request.data['pieceCurrentPosFile']
+        piece_current_pos_rank = request.data['pieceCurrentPosRank']
+        piece_type = request.data['pieceType']
+
+        user_msg =  "I will now describe the current location of my chesspiece on a chessboard " \
+                    "and ask you which squares my piece is allowed to move to. " \
+                    "My piece's type, current location, and color will be enlosed by brackets " \
+                    "like '[' and ']'. " \
+                    f"My piece is a [{piece_type}] and is located at square " \
+                    f"[{piece_current_pos_file + piece_current_pos_rank}] on the chess board'. " \
+                    f"The color of the chess piece is [{piece_color}]. " \
+                    f"This {'is' if not piece_first_move_made else 'is not'} the {piece_type}'s " \
+                    f"first move. " \
+                    f"What squares on the chess board is my {piece_type} allowed to move to? " \
+                    "Your answer should contain all the squares my chess piece is allowed to " \
+                    "move to. " \
+                    " Your answer should contain no text other than references chess squares " \
+                    "(one or more), with the comma-separated list of chess squares enclosed " \
+                    "in brackets '[]'.  For example '[c7]' or '[h1,d4]'.  Do not nest brackets. " \
+                    "For example, please do not format the response like '[[h1,d4]]'.  Instead " \
+                    "format the response with only a single set of brackets like like '[h1,d4]'."  
+        
+                    # Each chess board " \
+                    # "square in the answer list should start with a single letter (a-h) to " \
+                    # "denote the file and end with a single integer (1-8) to denote the rank."
+
+        load_dotenv()
+
+        client = OpenAI()
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a chess tutor, skilled in suggesting chess moves to a novice chess player."},
+                {"role": "user", "content": user_msg}
+            ]
+        )
+
+        while completion is None or len(completion.choices) == 0:
+            print(f"still waiting...  completion: {completion}")
+            time.sleep(1)
+
+        test_post_response = [completion.choices[0].message, {
             'request_data' : data,
         }]
         return Response(test_post_response)

@@ -86,7 +86,7 @@ const constants = {
     7 : '1',
   },
 
-  MAPPING_RANK_TO_ROWIINDEX : {
+  MAPPING_RANK_TO_ROWINDEX : {
     '1' : 7,
     '2' : 6,
     '3' : 5,

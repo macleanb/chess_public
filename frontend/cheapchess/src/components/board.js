@@ -53,7 +53,7 @@ const Board = (
                     </parentState.imports.Row>
                   )
                 })
-              : '1 of 1'
+              : ''
             }
           </parentState.imports.Container>
         : 'Loading page...'
