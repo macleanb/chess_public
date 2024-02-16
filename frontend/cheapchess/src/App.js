@@ -20,11 +20,13 @@ import Game from './pages/game';
 import getExclusiveRange from './utils/getExclusiveRange';
 import getRankFileStr from "./utils/getRankFileStr";
 import getSquaresBetween from './utils/board_getSquaresBetween';
+import getSquareData from './utils/board_getSquareData';
 import initializeBoardData from "./utils/board_initializeBoardData";
 import MessageDisplay from './components/messageDisplay';
 import MessageContext from './contexts/MessageProvider';
 import { MessageProvider } from './contexts/MessageProvider';
 import Piece from './components/piece';
+import pieceExistsBetweenTwoSquares from './utils/board_pieceExistsBetweenTwoSquares';
 import Square from './components/square';
 import validateStrArg from './utils/validateStrArg';
 
@@ -48,9 +50,11 @@ function App() {
     getIcons                      : api_GetIcons,
     getRankFileStr                : getRankFileStr,
     getSquaresBetween             : getSquaresBetween,
+    getSquareData                 : getSquareData,
     initializeBoardData           : initializeBoardData,
     MessageDisplay                : MessageDisplay,
     Piece                         : Piece,
+    pieceExistsBetweenTwoSquares  : pieceExistsBetweenTwoSquares,
     Row                           : Row,
     Square                        : Square,
     validateStrArg                : validateStrArg,

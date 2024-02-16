@@ -1,7 +1,7 @@
 /* Internal Imports */
 import getClient from "./api_GetClient";
 import getURL_Help from './getURL_Help';
-import isSquare from './isSquare';
+import isSquare from './square_isSquare';
 
 ////////////////////////
 /// Helper Functions ///

@@ -58,13 +58,15 @@ const Game = (
       for (const responseSquare of response) {
         const rank = responseSquare[1];
         const file = responseSquare[0];
-
         const col = appState.imports.constants.MAPPING_FILE_TO_COLINDEX[file];
         const row = appState.imports.constants.MAPPING_RANK_TO_ROWINDEX[rank];
-        const boardSquareData = tempBoardData[row][col];
+        // const boardSquareData = tempBoardData[row][col];
+
+        const selectedPiecesSquare = pieceData.currentFile + pieceData.currentRank;
+        const boardSquareData = appState.imports.getSquareData(tempBoardData, responseSquare);
 
         /* Make sure there is no piece before highlighting */
-        if (boardSquareData.piece === null) {
+        if (boardSquareData.piece === null && !appState.imports.pieceExistsBetweenTwoSquares(tempBoardData, selectedPiecesSquare, responseSquare)) {
           const originalSquareColor = boardSquareData.color;
           boardSquareData.color = 'greensquare';
   
@@ -73,11 +75,6 @@ const Game = (
             row            : row,
             originalColor  : originalSquareColor
           });
-
-          // test
-          console.log(`Here in  game 0: squares between ${pieceData.currentFile + pieceData.currentRank} and ${file + rank} ${ JSON.stringify(  appState.imports.getSquaresBetween(pieceData.currentFile + pieceData.currentRank, file + rank)  ) }`);
-          
-          
         }
       }
 

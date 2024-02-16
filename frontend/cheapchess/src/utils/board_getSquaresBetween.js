@@ -1,6 +1,6 @@
 /* Internal Imports */
 import getExclusiveRange from './getExclusiveRange';
-import isSquare from './isSquare';
+import isSquare from './square_isSquare';
 
 /**
  * Returns an array of squares between origin
