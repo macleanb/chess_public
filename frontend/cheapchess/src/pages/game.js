@@ -17,9 +17,29 @@ const Game = (
   const { messages, setMessages } = useContext(MessageContext);
 
   /* State Declarations */
+  /* boardData is a 2D array containing a single squareData object in
+     each element.  This array will be passed to a html component for 
+     display, with the top rows holding the opponent's pieces and the 
+     bottom rows holding the player's pieces.  If the player's color
+     is light, the lower rows will hold ranks 1 & 2, and the left
+     column will correspond to file 'a'.  But if the player's color is
+     dark, the lower rows will hold ranks 7-8 and the left colum will
+     correspond with to file 'h'.  For this reason, do not access
+     boardData directly unless absolutely necessary.  Instead use the
+     convenience util function square_getSquareData() along with
+     the various mappings of ranks and files to rows and cols in the
+     constants file. */
   const [ boardData, setBoardData ] = useState(null);
+
+  /* An array that keeps track of any squares that are highlighted
+     with a color different from their original color. */
   const [ highlightedSquares, setHighlightedSquares ] = useState([]);
+
+  /* TODO: Update to pieceData */
   const [ iconData, setIconData ] = useState();
+
+  /* TODO: Update with color selected by player */
+  const [ playerColor, setPlayerColor ] = useState('light');
 
   ////////////////////////
   /// Helper Functions ///
@@ -42,44 +62,51 @@ const Game = (
         pieceData.type
       );
 
-      /* First restore any highlighted squares to their original
-         color */
+      /* Restore any highlighted squares to their original color */
       const tempBoardData = [...boardData]; // copy boardData
-      let tempHighlightedSquares = [...highlightedSquares]; // copy highlightedSquares
       for (const highlightedSquare of highlightedSquares) {
-        const boardSquareData = tempBoardData[highlightedSquare.row][highlightedSquare.col];
-        boardSquareData.color = highlightedSquare.originalColor;
+        const squareData = appState.imports.getSquareData(
+          tempBoardData,
+          highlightedSquare.square,
+          playerColor
+        );
+        squareData.color = highlightedSquare.originalColor;
       }
-      tempHighlightedSquares = []; // reset before adding new squares
 
       /* For each square in the response (possible moves),
          color the square on our board green IF there isn't
          already a piece on it */
+      const newHighlightedSquares = [];
       for (const responseSquare of response) {
-        const rank = responseSquare[1];
-        const file = responseSquare[0];
-        const col = appState.imports.constants.MAPPING_FILE_TO_COLINDEX[file];
-        const row = appState.imports.constants.MAPPING_RANK_TO_ROWINDEX[rank];
-        // const boardSquareData = tempBoardData[row][col];
-
         const selectedPiecesSquare = pieceData.currentFile + pieceData.currentRank;
-        const boardSquareData = appState.imports.getSquareData(tempBoardData, responseSquare);
+        const boardSquareData = appState.imports.getSquareData(
+          tempBoardData,
+          responseSquare,
+          playerColor
+          );
 
         /* Make sure there is no piece before highlighting */
-        if (boardSquareData.piece === null && !appState.imports.pieceExistsBetweenTwoSquares(tempBoardData, selectedPiecesSquare, responseSquare)) {
+        if (
+          boardSquareData.piece === null &&
+          !appState.imports.pieceExistsBetweenTwoSquares(
+            tempBoardData,
+            selectedPiecesSquare,
+            responseSquare,
+            playerColor
+            )
+          ) {
           const originalSquareColor = boardSquareData.color;
           boardSquareData.color = 'greensquare';
   
-          tempHighlightedSquares.push({
-            col            : col,
-            row            : row,
+          newHighlightedSquares.push({
+            square         : responseSquare,
             originalColor  : originalSquareColor
           });
         }
       }
 
       setBoardData(tempBoardData);
-      setHighlightedSquares(tempHighlightedSquares);
+      setHighlightedSquares(newHighlightedSquares);
     }
   };
 
@@ -107,11 +134,19 @@ const Game = (
   /* Once icons have been received from icon server, initialize
      boardData. */
   useEffect(() => {
-    if (iconData && boardData === null) { // Don't overwrite boardData if it isn't null
-      const initializedBoardData = appState.imports.initializeBoardData(iconData);
+    if (
+      iconData &&
+      playerColor &&
+      boardData === null // Don't overwrite boardData if it isn't null
+      )
+    {
+      const initializedBoardData = appState.imports.initializeBoardData(
+        iconData,
+        playerColor
+        );
       setBoardData(initializedBoardData);
     }
-  }, [iconData]);
+  }, [iconData, playerColor]);
 
   // For troubleshooting: prints boardData whenever it changes
   // useEffect(() => {

@@ -11,11 +11,16 @@ import pieceData from './piece_PieceData';
  * @param {Object} iconData 
  * @returns {Array}
  */
-const initializeBoardData = (iconData) => {
-
+const initializeBoardData = (
+  iconData,
+  playerColor
+  ) =>
+{
   /* Throw an error if iconData isn't an object (dictionary) */
   if (typeof iconData !== 'object' || Array.isArray(iconData) || iconData.constructor !== Object) {
     throw new TypeError('Could not initialize board data because icon data was invalid.');
+  } else if (playerColor !== constants.COLOR_PIECE_LIGHT && playerColor !== constants.COLOR_PIECE_DARK) {
+    throw new TypeError(`playerColor provided to initializeBoardData was invalid (${playerColor})`);
   }
 
   const result = [];
@@ -29,14 +34,27 @@ const initializeBoardData = (iconData) => {
                     ? constants.COLOR_SQUARE_LIGHT
                     : constants.COLOR_SQUARE_DARK;
 
-      const squareData = emptySquareData(
-        color,
-        constants.MAPPING_COLINDEX_TO_FILE[colIndex],
-        constants.MAPPING_ROWINDEX_TO_RANK[rowIndex]
-      );
+      let squareData;
+      if (playerColor === constants.COLOR_PIECE_LIGHT) {
+        squareData = emptySquareData(
+          color,
+          constants.MAPPING_COLINDEX_TO_FILE_LIGHT[colIndex],
+          constants.MAPPING_ROWINDEX_TO_RANK_LIGHT[rowIndex]
+        );
+      } else {
+        squareData = emptySquareData(
+          color,
+          constants.MAPPING_COLINDEX_TO_FILE_DARK[colIndex],
+          constants.MAPPING_ROWINDEX_TO_RANK_DARK[rowIndex]
+        );
+      }
 
       /* Create a query key to see if this square should have a piece. */
-      const squareRankFileStr = getRankFileStr(rowIndex, colIndex);
+      const squareRankFileStr = getRankFileStr(
+        rowIndex,
+        colIndex,
+        playerColor
+        );
 
       /* If this square should have a piece, add a piece icon */
       if (constants.MAPPING_BOARD_INITIAL_PIECE_PLACES.hasOwnProperty(squareRankFileStr)) {

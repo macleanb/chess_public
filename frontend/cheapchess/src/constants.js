@@ -40,42 +40,42 @@ const constants = {
 
   /* Mappings */
   MAPPING_BOARD_INITIAL_PIECE_PLACES : {
-    'a1' : 'darkrook',
-    'b1' : 'darkknight',
-    'c1' : 'darkbishop',
-    'd1' : 'darkking',
-    'e1' : 'darkqueen',
-    'f1' : 'darkbishop',
-    'g1' : 'darkknight',
-    'h1' : 'darkrook',
-    'a2' : 'darkpawn',
-    'b2' : 'darkpawn',
-    'c2' : 'darkpawn',
-    'd2' : 'darkpawn',
-    'e2' : 'darkpawn',
-    'f2' : 'darkpawn',
-    'g2' : 'darkpawn',
-    'h2' : 'darkpawn',
+    'a1' : 'lightrook',
+    'b1' : 'lightknight',
+    'c1' : 'lightbishop',
+    'd1' : 'lightqueen',
+    'e1' : 'lightking',
+    'f1' : 'lightbishop',
+    'g1' : 'lightknight',
+    'h1' : 'lightrook',
+    'a2' : 'lightpawn',
+    'b2' : 'lightpawn',
+    'c2' : 'lightpawn',
+    'd2' : 'lightpawn',
+    'e2' : 'lightpawn',
+    'f2' : 'lightpawn',
+    'g2' : 'lightpawn',
+    'h2' : 'lightpawn',
 
-    'a8' : 'lightrook',
-    'b8' : 'lightknight',
-    'c8' : 'lightbishop',
-    'd8' : 'lightking',
-    'e8' : 'lightqueen',
-    'f8' : 'lightbishop',
-    'g8' : 'lightknight',
-    'h8' : 'lightrook',
-    'a7' : 'lightpawn',
-    'b7' : 'lightpawn',
-    'c7' : 'lightpawn',
-    'd7' : 'lightpawn',
-    'e7' : 'lightpawn',
-    'f7' : 'lightpawn',
-    'g7' : 'lightpawn',
-    'h7' : 'lightpawn',
+    'a8' : 'darkrook',
+    'b8' : 'darkknight',
+    'c8' : 'darkbishop',
+    'd8' : 'darkqueen',
+    'e8' : 'darkking',
+    'f8' : 'darkbishop',
+    'g8' : 'darkknight',
+    'h8' : 'darkrook',
+    'a7' : 'darkpawn',
+    'b7' : 'darkpawn',
+    'c7' : 'darkpawn',
+    'd7' : 'darkpawn',
+    'e7' : 'darkpawn',
+    'f7' : 'darkpawn',
+    'g7' : 'darkpawn',
+    'h7' : 'darkpawn',
   },
 
-  MAPPING_ROWINDEX_TO_RANK : {
+  MAPPING_ROWINDEX_TO_RANK_LIGHT : { // for player color = light
     0 : '8',
     1 : '7',
     2 : '6',
@@ -86,7 +86,18 @@ const constants = {
     7 : '1',
   },
 
-  MAPPING_RANK_TO_ROWINDEX : {
+  MAPPING_ROWINDEX_TO_RANK_DARK : { // for player color = dark
+    0 : '1',
+    1 : '2',
+    2 : '3',
+    3 : '4',
+    4 : '5',
+    5 : '6',
+    6 : '7',
+    7 : '8',
+  },
+
+  MAPPING_RANK_TO_ROWINDEX_LIGHT : { // for player color = light
     '1' : 7,
     '2' : 6,
     '3' : 5,
@@ -97,7 +108,18 @@ const constants = {
     '8' : 0,
   },
 
-  MAPPING_COLINDEX_TO_FILE : {
+  MAPPING_RANK_TO_ROWINDEX_DARK : { // for player color = dark
+    '1' : 0,
+    '2' : 1,
+    '3' : 2,
+    '4' : 3,
+    '5' : 4,
+    '6' : 5,
+    '7' : 6,
+    '8' : 7,
+  },
+
+  MAPPING_COLINDEX_TO_FILE_LIGHT : { // for player color = light
     0 : 'a',
     1 : 'b',
     2 : 'c',
@@ -108,7 +130,18 @@ const constants = {
     7 : 'h',
   },
 
-  MAPPING_FILE_TO_COLINDEX : {
+  MAPPING_COLINDEX_TO_FILE_DARK : { // for player color = dark
+    0 : 'h',
+    1 : 'g',
+    2 : 'f',
+    3 : 'e',
+    4 : 'd',
+    5 : 'c',
+    6 : 'b',
+    7 : 'a',
+  },
+
+  MAPPING_FILE_TO_COLINDEX_LIGHT : { // for player color = light
     'a' : 0,
     'b' : 1,
     'c' : 2,
@@ -117,6 +150,17 @@ const constants = {
     'f' : 5,
     'g' : 6,
     'h' : 7,
+  },
+
+  MAPPING_FILE_TO_COLINDEX_DARK : { // for player color = dark
+    'a' : 7,
+    'b' : 6,
+    'c' : 5,
+    'd' : 4,
+    'e' : 3,
+    'f' : 2,
+    'g' : 1,
+    'h' : 0,
   },
 
   /* Address Permissions */
