@@ -31,15 +31,21 @@ const Game = (
      constants file. */
   const [ boardData, setBoardData ] = useState(null);
 
+  /* A JSON object received from the game server */
+  const [ gameDataFromServer, setGameDataFromServer ] = useState();
+
   /* An array that keeps track of any squares that are highlighted
      with a color different from their original color. */
   const [ highlightedSquares, setHighlightedSquares ] = useState([]);
 
-  /* TODO: Update to pieceData */
+  /* Stores iconData (including images) for chess pieces */
   const [ iconData, setIconData ] = useState();
 
-  /* TODO: Update with color selected by player */
+  /* Stores color selected by player */
   const [ playerColor, setPlayerColor ] = useState('light');
+
+  /* Holds state for the selected color option in NewGameForm */
+  const [ selectedColorOptionInColorOptionSelect, setSelectedColorOptionInColorOptionSelect ] = useState();
 
   ////////////////////////
   /// Helper Functions ///
@@ -49,6 +55,44 @@ const Game = (
   /// Event Handlers ///
   //////////////////////
 
+  /* Make an API call to create a game on backend, then populate the
+     boardData with pieces from the backend server */
+  const handleNewGameClicked = async (e) => {
+    const formData = {}
+
+    if ((
+          selectedColorOptionInColorOptionSelect === 0 ||
+          selectedColorOptionInColorOptionSelect === 1
+        ) && appState.imports.constants
+      ) {
+
+      const selectedColor = appState.imports.constants.COLOR_OPTIONS[selectedColorOptionInColorOptionSelect].color;
+      
+      formData['player1Color'] = selectedColor;
+    } else {
+      formData['player1Color'] = appState.imports.constants.COLOR_PIECE_LIGHT;
+    }
+    const newGameData = await appState.imports.newGame(formData, setMessages);
+
+    /* For some reason the backend PieceSerializer wouldn't include full (absolute)
+       file paths for icons, so we update those here */
+    if (iconData) {
+      for (const square of Object.keys(newGameData.pieces)) {
+        const newGamePieceData = newGameData.pieces[square];
+        const iconKey = newGamePieceData.color + newGamePieceData.piece_type;
+        const directIconData = iconData[iconKey];
+        newGamePieceData.fk_icon = directIconData;
+      }
+    }
+
+    /* Update playerColor state */
+    setPlayerColor(formData['player1Color']);
+
+    /* Update gameDataFromServer state */
+    setGameDataFromServer(newGameData);
+  }
+
+  /* Get and display possible moves when a piece is clicked */
   const handlePieceClicked = async (e, pieceData) => {
     e.preventDefault()
     e.stopPropagation();
@@ -56,10 +100,10 @@ const Game = (
     if (appState?.imports?.apiGetPossibleMoves) {
       const response = await appState.imports.apiGetPossibleMoves(
         pieceData.color,
-        pieceData.firstMoveMade,
-        pieceData.currentFile,
-        pieceData.currentRank,
-        pieceData.type
+        pieceData.first_move_made,
+        pieceData.current_file,
+        pieceData.current_rank,
+        pieceData.piece_type
       );
 
       /* Restore any highlighted squares to their original color */
@@ -77,8 +121,8 @@ const Game = (
          color the square on our board green IF there isn't
          already a piece on it */
       const newHighlightedSquares = [];
+      const selectedPiecesSquare = pieceData.current_file + pieceData.current_rank;
       for (const responseSquare of response) {
-        const selectedPiecesSquare = pieceData.currentFile + pieceData.currentRank;
         const boardSquareData = appState.imports.getSquareData(
           tempBoardData,
           responseSquare,
@@ -114,7 +158,7 @@ const Game = (
   /* Use Effects */
   /////////////////
 
-  /* Get Icon Data once board is initialized page load */
+  /* Get Icon Data once page is loaded */
   useEffect(() => {
     if (!iconData && appState?.imports) {
       appState.imports.getIcons().then((result) => {      
@@ -131,22 +175,38 @@ const Game = (
     }
   }, []); // shouldn't need to watch appState?.imports
 
-  /* Once icons have been received from icon server, initialize
-     boardData. */
+  /* Once player color has been set, initialize boardData. */
   useEffect(() => {
     if (
-      iconData &&
       playerColor &&
       boardData === null // Don't overwrite boardData if it isn't null
       )
     {
-      const initializedBoardData = appState.imports.initializeBoardData(
-        iconData,
-        playerColor
-        );
+      const initializedBoardData = appState.imports.initializeBoardData(playerColor);
       setBoardData(initializedBoardData);
     }
-  }, [iconData, playerColor]);
+  }, [playerColor]);
+
+  /* Whenever gameDataFromServer changes, update boardData (will update UI). */
+  useEffect(() => {
+    if (
+      gameDataFromServer &&
+      boardData &&
+      boardData !== null &&
+      playerColor
+      )
+    {
+
+    const updatedBoardData = appState.imports.updateBoardDataWithFetchedPieces(
+      boardData,
+      gameDataFromServer,
+      playerColor,
+    );
+
+    /* Update boardData state */
+    setBoardData(updatedBoardData);
+    }
+  }, [gameDataFromServer, playerColor]);
 
   // For troubleshooting: prints boardData whenever it changes
   // useEffect(() => {
@@ -161,7 +221,6 @@ const Game = (
 
   // }, [boardData]);
 
-
   ////////////
   /* Render */
   ////////////
@@ -173,11 +232,20 @@ const Game = (
       ?
         <div>
           <appState.imports.MessageDisplay />
-          <appState.imports.Board parentState={{
-            ...appState,
-            boardData          : boardData,
-            handlePieceClicked : handlePieceClicked,
-          }}/>
+          <div className="game-main-container">
+              <appState.imports.NewGameForm parentState={{
+                ...appState,
+                handleNewGameClicked                        : handleNewGameClicked,
+                handlePieceClicked                        : handlePieceClicked, 
+                selectedColorOptionInColorOptionSelect      : selectedColorOptionInColorOptionSelect,
+                setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
+              }}/>
+              <appState.imports.Board parentState={{
+                ...appState,
+                boardData          : boardData,
+                handlePieceClicked : handlePieceClicked,
+              }}/>
+          </div>
           <div>
             Board icons sourced from:
             <div>

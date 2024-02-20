@@ -1,8 +1,9 @@
 /* External Imports */
 import "bootstrap/dist/css/bootstrap.min.css";
+import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-//import { Configuration, OpenAIApi } from 'openai';
+import Form from 'react-bootstrap/Form';
 import React from 'react';
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Row from 'react-bootstrap/Row';
@@ -25,9 +26,12 @@ import initializeBoardData from "./utils/board_initializeBoardData";
 import MessageDisplay from './components/messageDisplay';
 import MessageContext from './contexts/MessageProvider';
 import { MessageProvider } from './contexts/MessageProvider';
+import newGame from './utils/api_NewGame';
+import NewGameForm from './forms/NewGameForm';
 import Piece from './components/piece';
 import pieceExistsBetweenTwoSquares from './utils/board_pieceExistsBetweenTwoSquares';
 import Square from './components/square';
+import updateBoardDataWithFetchedPieces from './utils/board_updateBoardDataWithFetchedPieces';
 import validateStrArg from './utils/validateStrArg';
 
 function App() {
@@ -38,26 +42,31 @@ function App() {
   /* Enable dependency injection by creating a standard list
      of imports that can easily be overridden in each component. */
   const standardImports = {
-    apiGetPossibleMoves           : apiGetPossibleMoves,
-    Board                         : Board,
-    boardDataIsInitialized        : boardDataIsInitialized,
-    Col                           : Col,
-    constants                     : constants,
-    Container                     : Container,
-    convertArrayToDict            : convertArrayToDict,
-    Game                          : Game,
-    getExclusiveRange             : getExclusiveRange,
-    getIcons                      : api_GetIcons,
-    getRankFileStr                : getRankFileStr,
-    getSquaresBetween             : getSquaresBetween,
-    getSquareData                 : getSquareData,
-    initializeBoardData           : initializeBoardData,
-    MessageDisplay                : MessageDisplay,
-    Piece                         : Piece,
-    pieceExistsBetweenTwoSquares  : pieceExistsBetweenTwoSquares,
-    Row                           : Row,
-    Square                        : Square,
-    validateStrArg                : validateStrArg,
+    apiGetPossibleMoves              : apiGetPossibleMoves,
+    Board                            : Board,
+    Button                           : Button,
+    boardDataIsInitialized           : boardDataIsInitialized,
+    Col                              : Col,
+    constants                        : constants,
+    Container                        : Container,
+    convertArrayToDict               : convertArrayToDict,
+    Form                             : Form,
+    Game                             : Game,
+    getExclusiveRange                : getExclusiveRange,
+    getIcons                         : api_GetIcons,
+    getRankFileStr                   : getRankFileStr,
+    getSquaresBetween                : getSquaresBetween,
+    getSquareData                    : getSquareData,
+    initializeBoardData              : initializeBoardData,
+    MessageDisplay                   : MessageDisplay,
+    newGame                          : newGame,
+    NewGameForm                      : NewGameForm,
+    Piece                            : Piece,
+    pieceExistsBetweenTwoSquares     : pieceExistsBetweenTwoSquares,
+    Row                              : Row,
+    Square                           : Square,
+    updateBoardDataWithFetchedPieces : updateBoardDataWithFetchedPieces,
+    validateStrArg                   : validateStrArg,
   }
 
   /* Placeholders for custom import list for each component.

@@ -27,6 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('icons/', include('icons_app.urls')),
     path('help/', include('external_openai_app.urls')),
+    path('games/', include('games_app.urls')),
 ]
 
 if settings.DEBUG:

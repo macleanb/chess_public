@@ -101,13 +101,13 @@ class Piece(models.Model):
         null=True
         )
 
-    current_file = models.CharField(  # a, b, c...
+    current_file = models.CharField(  # 'a', 'b', 'c'...
         max_length=1,
         blank=True,
         null=True
         )
 
-    current_rank = models.CharField(  # 1, 2, 3, etc...
+    current_rank = models.CharField(  # '1', '2', '3', etc...
         max_length=1,
         blank=True,
         null=True
@@ -117,6 +117,28 @@ class Piece(models.Model):
         blank=True,
         null=True,
         default=False
+        )
+
+    fk_icon = models.ForeignKey(
+        Icon,
+        on_delete=models.CASCADE,
+        related_name='pieces',
+        blank=True,
+        null=True
+    )
+
+    fk_game = models.ForeignKey(
+        Game,
+        on_delete=models.CASCADE,
+        related_name='games',
+        blank=True,
+        null=True
+    )
+
+    on_board = models.BooleanField( # indicates whether the piece is active or captured
+        blank=True,
+        null=True,
+        default=True
         )
 
     piece_type = models.CharField(  # rook, pawn, etc
@@ -137,10 +159,3 @@ class Piece(models.Model):
         null=True
         )
 
-    fk_icon = models.ForeignKey(
-        Icon,
-        on_delete=models.CASCADE,
-        related_name='pieces',
-        blank=True,
-        null=True
-    )

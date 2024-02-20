@@ -28,12 +28,6 @@ const Square = (
 
   return (
     <div className={ `${ parentState?.squareData?.color ? parentState.squareData.color : ''} square` }>
-      {/* <img
-        src={ parentState?.squareData?.piece ? parentState.squareData.piece.icon : ''}
-        alt={ parentState?.squareData?.piece ? parentState.squareData.piece.description : ''}
-        className="pieceicon"
-      /> */}
-
       {
         parentState?.squareData?.piece && parentState?.imports?.Piece ?
           <parentState.imports.Piece parentState={ parentState } />

@@ -1,6 +1,8 @@
 const constants = {
   /* Board Params */
   BOARD_COLS: 8,
+  BOARD_FILES: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'],
+  BOARD_RANKS: ['1', '2', '3', '4', '5', '6', '7', '8'],
   BOARD_ROWS: 8,
 
   /* Colors */
@@ -190,6 +192,7 @@ const constants = {
   /* URLs */
   URL_AUTHENTICATED_USER: 'http://localhost:8000/users/authenticateduser',
   URL_BACKEND_BASE: 'http://127.0.0.1:8000',
+  URL_GAMES: 'http://127.0.0.1:8000/games/',
   URL_ICONS: 'http://127.0.0.1:8000/icons/',
   URL_LOGIN: 'http://localhost:8000/users/login',
   URL_LOGOUT: 'http://localhost:8000/users/logout',
@@ -198,6 +201,18 @@ const constants = {
   URL_USERS: 'http://localhost:8000/users/',
   URL_GAME: 'http://localhost:8000/games/',
 };
+
+/* Composite constants that rely on existing ones */
+constants['COLOR_OPTIONS'] = [
+  {
+    id     : 0,
+    color  : constants.COLOR_PIECE_LIGHT,
+  },
+  {
+    id     : 1,
+    color  : constants.COLOR_PIECE_DARK
+  }
+];
 
 /* Composite permissions that rely on existing ones: */
 constants['ADMIN_PERMISSIONS'] = constants.PERMISSIONS_CAN_VIEW_ALL_USERS.concat(

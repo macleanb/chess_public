@@ -71,11 +71,20 @@
   max-width: min-content;
 } */
 
+.new-game-form-container {
+  width: 30vw;
+}
+
 .piece {
   height:0;
   min-height:90%;
   width: auto;
   max-width: min-content;
+}
+
+.playercolorselect {
+  display: inline;
+  width: 50%;
 }
 
 .row {
@@ -95,6 +104,10 @@
 
 .column {
   padding: 0px;
+}
+
+.game-main-container {
+  display: flex;
 }
 
 .square {

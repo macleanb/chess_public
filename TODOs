@@ -3,8 +3,10 @@
 ### Must Do(s)
 -------------------------------------------------------------------------------------------------------------------------------------------------------
 *** Name / Task: Don't highlight any squares beyond any pieces blocking the selected piece
-Name / Task:
-Name / Task:
+Name / Task: (Frontend) Brian add InfoAndControls component (btn and select for color selection)
+Name / Task: (Frontend) Add optional rank/file labels to board (use checkbox to toggle display on and off)
+Name / Task: 
+(Frontend) in api_NewGame(playerColor) call to create game, pass data: { player1_color : playerColor }
 
 
 ### Requests for Help, Design Changes

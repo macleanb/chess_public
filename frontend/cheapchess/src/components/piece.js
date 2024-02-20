@@ -42,8 +42,8 @@ const Piece = (
                     )
                 }
                 : ''}
-      src={ parentState?.squareData?.piece ? parentState.squareData.piece.icon : ''}
-      alt={ parentState?.squareData?.piece ? parentState.squareData.piece.description : ''}
+      src={ parentState?.squareData?.piece?.fk_icon?.image ? parentState.squareData.piece.fk_icon?.image : ''}
+      alt={ parentState?.squareData?.piece?.fk_icon?.description ? parentState.squareData.piece.fk_icon.description : 'piece icon'}
     />
   );
 }

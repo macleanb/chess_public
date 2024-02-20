@@ -1,5 +1,7 @@
 /* Internal Imports */
 import constants from "../constants";
+import getFileFromRankFileStr from './square_getFileFromRankFileStr';
+import getRankFromRankFileStr from './square_getRankFromRankFileStr';
 
 /**
  * Returns true if the str argument is a square
@@ -10,12 +12,9 @@ const isSquare = (
   str
   ) =>
 {
-  const rank = str[1];
-  const file = str[0];
-  const allowedRanksArr = Object.keys(constants.MAPPING_RANK_TO_ROWINDEX_LIGHT);
-  const allowedFilesArr = Object.keys(constants.MAPPING_FILE_TO_COLINDEX_LIGHT);
-  const result = allowedRanksArr.includes(rank) && allowedFilesArr.includes(file);
-  return result;
+  const rank = getRankFromRankFileStr(str);
+  const file = getFileFromRankFileStr(str);
+  return constants.BOARD_RANKS.includes(rank) && constants.BOARD_FILES.includes(file);;
 };
 
 export default isSquare;
