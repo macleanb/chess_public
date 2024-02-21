@@ -2,10 +2,10 @@
 ///  Imports ///
 ////////////////
 
-/* External Libraries */
+/* External Imports */
 import { useEffect } from 'react';
 
-/* Internal Libraries */
+/* Internal Imports */
 
 /* This form provides a select component and a button for users
    to create new games */
@@ -14,9 +14,9 @@ const NewGameForm = ({
 }) => 
 {
 
-  /////////////////
-  /* Use Effects */
-  /////////////////
+  ///////////////////////
+  ///   Use Effects   ///
+  ///////////////////////
 
   /* Initialize color option select */
   useEffect(() => {
@@ -32,6 +32,10 @@ const NewGameForm = ({
     parentState?.setSelectedColorOptionInColorOptionSelect,
     parentState?.imports?.constants?.COLOR_OPTIONS?.length
   ]);
+
+  //////////////////
+  ///   Render   ///
+  //////////////////
 
   return (
     <div className="new-game-form-container">
@@ -64,6 +68,7 @@ const NewGameForm = ({
                   <parentState.imports.Form.Select
                     className="border-0 rounded-0 text-gray-700"
                     aria-label="Select player color"
+                    name="player1Color"
                     onChange={ (e) => { 
                       parentState.setSelectedColorOptionInColorOptionSelect(parseInt(e.target.value))
                     }}

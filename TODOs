@@ -2,11 +2,10 @@
 
 ### Must Do(s)
 -------------------------------------------------------------------------------------------------------------------------------------------------------
-*** Name / Task: Don't highlight any squares beyond any pieces blocking the selected piece
-Name / Task: (Frontend) Brian add InfoAndControls component (btn and select for color selection)
+*** Name / Task: Create GameControls form
+Name / Task:
 Name / Task: (Frontend) Add optional rank/file labels to board (use checkbox to toggle display on and off)
 Name / Task: 
-(Frontend) in api_NewGame(playerColor) call to create game, pass data: { player1_color : playerColor }
 
 
 ### Requests for Help, Design Changes
@@ -25,10 +24,11 @@ Name / Task:
 
 ### Team Role(s)
 -------------------------------------------------------------------------------------------------------------------------------------------------------
-Github Integration / Test (Team Coordinator) (1-2 frontend + backend)
+Github Integration / Test / Deployment/ Documentation (Team Coordinator) (1-2 frontend + backend)
 Styling, Sizing, and Mobile-Readiness (1 frontend)
 Authentication and Permissions (1-2 frontend + backend)
 API Integration (1-2 frontend + backend)
 Feature xyz (1-2 frontend + backend)
+
 Pure Frontend (1-2)
 Pure Backend (1-2)

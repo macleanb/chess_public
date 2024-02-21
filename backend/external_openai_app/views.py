@@ -37,16 +37,23 @@ class PossibleMoves(APIView):
                     f"The color of the chess piece is [{piece_color}]. " \
                     f"This {'is' if not piece_first_move_made else 'is not'} the {piece_type}'s " \
                     f"first move. " \
-                    f"What squares on the chess board is my {piece_type} allowed to move to? " \
-                    "Your answer should contain ALL possible squares my chess piece is allowed " \
-                    "to move to. " \
-                    " Your answer must contain only references chess squares (one or more). " \
-                    " Your answer must separate the chess squares with commas. " \
-                    " Your answer must enclose the list of chess squares in brackets '[]'. " \
-                    " For example '[c7]' or '[h1,d4]' are acceptale answer formats.  " \
+                    f"What squares on the chess board is my {piece_type} at square " \
+                    f"[{piece_current_pos_file + piece_current_pos_rank}] allowed to move to? " \
+                    "Please respond with an answer like this example enclosed in single-quotes: " \
+                    "'Answer: [a3, a4]. '" \
+                    "Your answer should list chess board squares I am allowed to move to " \
+                    "enclosed between brackets ('[]'), like in my previous example. " \
+                    "If I am allowed to move to more than one chess board square, please seprate " \
+                    "the allowable chess board squares with commas ',' like in my previous " \
+                    "example. Your answer should contain ALL possible squares my chess piece is " \
+                    "allowed to move to. " \
+                    " '[c7]' or '[h1,d4]' are acceptale answer formats.  " \
                     " Do not nest brackets. " \
                     "For example, please do not format the response like '[[h1,d4]]'.  Instead " \
-                    "format the response with only a single set of brackets like like '[h1,d4]'."  
+                    "format the response with only a single set of brackets like like '[h1,d4]'."  \
+                    " Do not enclose your entire answer in brackets.  For example please do not " \
+                    "respond with [Answer: a3, a4].  Put only the allowable chess board " \
+                    "squares between brackets."
 
         load_dotenv()
 

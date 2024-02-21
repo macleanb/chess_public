@@ -17,7 +17,13 @@ import Board from './components/board';
 import boardDataIsInitialized from "./utils/board_dataIsInitialized";
 import constants from './constants';
 import convertArrayToDict from './utils/convertArrayToDict';
+import { emptyFormData_GameControls } from './utils/formData_GameControls';
+import { emptyFormData_NewGame } from "./utils/formData_NewGame";
+import { formDataIs_GameControls } from "./utils/formData_GameControls";
+import { formDataIs_NewGame } from './utils/formData_NewGame';
+import FormManager from "./components/FormManager";
 import Game from './pages/game';
+import GameControlsForm from './forms/GameControlsForm';
 import getExclusiveRange from './utils/getExclusiveRange';
 import getRankFileStr from "./utils/getRankFileStr";
 import getSquaresBetween from './utils/board_getSquaresBetween';
@@ -50,8 +56,14 @@ function App() {
     constants                        : constants,
     Container                        : Container,
     convertArrayToDict               : convertArrayToDict,
+    emptyFormData_GameControls       : emptyFormData_GameControls,
+    emptyFormData_NewGame            : emptyFormData_NewGame,
     Form                             : Form,
+    formDataIs_GameControls          : formDataIs_GameControls,
+    formDataIs_NewGame               : formDataIs_NewGame,
+    FormManager                      : FormManager,
     Game                             : Game,
+    GameControlsForm                 : GameControlsForm,
     getExclusiveRange                : getExclusiveRange,
     getIcons                         : api_GetIcons,
     getRankFileStr                   : getRankFileStr,
@@ -79,8 +91,8 @@ function App() {
   /* Bundle all component imports into imports package */
   const compositeImports = {
     ...standardImports,
-    forBoard  : boardImports,
-    forSquare : squareImports,
+    forBoard  : boardImports, // TODO: make sure these are being used
+    forSquare : squareImports, // TODO: make sure these are being used
   }
   
   /* Context Declarations */

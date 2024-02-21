@@ -1,7 +1,7 @@
-/* External Libraries */
+/* External Imports */
 import React, { useContext, useEffect, useState } from 'react';
 
-/* Internal Libraries */
+/* Internal Imports */
 import MessageContext from '../contexts/MessageProvider';
 
 const Game = (
@@ -31,6 +31,15 @@ const Game = (
      constants file. */
   const [ boardData, setBoardData ] = useState(null);
 
+  /* Stores data as state for any form being displayed */
+  const [ formData, setFormData ] = useState();
+
+  /* Stores the mode for the form being displayed */
+  const [ formMode, setFormMode ] = useState();
+
+  /* Stores the type of the form being displayed */
+  const [ formType, setFormType ] = useState();
+
   /* A JSON object received from the game server */
   const [ gameDataFromServer, setGameDataFromServer ] = useState();
 
@@ -55,41 +64,14 @@ const Game = (
   /// Event Handlers ///
   //////////////////////
 
-  /* Make an API call to create a game on backend, then populate the
-     boardData with pieces from the backend server */
-  const handleNewGameClicked = async (e) => {
-    const formData = {}
-
-    if ((
-          selectedColorOptionInColorOptionSelect === 0 ||
-          selectedColorOptionInColorOptionSelect === 1
-        ) && appState.imports.constants
-      ) {
-
-      const selectedColor = appState.imports.constants.COLOR_OPTIONS[selectedColorOptionInColorOptionSelect].color;
+  /* After new game is created, update game form mode */
+  const handleGameQuit = () => {
+    if (appState?.imports) {
+      const initializedBoardData = appState.imports.initializeBoardData(playerColor);
+      setBoardData(initializedBoardData);
       
-      formData['player1Color'] = selectedColor;
-    } else {
-      formData['player1Color'] = appState.imports.constants.COLOR_PIECE_LIGHT;
+      setFormMode(appState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE);
     }
-    const newGameData = await appState.imports.newGame(formData, setMessages);
-
-    /* For some reason the backend PieceSerializer wouldn't include full (absolute)
-       file paths for icons, so we update those here */
-    if (iconData) {
-      for (const square of Object.keys(newGameData.pieces)) {
-        const newGamePieceData = newGameData.pieces[square];
-        const iconKey = newGamePieceData.color + newGamePieceData.piece_type;
-        const directIconData = iconData[iconKey];
-        newGamePieceData.fk_icon = directIconData;
-      }
-    }
-
-    /* Update playerColor state */
-    setPlayerColor(formData['player1Color']);
-
-    /* Update gameDataFromServer state */
-    setGameDataFromServer(newGameData);
   }
 
   /* Get and display possible moves when a piece is clicked */
@@ -154,6 +136,13 @@ const Game = (
     }
   };
 
+  /* After new game is created, update game form mode */
+  const handleNewGameCreated = () => {
+    if (appState?.imports) {
+      setFormMode(appState.imports.constants.FORM_MODE_GAME_CONTROLS);
+    }
+  }
+
   /////////////////
   /* Use Effects */
   /////////////////
@@ -172,6 +161,14 @@ const Game = (
           setIconData(objResult);
         }
       });
+    }
+  }, []); // shouldn't need to watch appState?.imports
+
+  /* Set formMode and formType once page is loaded */
+  useEffect(() => {
+    if (appState?.imports) {
+      setFormMode(appState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE);
+      setFormType(appState.imports.constants.FORM_TYPE_GAME);
     }
   }, []); // shouldn't need to watch appState?.imports
 
@@ -233,11 +230,18 @@ const Game = (
         <div>
           <appState.imports.MessageDisplay />
           <div className="game-main-container">
-              <appState.imports.NewGameForm parentState={{
+              <appState.imports.FormManager parentState={{
                 ...appState,
-                handleNewGameClicked                        : handleNewGameClicked,
-                handlePieceClicked                        : handlePieceClicked, 
+                formData                                    : formData,
+                formMode                                    : formMode,
+                formType                                    : formType,
+                handleGameQuit                              : handleGameQuit,
+                handleNewGameCreated                        : handleNewGameCreated,
+                iconData                                    : iconData,
                 selectedColorOptionInColorOptionSelect      : selectedColorOptionInColorOptionSelect,
+                setFormData                                 : setFormData,
+                setGameDataFromServer                       : setGameDataFromServer,
+                setPlayerColor                              : setPlayerColor,
                 setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
               }}/>
               <appState.imports.Board parentState={{
