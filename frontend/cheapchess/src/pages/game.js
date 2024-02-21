@@ -232,12 +232,14 @@ const Game = (
           <div className="game-main-container">
               <appState.imports.FormManager parentState={{
                 ...appState,
+                boardData                                   : boardData,
                 formData                                    : formData,
                 formMode                                    : formMode,
                 formType                                    : formType,
                 handleGameQuit                              : handleGameQuit,
                 handleNewGameCreated                        : handleNewGameCreated,
                 iconData                                    : iconData,
+                playerColor                                 : playerColor,
                 selectedColorOptionInColorOptionSelect      : selectedColorOptionInColorOptionSelect,
                 setFormData                                 : setFormData,
                 setGameDataFromServer                       : setGameDataFromServer,

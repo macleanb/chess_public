@@ -24,6 +24,7 @@ import { formDataIs_NewGame } from './utils/formData_NewGame';
 import FormManager from "./components/FormManager";
 import Game from './pages/game';
 import GameControlsForm from './forms/GameControlsForm';
+import getAllPieceLocations from "./utils/board_getAllPieceLocations";
 import getExclusiveRange from './utils/getExclusiveRange';
 import getRankFileStr from "./utils/getRankFileStr";
 import getSquaresBetween from './utils/board_getSquaresBetween';
@@ -64,6 +65,7 @@ function App() {
     FormManager                      : FormManager,
     Game                             : Game,
     GameControlsForm                 : GameControlsForm,
+    getAllPieceLocations             : getAllPieceLocations,
     getExclusiveRange                : getExclusiveRange,
     getIcons                         : api_GetIcons,
     getRankFileStr                   : getRankFileStr,

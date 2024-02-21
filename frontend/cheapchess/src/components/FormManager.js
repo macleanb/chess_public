@@ -100,11 +100,15 @@ const FormManager = ({
 
   /* Suggest a move to the user if they click the Suggest Move button */
   const handleSuggestMoveClicked = () => {
-    
+    if (parentState.boardData && parentState.playerColor) {
+      const allPieceLocations = parentState.imports.getAllPieceLocations(
+        parentState.boardData,
+        parentState.playerColor
+      );
+      
     // test
-    console.log(`Here in  FormManager handleSuggestMoveClicked!`);
-    
-    
+    console.log(`Here in  FormManager handleSuggestMoveClicked! all piece locations ${allPieceLocations}`);
+    }
   }
 
   /* Handles changes to NewGame Form */

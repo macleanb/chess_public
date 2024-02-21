@@ -4,6 +4,7 @@
  */
 export const emptyFormData_GameControls = () => {
   return {
+    allPieceLocations : null
   }
 };
 
@@ -17,7 +18,11 @@ export const formDataIs_GameControls = (formData) => {
     throw new TypeError('formData provided to formDataIs_GameControls was invalid.');
   }
 
-  if (Object.keys(formData).length !== 0) {
+  if (Object.keys(formData).length !== 1) {
+    return false;
+  }
+
+  if (!formData.hasOwnProperty('allPieceLocations')) {
     return false;
   }
 
@@ -34,5 +39,9 @@ export const formDataIs_GameControlsEmpty = (formData) => {
     return false;
   }
 
+  if (!formData['allPieceLocations'] === null) {
+    return false;
+  }
+  
   return true;
 }
