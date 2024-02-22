@@ -99,15 +99,26 @@ const FormManager = ({
   }
 
   /* Suggest a move to the user if they click the Suggest Move button */
-  const handleSuggestMoveClicked = () => {
+  const handleSuggestMoveClicked = async (e) => {
+    e.preventDefault();
+
     if (parentState.boardData && parentState.playerColor) {
       const allPieceLocations = parentState.imports.getAllPieceLocations(
         parentState.boardData,
         parentState.playerColor
       );
-      
-    // test
-    console.log(`Here in  FormManager handleSuggestMoveClicked! all piece locations ${allPieceLocations}`);
+
+      if (
+        parentState?.imports?.apiGetSuggestedMove &&
+        parentState?.playerColor
+        ) {
+        const response = await parentState.imports.apiGetSuggestedMove(
+          parentState.playerColor,
+          allPieceLocations
+        );
+
+        parentState.handleSuggestedMoveReceived(response);
+      }
     }
   }
 

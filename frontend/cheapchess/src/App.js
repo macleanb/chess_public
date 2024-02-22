@@ -12,6 +12,7 @@ import { useContext, useState } from "react";
 /* Internal Imports */
 import api_GetIcons from './utils/api_GetIcons';
 import apiGetPossibleMoves from './utils/api_GetPossibleMoves';
+import apiGetSuggestedMove from "./utils/api_GetSuggestedMove";
 import './App.css';
 import Board from './components/board';
 import boardDataIsInitialized from "./utils/board_dataIsInitialized";
@@ -50,6 +51,7 @@ function App() {
      of imports that can easily be overridden in each component. */
   const standardImports = {
     apiGetPossibleMoves              : apiGetPossibleMoves,
+    apiGetSuggestedMove              : apiGetSuggestedMove,
     Board                            : Board,
     Button                           : Button,
     boardDataIsInitialized           : boardDataIsInitialized,

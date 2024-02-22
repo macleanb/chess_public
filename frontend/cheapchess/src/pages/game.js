@@ -76,8 +76,8 @@ const Game = (
 
   /* Get and display possible moves when a piece is clicked */
   const handlePieceClicked = async (e, pieceData) => {
-    e.preventDefault()
-    e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation(); 
 
     if (appState?.imports?.apiGetPossibleMoves) {
       const response = await appState.imports.apiGetPossibleMoves(
@@ -141,6 +141,46 @@ const Game = (
     if (appState?.imports) {
       setFormMode(appState.imports.constants.FORM_MODE_GAME_CONTROLS);
     }
+  }
+
+  /* Display suggested move when received from API call */
+  const handleSuggestedMoveReceived = (suggestedMove) => {
+    /* Restore any highlighted squares to their original color */
+    const tempBoardData = [...boardData]; // copy boardData
+    for (const highlightedSquare of highlightedSquares) {
+      const squareData = appState.imports.getSquareData(
+        tempBoardData,
+        highlightedSquare.square,
+        playerColor
+      );
+      squareData.color = highlightedSquare.originalColor;
+    }
+
+    /* For each square in the response ([<origin_squareID>, <dest_squareID>]),
+       color the square on our board blue */
+    const newHighlightedSquares = [];
+    for (const squareID of suggestedMove) {
+      const boardSquareData = appState.imports.getSquareData(
+        tempBoardData,
+        squareID,
+        playerColor
+        );
+
+      const originalSquareColor = boardSquareData.color;
+      boardSquareData.color = 'bluesquare';
+
+      newHighlightedSquares.push({
+        square         : squareID,
+        originalColor  : originalSquareColor
+      });
+    }
+
+    setBoardData(tempBoardData);
+    setHighlightedSquares(newHighlightedSquares);
+
+    // test
+    console.log(`Here in   game0 handlesuggestedMoveReceived suggestedMove:   ${ suggestedMove }`);
+    console.log(`Here in   game0 handlesuggestedMoveReceived suggestedMove type:   ${ typeof suggestedMove }`);
   }
 
   /////////////////
@@ -238,6 +278,7 @@ const Game = (
                 formType                                    : formType,
                 handleGameQuit                              : handleGameQuit,
                 handleNewGameCreated                        : handleNewGameCreated,
+                handleSuggestedMoveReceived                 : handleSuggestedMoveReceived,
                 iconData                                    : iconData,
                 playerColor                                 : playerColor,
                 selectedColorOptionInColorOptionSelect      : selectedColorOptionInColorOptionSelect,

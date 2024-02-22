@@ -8,23 +8,6 @@ import isSquare from './square_isSquare';
 ////////////////////////
 
 /**
- * Returns true if the str argument is the current piece's square
- * @param {str} str
- * @param {str} pieceCurrentPosFile
- * @param {str} pieceCurrentPosRank
- * @returns {boolean}
- */
-const isCurrentPiecesSquare = (
-  str,
-  pieceCurrentPosFile,
-  pieceCurrentPosRank
-  ) =>
-{
-  const result = str === pieceCurrentPosFile + pieceCurrentPosRank;
-  return result;
-};
-
-/**
  * Trims the double-quotation marks off of the str argument and returns the resulting string
  * @param {str} str 
  */
@@ -41,16 +24,16 @@ const trimSpaces = (str) => {
 };
 
 /**
- * Returns an array of squares the current piece can move to
+ * Returns an array of squares.  The first element should be a squareID
+ * for one of the current player's pieces.  The second element should be
+ * a squareID for a square a current player should move their piece to.
  * @param {str} response
  * @param {str} pieceCurrentPosFile
  * @param {str} pieceCurrentPosRank
  * @returns {Array}
  */
-const parseResponseToGetPossibleMoves = (
+const parseResponseToGetSuggestedMove = (
   response,
-  pieceCurrentPosFile,
-  pieceCurrentPosRank
   ) =>
 {
   const responseStr = response.data[0][0][1];
@@ -96,8 +79,7 @@ const parseResponseToGetPossibleMoves = (
   }
   
   /* Clean the data in bracketContentsArr. Remove commas, spaces, quotes.
-     Ensure there are no duplicates. Remove the current piece's square
-     if it is included.  Remove any values that aren't squares. */
+     Ensure there are no duplicates. Remove any values that aren't squares. */
   const cleanedSquaresDict = {};
   for (const elem of bracketContentsArr) {
     let workingElem = elem; // copy elem
@@ -111,36 +93,13 @@ const parseResponseToGetPossibleMoves = (
         workingSplitElem = trimSpaces(workingSplitElem);
         workingSplitElem = trimDoubleQuotes(workingSplitElem);
 
-        /* Make sure the square (splitElem) isn't the current piece's square
-           before adding it to the cleanedSquares arr */
-        if (
-          isSquare(workingSplitElem) &&
-          !isCurrentPiecesSquare(
-            workingSplitElem,
-            pieceCurrentPosFile,
-            pieceCurrentPosRank
-          )
-        ) {
-          cleanedSquaresDict[workingSplitElem] = workingSplitElem; // ensures there are no duplicates
-        }
+        cleanedSquaresDict[workingSplitElem] = workingSplitElem; // ensures there are no duplicates
       }
     } else {
       /* This element contains a single square */
       workingElem = trimSpaces(workingElem);
       workingElem = trimDoubleQuotes(workingElem);
-
-      /* Make sure the square (elem) isn't the current piece's square
-          before adding it to the cleanedSquares arr */
-      if (
-        isSquare(workingElem) &&
-        !isCurrentPiecesSquare(
-          workingElem,
-          pieceCurrentPosFile,
-          pieceCurrentPosRank
-        )
-      ) {
-        cleanedSquaresDict[workingElem] = workingElem; // ensures there are no duplicates
-      }
+      cleanedSquaresDict[workingElem] = workingElem; // ensures there are no duplicates
     }
   }
 
@@ -149,20 +108,15 @@ const parseResponseToGetPossibleMoves = (
 };
 
 /**
- * Returns an Array of possible moves in file-rank format
+ * Returns an Array for a suggested move. The first element should be a squareID
+ * for one of the current player's pieces.  The second element should be
+ * a squareID for a square a current player should move their piece to.
  * @param {str} pieceColor
- * @param {boolean} pieceFirstMoveMade
- * @param {str} pieceCurrentPosFile
- * @param {str} pieceCurrentPosRank
- * @param {str} pieceType
- * @returns {Array} // i.e. ['a1', 'b2']
+ * @returns {Array} // i.e. ['a2', 'a3']
  */
-const apiGetPossibleMoves = async (
+const apiGetSuggestedMove = async (
   pieceColor,
-  pieceFirstMoveMade,
-  pieceCurrentPosFile,
-  pieceCurrentPosRank,
-  pieceType,
+  allPieceLocations,
   ) =>
 {
   try {
@@ -170,11 +124,8 @@ const apiGetPossibleMoves = async (
     const client = getClient();
     const requestData = {
       pieceColor           :   pieceColor,
-      pieceFirstMoveMade   :   pieceFirstMoveMade,
-      pieceCurrentPosFile  :   pieceCurrentPosFile,
-      pieceCurrentPosRank  :   pieceCurrentPosRank,
-      pieceType            :   pieceType,
-      request_type         :   'POSSIBLE_MOVES'
+      allPieceLocations    :   allPieceLocations,
+      request_type         :   'SUGGESTED_MOVE'
     }
 
     const response = await client.post(
@@ -188,10 +139,8 @@ const apiGetPossibleMoves = async (
     );
 
     /* Parse the response into a list */
-    const parsedResponse = parseResponseToGetPossibleMoves(
+    const parsedResponse = parseResponseToGetSuggestedMove(
       response,
-      pieceCurrentPosFile,
-      pieceCurrentPosRank
       );
 
     return parsedResponse;
@@ -200,4 +149,4 @@ const apiGetPossibleMoves = async (
   }
 };
 
-export default apiGetPossibleMoves;
+export default apiGetSuggestedMove;
