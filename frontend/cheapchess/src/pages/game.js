@@ -74,68 +74,6 @@ const Game = (
     }
   }
 
-  /* Get and display possible moves when a piece is clicked */
-  const handlePieceClicked = async (e, pieceData) => {
-    e.preventDefault();
-    e.stopPropagation(); 
-
-    if (appState?.imports?.apiGetPossibleMoves) {
-      const response = await appState.imports.apiGetPossibleMoves(
-        pieceData.color,
-        pieceData.first_move_made,
-        pieceData.current_file,
-        pieceData.current_rank,
-        pieceData.piece_type
-      );
-
-      /* Restore any highlighted squares to their original color */
-      const tempBoardData = [...boardData]; // copy boardData
-      for (const highlightedSquare of highlightedSquares) {
-        const squareData = appState.imports.getSquareData(
-          tempBoardData,
-          highlightedSquare.square,
-          playerColor
-        );
-        squareData.color = highlightedSquare.originalColor;
-      }
-
-      /* For each square in the response (possible moves),
-         color the square on our board green IF there isn't
-         already a piece on it */
-      const newHighlightedSquares = [];
-      const selectedPiecesSquare = pieceData.current_file + pieceData.current_rank;
-      for (const responseSquare of response) {
-        const boardSquareData = appState.imports.getSquareData(
-          tempBoardData,
-          responseSquare,
-          playerColor
-          );
-
-        /* Make sure there is no piece before highlighting */
-        if (
-          boardSquareData.piece === null &&
-          !appState.imports.pieceExistsBetweenTwoSquares(
-            tempBoardData,
-            selectedPiecesSquare,
-            responseSquare,
-            playerColor
-            )
-          ) {
-          const originalSquareColor = boardSquareData.color;
-          boardSquareData.color = 'greensquare';
-  
-          newHighlightedSquares.push({
-            square         : responseSquare,
-            originalColor  : originalSquareColor
-          });
-        }
-      }
-
-      setBoardData(tempBoardData);
-      setHighlightedSquares(newHighlightedSquares);
-    }
-  };
-
   /* After new game is created, update game form mode */
   const handleNewGameCreated = () => {
     if (appState?.imports) {
@@ -177,10 +115,6 @@ const Game = (
 
     setBoardData(tempBoardData);
     setHighlightedSquares(newHighlightedSquares);
-
-    // test
-    console.log(`Here in   game0 handlesuggestedMoveReceived suggestedMove:   ${ suggestedMove }`);
-    console.log(`Here in   game0 handlesuggestedMoveReceived suggestedMove type:   ${ typeof suggestedMove }`);
   }
 
   /////////////////
@@ -289,8 +223,11 @@ const Game = (
               }}/>
               <appState.imports.Board parentState={{
                 ...appState,
-                boardData          : boardData,
-                handlePieceClicked : handlePieceClicked,
+                boardData               :   boardData,
+                highlightedSquares      :   highlightedSquares,
+                playerColor             :   playerColor,
+                setBoardData            :   setBoardData,
+                setHighlightedSquares   :   setHighlightedSquares,
               }}/>
           </div>
           <div>
