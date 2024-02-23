@@ -86,11 +86,10 @@ function App() {
   }
 
   /* Placeholders for custom import list for each component.
-   This will allow dependencies to be updated in a single
-   place (here) without affecting components themselves and
-   minimize repetitive importing in each component. */
-  const boardImports = {...standardImports}
-  const squareImports = {...standardImports}
+   This will allow dependencies to be overridden for specific
+   components if needed. */
+  const boardImports = {}
+  const squareImports = {}
   
   /* Bundle all component imports into imports package */
   const compositeImports = {
