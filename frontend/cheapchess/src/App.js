@@ -22,9 +22,10 @@ import { emptyFormData_GameControls } from './utils/formData_GameControls';
 import { emptyFormData_NewGame } from "./utils/formData_NewGame";
 import { formDataIs_GameControls } from "./utils/formData_GameControls";
 import { formDataIs_NewGame } from './utils/formData_NewGame';
+import Form_Game from './forms/Form_Game';
+import Form_GameControls from './forms/Form_GameControls';
 import FormManager from "./components/FormManager";
 import Game from './pages/game';
-import GameControlsForm from './forms/GameControlsForm';
 import getAllPieceLocations from "./utils/board_getAllPieceLocations";
 import getExclusiveRange from './utils/getExclusiveRange';
 import getRankFileStr from "./utils/getRankFileStr";
@@ -35,7 +36,6 @@ import MessageDisplay from './components/messageDisplay';
 import MessageContext from './contexts/MessageProvider';
 import { MessageProvider } from './contexts/MessageProvider';
 import newGame from './utils/api_NewGame';
-import NewGameForm from './forms/NewGameForm';
 import Piece from './components/piece';
 import pieceExistsBetweenTwoSquares from './utils/board_pieceExistsBetweenTwoSquares';
 import Square from './components/square';
@@ -64,9 +64,10 @@ function App() {
     Form                             : Form,
     formDataIs_GameControls          : formDataIs_GameControls,
     formDataIs_NewGame               : formDataIs_NewGame,
+    Form_Game                        : Form_Game,
+    Form_GameControls                : Form_GameControls,
     FormManager                      : FormManager,
     Game                             : Game,
-    GameControlsForm                 : GameControlsForm,
     getAllPieceLocations             : getAllPieceLocations,
     getExclusiveRange                : getExclusiveRange,
     getIcons                         : api_GetIcons,
@@ -76,7 +77,6 @@ function App() {
     initializeBoardData              : initializeBoardData,
     MessageDisplay                   : MessageDisplay,
     newGame                          : newGame,
-    NewGameForm                      : NewGameForm,
     Piece                            : Piece,
     pieceExistsBetweenTwoSquares     : pieceExistsBetweenTwoSquares,
     Row                              : Row,

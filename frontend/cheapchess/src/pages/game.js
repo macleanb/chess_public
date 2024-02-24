@@ -77,7 +77,8 @@ const Game = (
   /* After new game is created, update game form mode */
   const handleNewGameCreated = () => {
     if (appState?.imports) {
-      setFormMode(appState.imports.constants.FORM_MODE_GAME_CONTROLS);
+      setFormMode(appState.imports.constants.FORM_MODE_GAME_CONTROLS_PLAY);
+      setFormType(appState.imports.constants.FORM_TYPE_GAME_CONTROLS);
     }
   }
 

@@ -297,8 +297,8 @@ const FormManager = ({
       parentState.setFormData(parentState.imports.emptyFormData_NewGame());
     } else if (
       parentState?.imports &&
-      parentState.formType === parentState.imports.constants.FORM_TYPE_GAME &&
-      parentState.formMode === parentState.imports.constants.FORM_MODE_GAME_CONTROLS
+      parentState.formType === parentState.imports.constants.FORM_TYPE_GAME_CONTROLS &&
+      parentState.formMode === parentState.imports.constants.FORM_MODE_GAME_CONTROLS_PLAY
     )
     {
       parentState.setFormData(parentState.imports.emptyFormData_GameControls());
@@ -331,11 +331,10 @@ const FormManager = ({
     parentState?.formData &&
     parentState?.imports &&
     parentState.formType === parentState.imports.constants.FORM_TYPE_GAME && 
-    parentState.formMode === parentState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE &&
     parentState.imports?.formDataIs_NewGame(parentState.formData)
     ) {
     return (
-      <parentState.imports.NewGameForm parentState={{
+      <parentState.imports.Form_Game parentState={{
         ...parentState,
         handleNewGameClicked     : handleNewGameClicked,
         onGameNewFormChange      : onGameNewFormChange,
@@ -346,12 +345,11 @@ const FormManager = ({
     parentState?.formMode &&
     parentState?.formData &&
     parentState?.imports &&
-    parentState.formType === parentState.imports.constants.FORM_TYPE_GAME && 
-    parentState.formMode === parentState.imports.constants.FORM_MODE_GAME_CONTROLS &&
+    parentState.formType === parentState.imports.constants.FORM_TYPE_GAME_CONTROLS &&
     parentState.imports?.formDataIs_GameControls(parentState.formData)
   ) {
     return (
-      <parentState.imports.GameControlsForm parentState={{
+      <parentState.imports.Form_GameControls parentState={{
         ...parentState,
         handleSuggestMoveClicked     : handleSuggestMoveClicked,
         handleQuitGameClicked        : handleQuitGameClicked,

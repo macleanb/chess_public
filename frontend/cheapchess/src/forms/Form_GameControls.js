@@ -7,7 +7,7 @@
 /* Internal Imports */
 
 /* This form provides controls for playing chess games */
-const GameControlsForm = ({
+const Form_GameControls = ({
   parentState,
 }) => 
 {
@@ -21,7 +21,7 @@ const GameControlsForm = ({
   //////////////////
 
   return (
-    <div className="new-game-form-container">
+    <div className="form-container">
       <br/>
       <h1><b>Game Controls</b></h1>
       <br/>
@@ -53,4 +53,4 @@ const GameControlsForm = ({
   );
 }
 
-export default GameControlsForm;
+export default Form_GameControls;

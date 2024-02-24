@@ -8,7 +8,7 @@
 ### Must Do(s)
 -----------------------------------------------------------------------------------------------------------------------------------------
 *** Name / Task: 
-1. Name / Task: (F/B) Brian add user auth
+1. Name / Task: (F/B) Brian add user auth, capitalize component names
 2. Name / Task: (F/B) New Game Form: 'Join Existing Game' selector that includes unfinished games
 3. Name / Task: (F/B) Feature for game play functionality (moving & capturing pieces)
 4. Name / Task: (F/B) Feature for game chat window to the right of the chess board

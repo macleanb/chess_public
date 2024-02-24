@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 
 /* This form provides a select component and a button for users
    to create new games */
-const NewGameForm = ({
+const Form_Game = ({
   parentState,
 }) => 
 {
@@ -38,7 +38,7 @@ const NewGameForm = ({
   //////////////////
 
   return (
-    <div className="new-game-form-container">
+    <div className="form-container">
       <br/>
       <h1><b>CheapChess</b></h1>
       <br/>
@@ -118,4 +118,4 @@ const NewGameForm = ({
   );
 }
 
-export default NewGameForm;
+export default Form_Game;
