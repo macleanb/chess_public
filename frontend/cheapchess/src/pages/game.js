@@ -1,5 +1,5 @@
 /* External Imports */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 /* Internal Imports */
 import MessageContext from '../contexts/MessageProvider';
@@ -56,6 +56,12 @@ const Game = (
   /* Holds state for the selected color option in NewGameForm */
   const [ selectedColorOptionInColorOptionSelect, setSelectedColorOptionInColorOptionSelect ] = useState();
 
+  /* Ref Declarations */
+  const inputEmailRef = useRef(null);
+  const inputPasswordRef = useRef(null);
+  const inputFirstNameRef = useRef(null);
+  const inputLastNameRef = useRef(null);
+
   ////////////////////////
   /// Helper Functions ///
   ////////////////////////
@@ -71,6 +77,7 @@ const Game = (
       setBoardData(initializedBoardData);
       
       setFormMode(appState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE);
+      setFormType(appState.imports.constants.FORM_TYPE_GAME);
     }
   }
 
@@ -125,7 +132,7 @@ const Game = (
   /* Get Icon Data once page is loaded */
   useEffect(() => {
     if (!iconData && appState?.imports) {
-      appState.imports.getIcons().then((result) => {      
+      appState.imports.getIcons(setMessages).then((result) => {      
         if (result) {
           /* Before setting the result, convert it to a dict
              using each value of the icon data's name field as the key */
@@ -142,8 +149,13 @@ const Game = (
   /* Set formMode and formType once page is loaded */
   useEffect(() => {
     if (appState?.imports) {
-      setFormMode(appState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE);
-      setFormType(appState.imports.constants.FORM_TYPE_GAME);
+      // test delete
+      setFormMode(appState.imports.constants.FORM_MODE_USER_SIGNIN);
+      setFormType(appState.imports.constants.FORM_TYPE_USER);
+
+      // test uncomment
+      //setFormMode(appState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE);
+      //setFormType(appState.imports.constants.FORM_TYPE_GAME);
     }
   }, []); // shouldn't need to watch appState?.imports
 
@@ -205,23 +217,32 @@ const Game = (
         <div>
           <appState.imports.MessageDisplay />
           <div className="game-main-container">
-              <appState.imports.FormManager parentState={{
-                ...appState,
-                boardData                                   : boardData,
-                formData                                    : formData,
-                formMode                                    : formMode,
-                formType                                    : formType,
-                handleGameQuit                              : handleGameQuit,
-                handleNewGameCreated                        : handleNewGameCreated,
-                handleSuggestedMoveReceived                 : handleSuggestedMoveReceived,
-                iconData                                    : iconData,
-                playerColor                                 : playerColor,
-                selectedColorOptionInColorOptionSelect      : selectedColorOptionInColorOptionSelect,
-                setFormData                                 : setFormData,
-                setGameDataFromServer                       : setGameDataFromServer,
-                setPlayerColor                              : setPlayerColor,
-                setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
-              }}/>
+              <appState.imports.FormManager
+                parentState={{
+                  ...appState,
+                  boardData                                   : boardData,
+                  formData                                    : formData,
+                  formMode                                    : formMode,
+                  formType                                    : formType,
+                  handleGameQuit                              : handleGameQuit,
+                  handleNewGameCreated                        : handleNewGameCreated,
+                  handleSuggestedMoveReceived                 : handleSuggestedMoveReceived,
+                  iconData                                    : iconData,
+                  playerColor                                 : playerColor,
+                  selectedColorOptionInColorOptionSelect      : selectedColorOptionInColorOptionSelect,
+                  setFormData                                 : setFormData,
+                  setFormMode                                 : setFormMode,
+                  setGameDataFromServer                       : setGameDataFromServer,
+                  setPlayerColor                              : setPlayerColor,
+                  setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
+                }}
+                parentRefs={{
+                  inputEmailRef       : inputEmailRef,
+                  inputPasswordRef    : inputPasswordRef,
+                  inputFirstNameRef   : inputFirstNameRef,
+                  inputLastNameRef    : inputLastNameRef,
+                }}
+              />
               <appState.imports.Board parentState={{
                 ...appState,
                 boardData               :   boardData,

@@ -4,14 +4,12 @@
 */
 
 /* External Imports */
-import { useContext } from 'react';
 
 /* Internal Imports */
-import AuthContext from '../contexts/AuthProvider';
-import { userIsAuthorized } from '../utils/authUtils';
     
 const Form_User = (
   { 
+    parentRefs,
     parentState
   }
 ) => {
@@ -21,8 +19,6 @@ const Form_User = (
   ///////////////////////
 
   /* Context Declarations */
-  const { auth } = useContext(AuthContext);
-  
 
   ////////////////
   ///  Render  ///
@@ -37,19 +33,51 @@ const Form_User = (
         ?
           <div>
             <br/>
-            <h1><b>{"New User Information"}</b></h1>
+            <h1><b>{
+              parentState.formMode === parentState.imports.constants.FORM_MODE_USER_SELF_REGISTER
+              ?
+                "New User Information"
+              : "Sign In"}
+              </b></h1>
             <br/>
             <parentState.imports.Form id="user-form">
               <parentState.imports.UserInputs
-                parentState={ parentState }
                 parentRefs={ parentRefs }
-              />
-              <parentState.imports.ImageInput
                 parentState={ parentState }
               />
-              <parentState.imports.Button variant="primary" className="h-40 w-80 mt-1 mb-1" onClick={ handleAddUserClicked }>
-                Complete Registration
-              </parentState.imports.Button>
+              {
+                parentState.formMode === parentState.imports.constants.FORM_MODE_USER_SELF_REGISTER
+                ?
+                  <parentState.imports.Button
+                    className="h-40 w-80 mt-1 mb-1"
+                    onClick={ parentState.handleAddUserClicked }
+                    variant="primary"
+                  >
+                    Complete Registration
+                  </parentState.imports.Button>
+                :
+                  parentState.formMode === parentState.imports.constants.FORM_MODE_USER_SIGNIN
+                  ?
+                    <parentState.imports.Button
+                      className="h-40 w-80 mt-1 mb-1"
+                      onClick={ parentState.handleSignInClicked }
+                      variant="primary"
+                    >
+                      Sign In
+                    </parentState.imports.Button>
+                  :''
+              }
+              {
+                parentState.formMode === parentState.imports.constants.FORM_MODE_USER_SIGNIN
+                ?
+                  <parentState.imports.Button
+                    className="button-signup"
+                    onClick={ parentState.handleSignUpClicked }
+                  >
+                    Sign Up
+                  </parentState.imports.Button>
+                : ''
+              }
             </parentState.imports.Form>
           </div>
         :

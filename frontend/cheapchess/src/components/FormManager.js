@@ -7,6 +7,7 @@ import MessageContext from '../contexts/MessageProvider';
 /* This component is a flexible-use form manager for
    User, Address, and Residence objects. */
 const FormManager = ({
+  parentRefs,
   parentState
   }) => 
 {
@@ -130,101 +131,76 @@ const FormManager = ({
     }
   }
   
-    /* Handles changes to UserForm */
-    // const onUserFormChange = e => {
-    //   if (e && e.target?.name === 'image') {
-    //     parentState.setFormData({ 
-    //       ...parentState.formData, 
-    //       imageFileName: e.target.value,
-    //       image: e.target.files['0'],
-    //     });
-    //   } else if (e && e.target?.name === 'deleteExistingImageCheckbox') {
-    //     const checked = e.target.checked;
-  
-    //     if (checked) {
-    //       parentState.setFormData({ 
-    //         ...parentState.formData,
-    //         imageFileName: '',
-    //         image: null,
-    //         deleteExistingImage: true
-    //       });
-    //     } else { // User had wanted to set image to null but changed mind
-    //       parentState.setFormData({ 
-    //         ...parentState.formData,
-    //         deleteExistingImage: false
-    //       });
-    //     }
-    //   } else if (e && e.target?.name === 'isActiveCheckbox') {
-    //     const checked = e.target.checked;
-  
-    //     if (checked) {
-    //       parentState.setFormData({ 
-    //         ...parentState.formData,
-    //         is_active: true
-    //       });
-    //     } else {
-    //       parentState.setFormData({ 
-    //         ...parentState.formData,
-    //         is_active: false
-    //       });
-    //     }
-    //   } else if (e && e.target?.name === 'isStaffCheckbox') {
-    //     const checked = e.target.checked;
-  
-    //     if (checked) {
-    //       parentState.setFormData({ 
-    //         ...parentState.formData,
-    //         is_staff: true
-    //       });
-    //     } else {
-    //       parentState.setFormData({ 
-    //         ...parentState.formData,
-    //         is_staff: false
-    //       });
-    //     }
-    //   } else {
-    //     /* For all other field changes, use the generic set function */
-    //     parentState.setFormData({ ...parentState.formData, [e.target.name]: e.target.value });
+  /* Handles changes to UserForm */
+  const onUserFormChange = e => {
+    parentState.setFormData({ ...parentState.formData, [e.target.name]: e.target.value });
+  }
+
+  /* Adds a user to backend server/database. */
+  const handleAddUserClicked = async (e) => {
+    e.preventDefault();
+    let apiResponse = null;
+
+    // test
+    console.log(`Here in  FormManager handleAddUserClicked formData   ${ JSON.stringify(parentState.formData) }`);
+
+    /* Check for validation errors and report as needed. */
+    const formIsValid = parentState.imports.reportUserFormValidity(
+      parentState.formData,
+      parentRefs,
+      parentState.formMode,
+      );
+
+    // if (parentState.formData && formIsValid) {
+    //   if (formMode === constants.MODE_USER_ADD) {
+    //     apiResponse = await addUser( // Administrators adding users
+    //       auth,
+    //       formData,
+    //       setFrontEndErrors,
+    //       setBackEndErrors,
+    //       setSuccessMessages
+    //     );
+    //   } else if (formMode === constants.MODE_USER_SELF_REGISTER) {
+    //     apiResponse = await registerUser( // Users self-registering
+    //       auth,
+    //       formData,
+    //       setFrontEndErrors,
+    //       setBackEndErrors,
+    //       setSuccessMessages
+    //     );
+    //   }
+
+    //   /* Notify the parent component that the user has been created & reset the form */
+    //   if (await apiResponse && !backEndErrors && apiResponse.id) {
+    //     const userData = apiResponse;
+    //     setFormData(null);
+    //     parentHandlers.handleUserCreated(userData);
     //   }
     // }
+  }
 
-  /* Adds a user and begins a multi-step process for 
-     adding a mailing address and residences to the
-     selected user. */
-  // const handleAddUserClicked = async (event) => {
-  //   event.preventDefault();
-  //   let apiResponse = null;
+  /* User login action */
+  const handleSignInClicked = async (e) => {
+    e.preventDefault();
+    let apiResponse = null;
 
-  //   /* Check for validation errors and report as needed. */
-  //   const formIsValid = reportUserFormValidity(formData, parentRefs);
+    /* Check for validation errors and report as needed. */
+    const formIsValid = parentState.imports.reportUserFormValidity(
+      parentState.formData,
+      parentRefs,
+      parentState.formMode
+      );
+  
+    // test
+    console.log(`Here in  FormManager handleSignInClicked formData   ${ JSON.stringify(parentState.formData) }`);
+  }
 
-  //   if (formData && formIsValid) {
-  //     if (formMode === constants.MODE_USER_ADD) {
-  //       apiResponse = await addUser( // Administrators adding users
-  //         auth,
-  //         formData,
-  //         setFrontEndErrors,
-  //         setBackEndErrors,
-  //         setSuccessMessages
-  //       );
-  //     } else if (formMode === constants.MODE_USER_SELF_REGISTER) {
-  //       apiResponse = await registerUser( // Users self-registering
-  //         auth,
-  //         formData,
-  //         setFrontEndErrors,
-  //         setBackEndErrors,
-  //         setSuccessMessages
-  //       );
-  //     }
-
-  //     /* Notify the parent component that the user has been created & reset the form */
-  //     if (await apiResponse && !backEndErrors && apiResponse.id) {
-  //       const userData = apiResponse;
-  //       setFormData(null);
-  //       parentHandlers.handleUserCreated(userData);
-  //     }
-  //   }
-  // }
+  /* Switch form from login to self-register */
+  const handleSignUpClicked = async (e) => {
+    e.preventDefault();
+  
+    parentState.setFormMode(parentState.imports.constants.FORM_MODE_USER_SELF_REGISTER);
+  }
 
   /* Updates the selected user. */
   // const handleUpdateUserClicked = async (event) => {
@@ -288,20 +264,25 @@ const FormManager = ({
 
   /* If the formType or formMode changes, set formData to empty for whatever the new formType is */
   useEffect(() => {
-    if (
-      parentState?.imports &&
-      parentState.formType === parentState.imports.constants.FORM_TYPE_GAME &&
-      parentState.formMode === parentState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE
-      )
-    {
-      parentState.setFormData(parentState.imports.emptyFormData_NewGame());
-    } else if (
-      parentState?.imports &&
-      parentState.formType === parentState.imports.constants.FORM_TYPE_GAME_CONTROLS &&
-      parentState.formMode === parentState.imports.constants.FORM_MODE_GAME_CONTROLS_PLAY
-    )
-    {
-      parentState.setFormData(parentState.imports.emptyFormData_GameControls());
+    if (parentState?.imports) {
+      if (
+        parentState.formType === parentState.imports.constants.FORM_TYPE_GAME &&
+        parentState.formMode === parentState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE
+        )
+      {
+        parentState.setFormData(parentState.imports.emptyFormData_NewGame());
+      } else if (
+        parentState.formType === parentState.imports.constants.FORM_TYPE_GAME_CONTROLS &&
+        parentState.formMode === parentState.imports.constants.FORM_MODE_GAME_CONTROLS_PLAY
+       )
+      {
+        parentState.setFormData(parentState.imports.emptyFormData_GameControls());
+      } else if (
+        parentState.formType === parentState.imports.constants.FORM_TYPE_USER
+        )
+      {
+        parentState.setFormData(parentState.imports.emptyFormData_User());
+      }
     }
   }, [parentState?.formType, parentState?.formMode]);
   
@@ -354,6 +335,26 @@ const FormManager = ({
         handleSuggestMoveClicked     : handleSuggestMoveClicked,
         handleQuitGameClicked        : handleQuitGameClicked,
       }}/>
+    );
+  } else if (
+    parentState?.formType &&
+    parentState?.formMode &&
+    parentState?.formData &&
+    parentState?.imports &&
+    parentState.formType === parentState.imports.constants.FORM_TYPE_USER &&
+    parentState.imports?.formDataIs_User(parentState.formData)
+  ) {
+    return (
+      <parentState.imports.Form_User
+        parentState={{
+          ...parentState,
+          handleAddUserClicked         : handleAddUserClicked,
+          handleSignInClicked          : handleSignInClicked,
+          handleSignUpClicked          : handleSignUpClicked,
+          onUserFormChange             : onUserFormChange,
+        }}
+        parentRefs={ parentRefs }
+      />
     );
   }
 

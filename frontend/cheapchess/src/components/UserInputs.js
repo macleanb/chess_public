@@ -7,132 +7,153 @@ import { useContext } from 'react';
 import Form from 'react-bootstrap/Form';
 
 /* Internal Libraries */
-import constants from '../constants';
-import FrontEndErrorContext from '../contexts/FrontEndErrorProvider';
+import MessageContext from '../contexts/MessageProvider';
 
 /* This component provides input fields for users, to be used in forms */
-const UserInputs = ( { userData, onChange, parentRefs, mode } ) => {
-
-
-  //////////////////////
-  ///   Use Effects  ///
-  //////////////////////
-
-  /* This is handled by autoFocus below.  We can't monitor refs with useEffect */
-  // useEffect(() => {
-  //   if (parentRefs?.inputEmailRef?.current) {
-  //     parentRefs.inputEmailRef.current.focus();
-  //   }
-  // }, []);
-
-
+const UserInputs = ({
+  parentRefs,
+  parentState
+  }) =>
+{
   ///////////////////////
   ///   Declarations  ///
   ///////////////////////
 
-  const { frontEndErrors } = useContext(FrontEndErrorContext);
+  const { messages } = useContext(MessageContext);
+
+  /////////////////
+  ///   Render  ///
+  /////////////////
 
   return (
-    <div>
-      <div className="d-flex flex-wrap justify-content-evenly">
-        <Form.Group className="mb-4 text-start" controlId={ constants.AUTH_EMAIL_FIELD_NAME }>
-          <Form.Label className="colorsettings_listtext">E-mail</Form.Label>
-          <Form.Control 
-            type="email" 
-            placeholder="Enter e-mail address" 
-            onChange={ onChange }
-            ref={(c) => {
-              if (c) {
-                parentRefs.inputEmailRef.current = c;
+    <div className="user-inputs-container">
+      {
+        parentRefs &&
+        parentState?.imports?.Button &&
+        parentState.imports.constants &&
+        parentState.imports.Form
+        ?
+          <div>
+            <Form.Group
+              className="user-input-group"
+              controlId={ parentState.imports.constants.FIELD_NAME_AUTH_EMAIL }
+            >
+              <Form.Label><strong>E-mail</strong></Form.Label>
+              <Form.Control
+                autoFocus
+                name="email"
+                onChange={ parentState.onUserFormChange }
+                placeholder="Enter e-mail address" 
+                ref={(c) => {
+                  if (c) {
+                    parentRefs.inputEmailRef.current = c;
+                  }
+                }}
+                required
+                type="email"
+                value={ parentState.formData?.email ? parentState.formData.email : ''}
+              />
+              {
+                messages?.email && (
+                  <Form.Text className="alert-danger ms-2 text-danger" tooltip="true">
+                    {messages.email}
+                  </Form.Text>
+                )
               }
-            }}
-            value={ userData?.email ? userData.email : ''}
-            required
-            autoFocus
-            name="email"
-          />
-          {
-            frontEndErrors?.email && (
-              <Form.Text className="alert-danger ms-2 text-danger" tooltip="true">
-                {frontEndErrors.email}
-              </Form.Text>
-            )
-          }
-        </Form.Group>
-        <Form.Group className="mb-4 text-start" controlId={ constants.PASSWORD_FIELD_NAME }>
-          <Form.Label className="colorsettings_listtext">{`${ (mode === constants.MODE_USER_UPDATE_DELETE || mode === constants.MODE_USER_PROFILE) ? 'New ' : ''}Password`}</Form.Label>
-          <Form.Control 
-            type="password" 
-            placeholder="Enter password" 
-            onChange={ onChange }
-            ref={(c) => {
-              if (c) {
-                parentRefs.inputPasswordRef.current = c;
+            </Form.Group>
+            <Form.Group
+              className="user-input-group"
+              controlId={ parentState.imports.constants.FIELD_NAME_PASSWORD }
+            >
+              <Form.Label><strong>Password</strong></Form.Label>
+              <Form.Control
+                name="password"
+                onChange={ parentState.onUserFormChange }
+                placeholder="Enter password" 
+                ref={(c) => {
+                  if (c) {
+                    parentRefs.inputPasswordRef.current = c;
+                  }
+                }}
+                required
+                type="password"
+                value={ parentState?.formData?.password ? parentState.formData.password : ''}
+              />
+              {
+                messages?.password && (
+                  <Form.Text className="alert-danger ms-2 text-danger" tooltip="true">
+                    {messages.password}
+                  </Form.Text>
+                )
               }
-            }}
-            value={ userData?.password ? userData.password : ''}
-            required={(mode === constants.MODE_USER_ADD || mode === constants.MODE_USER_SELF_REGISTER)}
-            name="password"
-          />
-          {
-            frontEndErrors?.password && (
-              <Form.Text className="alert-danger ms-2 text-danger" tooltip="true">
-                {frontEndErrors.password}
-              </Form.Text>
-            )
-          }
-        </Form.Group>
-      </div>
-      <div className="d-flex flex-wrap justify-content-evenly">
-        <Form.Group className="mb-4 text-start" controlId={ constants.FIRST_NAME_FIELD_NAME }>
-          <Form.Label className="colorsettings_listtext">First Name</Form.Label>
-          <Form.Control 
-            type="text" 
-            placeholder="Enter first name" 
-            onChange={ onChange }
-            ref={(c) => {
-              if (c) {
-                parentRefs.inputFirstNameRef.current = c;
-              }
-            }}
-            value={ userData?.first_name ? userData.first_name : '' }
-            required
-            name="first_name"
-          />
-          {
-            frontEndErrors?.first_name && (
-              <Form.Text className="alert-danger ms-2 text-danger" tooltip="true">
-                {frontEndErrors.first_name}
-              </Form.Text>
-            )
-          }
-        </Form.Group>
-        <Form.Group className="mb-4 text-start" controlId={ constants.LAST_NAME_FIELD_NAME }>
-          <Form.Label className="colorsettings_listtext">Last Name</Form.Label>
-          <Form.Control 
-            type="text" 
-            placeholder="Enter last name" 
-            onChange={ onChange }
-            ref={(c) => {
-              if (c) {
-                parentRefs.inputLastNameRef.current = c;
-              }
-            }}
-            value={ userData?.last_name ? userData.last_name : '' }
-            required
-            name="last_name"
-          />
-          {
-            frontEndErrors?.last_name && (
-              <Form.Text className="alert-danger ms-2 text-danger" tooltip="true">
-                {frontEndErrors.last_name}
-              </Form.Text>
-            )
-          }
-        </Form.Group>
-      </div>
+            </Form.Group>
+            {
+              parentState.formMode === parentState.imports.constants.FORM_MODE_USER_SELF_REGISTER
+              ?
+                <Form.Group
+                  className="user-input-group"
+                  controlId={ parentState.imports.constants.FIELD_NAME_FIRST_NAME }
+                >
+                  <Form.Label><strong>First Name</strong></Form.Label>
+                  <Form.Control
+                    name="first_name"
+                    onChange={ parentState.onUserFormChange }
+                    placeholder="Enter first name" 
+                    ref={(c) => {
+                      if (c) {
+                        parentRefs.inputFirstNameRef.current = c;
+                      }
+                    }}
+                    required
+                    type="text"
+                    value={ parentState.formData?.first_name ? parentState.formData.first_name : '' }
+                  />
+                  {
+                    messages?.first_name && (
+                      <Form.Text className="alert-danger ms-2 text-danger" tooltip="true">
+                        {messages.first_name}
+                      </Form.Text>
+                    )
+                  }
+                </Form.Group>
+              : ''
+            }
+            {
+              parentState.formMode === parentState.imports.constants.FORM_MODE_USER_SELF_REGISTER
+              ?
+                <Form.Group
+                  className="user-input-group"
+                  controlId={ parentState.imports.constants.FIELD_NAME_LAST_NAME }
+                >
+                  <Form.Label><strong>Last Name</strong></Form.Label>
+                  <Form.Control
+                    name="last_name"
+                    onChange={ parentState.onUserFormChange }
+                    placeholder="Enter last name" 
+                    ref={(c) => {
+                      if (c) {
+                        parentRefs.inputLastNameRef.current = c;
+                      }
+                    }}
+                    required
+                    type="text"
+                    value={ parentState.formData?.last_name ? parentState.formData.last_name : '' }
+                  />
+                  {
+                    messages?.last_name && (
+                      <Form.Text className="alert-danger ms-2 text-danger" tooltip="true">
+                        {messages.last_name}
+                      </Form.Text>
+                    )
+                  }
+                </Form.Group>
+              : ''
+            }
+          </div>
+        : ''
+      }
     </div>
-  );
-}
+  )
+};
 
 export default UserInputs;

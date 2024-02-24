@@ -20,10 +20,13 @@ import constants from './constants';
 import convertArrayToDict from './utils/convertArrayToDict';
 import { emptyFormData_GameControls } from './utils/formData_GameControls';
 import { emptyFormData_NewGame } from "./utils/formData_NewGame";
+import { emptyFormData_User } from './utils/formData_User';
 import { formDataIs_GameControls } from "./utils/formData_GameControls";
 import { formDataIs_NewGame } from './utils/formData_NewGame';
+import { formDataIs_User } from './utils/formData_User';
 import Form_Game from './forms/Form_Game';
 import Form_GameControls from './forms/Form_GameControls';
+import Form_User from './forms/Form_User';
 import FormManager from "./components/FormManager";
 import Game from './pages/game';
 import getAllPieceLocations from "./utils/board_getAllPieceLocations";
@@ -38,8 +41,10 @@ import { MessageProvider } from './contexts/MessageProvider';
 import newGame from './utils/api_NewGame';
 import Piece from './components/piece';
 import pieceExistsBetweenTwoSquares from './utils/board_pieceExistsBetweenTwoSquares';
+import reportUserFormValidity from './utils/form_reportUserFormValidity';
 import Square from './components/square';
 import updateBoardDataWithFetchedPieces from './utils/board_updateBoardDataWithFetchedPieces';
+import UserInputs from './components/UserInputs';
 import validateStrArg from './utils/validateStrArg';
 
 function App() {
@@ -61,11 +66,14 @@ function App() {
     convertArrayToDict               : convertArrayToDict,
     emptyFormData_GameControls       : emptyFormData_GameControls,
     emptyFormData_NewGame            : emptyFormData_NewGame,
+    emptyFormData_User               : emptyFormData_User,
     Form                             : Form,
     formDataIs_GameControls          : formDataIs_GameControls,
     formDataIs_NewGame               : formDataIs_NewGame,
+    formDataIs_User                  : formDataIs_User,
     Form_Game                        : Form_Game,
     Form_GameControls                : Form_GameControls,
+    Form_User                        : Form_User,
     FormManager                      : FormManager,
     Game                             : Game,
     getAllPieceLocations             : getAllPieceLocations,
@@ -79,9 +87,11 @@ function App() {
     newGame                          : newGame,
     Piece                            : Piece,
     pieceExistsBetweenTwoSquares     : pieceExistsBetweenTwoSquares,
+    reportUserFormValidity           : reportUserFormValidity,
     Row                              : Row,
     Square                           : Square,
     updateBoardDataWithFetchedPieces : updateBoardDataWithFetchedPieces,
+    UserInputs                       : UserInputs,
     validateStrArg                   : validateStrArg,
   }
 
