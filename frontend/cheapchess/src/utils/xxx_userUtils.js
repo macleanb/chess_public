@@ -183,23 +183,6 @@ export const getUserIndexFromAllUserDataArray = (userID, allUserData) => {
   return null;
 }
 
-/* Returns all users with a specific mailing address */
-export const getUsersWithMailingAddress = (address_id, possibleUsersDict) => {
-  const result = [];
-
-  if (address_id && possibleUsersDict) {
-    for (const user of Object.values(possibleUsersDict)) {
-      if (user) {
-        if (user['fk_mailing_address'] === address_id) {
-          result.push(user);
-        }
-      }
-    }
-  }
-
-  return result;
-}
-
 /* Removes a user object from an array of users.
    Inputs:
      userID: integer
@@ -639,71 +622,3 @@ export const deleteUser = async (auth, userIDToDelete, setFrontEndErrors, setBac
   }
 }
 
-/* Makes an API call to self-register a new user to the backend */
-export const registerUser = async (auth, userData, setFrontEndErrors, setBackEndErrors, setSuccessMessages) => {
-  /* Don't require constants.PERMISSIONS_CAN_ADD_USER because new
-     users must be able to self-register. */
-  try {
-    /* Handle any blank fields on the 
-    front end rather than sending blank credentials to the server */
-    const validationErrors = getUserValidationErrors(userData);
-
-    if (!validationErrors) {
-      const client = getClient();
-      const form_data = new FormData();
-
-      if (userData) {
-        form_data.append("email", userData.email);
-        form_data.append("password", userData.password);
-        form_data.append("first_name", userData.first_name);
-        form_data.append("last_name", userData.last_name); 
-
-        /* Require permissions for adding is_staff */
-        if (userData.is_staff) {
-          if(userIsAuthorized(auth, constants.PERMISSIONS_CAN_ASSIGN_ALL_PERMISSIONS)) {
-            form_data.append("is_staff", userData.is_staff);
-          } else {
-            setFrontEndErrors({'Error': 'Current user is not authorized to assign new users to "staff"'});
-            return null;
-          }
-        }
-
-        if (userData.is_active) {
-          form_data.append("is_active", userData.is_active);
-        }
-
-        if (userData.fk_mailing_address) {
-          form_data.append("fk_mailing_address", userData.fk_mailing_address);
-        }
-
-        if (userData.image && userData.imageFileName.length > 0) {
-          form_data.append("image", userData.image, userData.imageFileName);
-        }
-      }
-      
-      if (client) {
-        const response = await client.post(
-          constants.REGISTER_URL,
-          form_data,
-          {
-            headers: { 'Content-Type': 'multipart/form-data'
-            },
-            withCredentials: true
-          }
-        );
-        return await response?.data;
-      } else {
-        throw new Error('Error in apiUtils: CSRF Token null or bad Axios client.');
-      }
-    }  else {
-      // Rely on built-in reportValidity() call in handleClick function
-      // setFrontEndErrors(validationErrors);
-    }
-  } catch (error) {
-    if (!error?.response) {
-      setBackEndErrors({'Server Error': 'No Server Response'});
-    } else {
-      setBackEndErrors(getResponseError(error)); // new way that requires custom User model and validators assigned to fields on the backend
-    }
-  }
-}

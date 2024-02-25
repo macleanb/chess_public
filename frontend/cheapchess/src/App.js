@@ -41,6 +41,7 @@ import { MessageProvider } from './contexts/MessageProvider';
 import newGame from './utils/api_NewGame';
 import Piece from './components/piece';
 import pieceExistsBetweenTwoSquares from './utils/board_pieceExistsBetweenTwoSquares';
+import registerUser from "./utils/api_RegisterUser";
 import reportUserFormValidity from './utils/form_reportUserFormValidity';
 import Square from './components/square';
 import updateBoardDataWithFetchedPieces from './utils/board_updateBoardDataWithFetchedPieces';
@@ -87,6 +88,7 @@ function App() {
     newGame                          : newGame,
     Piece                            : Piece,
     pieceExistsBetweenTwoSquares     : pieceExistsBetweenTwoSquares,
+    registerUser                     : registerUser,
     reportUserFormValidity           : reportUserFormValidity,
     Row                              : Row,
     Square                           : Square,

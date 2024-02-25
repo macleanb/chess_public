@@ -141,8 +141,8 @@ const FormManager = ({
     e.preventDefault();
     let apiResponse = null;
 
-    // test
-    console.log(`Here in  FormManager handleAddUserClicked formData   ${ JSON.stringify(parentState.formData) }`);
+    /* For later once we have AuthContext working (TODO)*/
+    const auth = null;
 
     /* Check for validation errors and report as needed. */
     const formIsValid = parentState.imports.reportUserFormValidity(
@@ -151,24 +151,27 @@ const FormManager = ({
       parentState.formMode,
       );
 
-    // if (parentState.formData && formIsValid) {
-    //   if (formMode === constants.MODE_USER_ADD) {
-    //     apiResponse = await addUser( // Administrators adding users
-    //       auth,
-    //       formData,
-    //       setFrontEndErrors,
-    //       setBackEndErrors,
-    //       setSuccessMessages
-    //     );
-    //   } else if (formMode === constants.MODE_USER_SELF_REGISTER) {
-    //     apiResponse = await registerUser( // Users self-registering
-    //       auth,
-    //       formData,
-    //       setFrontEndErrors,
-    //       setBackEndErrors,
-    //       setSuccessMessages
-    //     );
-    //   }
+    if (parentState.formData && formIsValid) {
+      if (parentState.formMode === parentState.imports.constants.FORM_MODE_USER_ADD) {
+        apiResponse = await parentState.imports.addUser( // Administrators adding users
+          auth,
+          parentState.formData,
+          setMessages
+        );
+      } else if (parentState.formMode === parentState.imports.constants.FORM_MODE_USER_SELF_REGISTER) {
+        apiResponse = await parentState.imports.registerUser( // Users self-registering
+          auth,
+          parentState.formData,
+          setMessages
+        );
+      }
+    }
+
+    
+    // test
+    console.log(`Here in  formManager handleAddUserClicked  response:   ${ JSON.stringify(  apiResponse  ) }`);
+    
+    
 
     //   /* Notify the parent component that the user has been created & reset the form */
     //   if (await apiResponse && !backEndErrors && apiResponse.id) {

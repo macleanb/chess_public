@@ -36,7 +36,8 @@ Run pip install -r requirements.txt to ensure all required dependiences are inst
 for this Django REST application
 
 ### Create a Local Database and a superuser account
-Recommend creating a database using PostgreSQL ($ createdb cheapchess)
+Recommend creating a database using PostgreSQL ($ createdb cheapchess_db)
+seed your db with the icons by running the seeds.sql file in the icons_app directory
 This app uses Django REST framework to interact with the database
 
 ### Download Free Chess Images

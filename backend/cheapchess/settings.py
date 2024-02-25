@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'games_app',
     'icons_app',
     'external_openai_app',
+    'chess_users',
 ]
 
 MIDDLEWARE = [
@@ -91,13 +92,16 @@ WSGI_APPLICATION = 'cheapchess.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
+# https://stackoverflow.com/questions/49189402/auth-user-groups-fields-e304-reverse-accessor-for-user-groups-clashes-with
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cheapchess',
+        'NAME': 'cheapchess_db',
     }
 }
+
+# Custom user model
+AUTH_USER_MODEL = 'chess_users.ChessUser'
 
 REST_FRAMEWORK = {'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.AllowAny']}
 

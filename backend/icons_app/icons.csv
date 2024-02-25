@@ -1,0 +1,13 @@
+id,name,image,description
+1,darkpawn,,a dark pawn chess piece
+2,darkknight,,a dark knight chess piece
+3,darkrook,,a dark rook chess piece
+4,darkbishop,,a dark bishop chess piece
+5,darkqueen,,a dark queen chess piece
+6,darkking,,a dark king chess piece
+7,lightknight,,a light knight chess piece
+8,lightrook,,a light rook chess piece
+9,lightbishop,,a light bishop chess piece
+10,lightking,,a light king chess piece
+11,lightqueen,,a light queen chess piece
+12,lightpawn,,a light pawn chess piece

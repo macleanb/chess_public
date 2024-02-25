@@ -25,9 +25,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('icons/', include('icons_app.urls')),
-    path('help/', include('external_openai_app.urls')),
     path('games/', include('games_app.urls')),
+    path('help/', include('external_openai_app.urls')),
+    path('icons/', include('icons_app.urls')),
+    path('users/', include('chess_users.urls')),
 ]
 
 if settings.DEBUG:
