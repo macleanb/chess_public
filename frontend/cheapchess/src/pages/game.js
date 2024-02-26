@@ -77,7 +77,7 @@ const Game = (
       setBoardData(initializedBoardData);
       
       setFormMode(appState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE);
-      setFormType(appState.imports.constants.FORM_TYPE_GAME);
+      setFormType(appState.imports.constants.FORM_TYPE_GAME_MENU);
     }
   }
 
@@ -155,7 +155,7 @@ const Game = (
 
       // test uncomment
       //setFormMode(appState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE);
-      //setFormType(appState.imports.constants.FORM_TYPE_GAME);
+      //setFormType(appState.imports.constants.FORM_TYPE_GAME_MENU);
     }
   }, []); // shouldn't need to watch appState?.imports
 
@@ -232,6 +232,7 @@ const Game = (
                   selectedColorOptionInColorOptionSelect      : selectedColorOptionInColorOptionSelect,
                   setFormData                                 : setFormData,
                   setFormMode                                 : setFormMode,
+                  setFormType                                 : setFormType,
                   setGameDataFromServer                       : setGameDataFromServer,
                   setPlayerColor                              : setPlayerColor,
                   setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,

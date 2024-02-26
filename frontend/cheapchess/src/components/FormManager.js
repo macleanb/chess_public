@@ -2,6 +2,7 @@
 import { useContext, useEffect } from 'react';
 
 /* Internal Imports */
+import AuthContext from '../contexts/AuthProvider';
 import MessageContext from '../contexts/MessageProvider';
 
 /* This component is a flexible-use form manager for
@@ -18,6 +19,7 @@ const FormManager = ({
 
   /* Context Declarations */
   const { messages, setMessages } = useContext(MessageContext);
+  const { auth, setAuth } = useContext(AuthContext);
 
 
   ////////////////////////
@@ -42,6 +44,43 @@ const FormManager = ({
   ////////////////////////
   ///  Event Handlers  ///
   ////////////////////////
+
+  /* Adds a user to backend server/database. */
+  const handleAddUserClicked = async (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    let apiResponse = null;
+
+    /* For later once we have AuthContext working (TODO)*/
+    const auth = null;
+
+    /* Check for validation errors and report as needed. */
+    const formIsValid = parentState.imports.reportUserFormValidity(
+      parentState.formData,
+      parentRefs,
+      parentState.formMode,
+      );
+
+    if (parentState.formData && formIsValid) {
+      if (parentState.formMode === parentState.imports.constants.FORM_MODE_USER_ADD) {
+        apiResponse = await parentState.imports.addUser( // Administrators adding users
+          auth,
+          parentState.formData,
+          setMessages
+        );
+      } else if (parentState.formMode === parentState.imports.constants.FORM_MODE_USER_SELF_REGISTER) {
+        apiResponse = await parentState.imports.registerUser( // Users self-registering
+          auth,
+          parentState.formData,
+          setMessages
+        );
+
+        setMessages({Success: `Chess user ${apiResponse.first_name} was successfully added.`});
+        parentState.setFormMode(parentState.imports.constants.FORM_MODE_USER_SIGNIN);
+      }
+    }
+  }
 
   /* Make an API call to create a game on backend, then populate the
      gameDataFromServer with pieces from the backend server */
@@ -99,6 +138,61 @@ const FormManager = ({
     }
   }
 
+  /* User login action */
+  const handleSignInClicked = async (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    let apiResponse = null;
+
+    /* Check for validation errors and report as needed. */
+    const formIsValid = parentState.imports.reportUserFormValidity(
+      parentState.formData,
+      parentRefs,
+      parentState.formMode
+      );
+
+    if (parentState.formData && formIsValid) {
+      if (parentState.formMode === parentState.imports.constants.FORM_MODE_USER_SIGNIN) {
+        apiResponse = await parentState.imports.signIn(
+          parentState.formData,
+          setMessages
+        );
+        
+        /* If the response contains user data, transition to form 
+           for starting a new game or continuing an existing game */
+        if (apiResponse?.data?.user?.first_name) {
+          /* Update Authentication context */
+          parentState.imports.parseAndSetAuth(apiResponse.data, setAuth);
+          
+          parentState.setFormMode(parentState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE);
+          parentState.setFormType(parentState.imports.constants.FORM_TYPE_GAME_MENU);
+        }
+      }
+    }
+  }
+
+  /* User logout action */
+  const handleSignOutClicked = async (e) => {
+    parentState.imports.signOut(setAuth).then((result) => {
+      /* Print goodbye message */
+      setMessages({Success: 'Come back soon!'});
+
+      /* Switch form back to user/sign in */
+      parentState.setFormMode(parentState.imports.constants.FORM_MODE_USER_SIGNIN);
+      parentState.setFormType(parentState.imports.constants.FORM_TYPE_USER);
+    }).catch((e) => {
+      setMessages({Error: `Unable to logout.  Please try again.\n ${e}`});
+    });
+  }
+
+  /* Switch form from login to self-register */
+  const handleSignUpClicked = async (e) => {
+    e.preventDefault();
+  
+    parentState.setFormMode(parentState.imports.constants.FORM_MODE_USER_SELF_REGISTER);
+  }
+
   /* Suggest a move to the user if they click the Suggest Move button */
   const handleSuggestMoveClicked = async (e) => {
     e.preventDefault();
@@ -125,6 +219,8 @@ const FormManager = ({
 
   /* Handles changes to NewGame Form */
   const onGameNewFormChange = e => {
+    parentState.imports.clearFormErrors(parentRefs);
+
     if (parentState.imports.constants) {
       const selectedColor = parentState.imports.constants.COLOR_OPTIONS[e.target.value];
       parentState.setFormData({ ...parentState.formData, [e.target.name]: selectedColor });
@@ -133,76 +229,9 @@ const FormManager = ({
   
   /* Handles changes to UserForm */
   const onUserFormChange = e => {
+    parentState.imports.clearFormErrors(parentRefs);
+
     parentState.setFormData({ ...parentState.formData, [e.target.name]: e.target.value });
-  }
-
-  /* Adds a user to backend server/database. */
-  const handleAddUserClicked = async (e) => {
-    e.preventDefault();
-    let apiResponse = null;
-
-    /* For later once we have AuthContext working (TODO)*/
-    const auth = null;
-
-    /* Check for validation errors and report as needed. */
-    const formIsValid = parentState.imports.reportUserFormValidity(
-      parentState.formData,
-      parentRefs,
-      parentState.formMode,
-      );
-
-    if (parentState.formData && formIsValid) {
-      if (parentState.formMode === parentState.imports.constants.FORM_MODE_USER_ADD) {
-        apiResponse = await parentState.imports.addUser( // Administrators adding users
-          auth,
-          parentState.formData,
-          setMessages
-        );
-      } else if (parentState.formMode === parentState.imports.constants.FORM_MODE_USER_SELF_REGISTER) {
-        apiResponse = await parentState.imports.registerUser( // Users self-registering
-          auth,
-          parentState.formData,
-          setMessages
-        );
-      }
-    }
-
-    
-    // test
-    console.log(`Here in  formManager handleAddUserClicked  response:   ${ JSON.stringify(  apiResponse  ) }`);
-    
-    
-
-    //   /* Notify the parent component that the user has been created & reset the form */
-    //   if (await apiResponse && !backEndErrors && apiResponse.id) {
-    //     const userData = apiResponse;
-    //     setFormData(null);
-    //     parentHandlers.handleUserCreated(userData);
-    //   }
-    // }
-  }
-
-  /* User login action */
-  const handleSignInClicked = async (e) => {
-    e.preventDefault();
-    let apiResponse = null;
-
-    /* Check for validation errors and report as needed. */
-    const formIsValid = parentState.imports.reportUserFormValidity(
-      parentState.formData,
-      parentRefs,
-      parentState.formMode
-      );
-  
-    // test
-    console.log(`Here in  FormManager handleSignInClicked formData   ${ JSON.stringify(parentState.formData) }`);
-  }
-
-  /* Switch form from login to self-register */
-  const handleSignUpClicked = async (e) => {
-    e.preventDefault();
-  
-    parentState.setFormMode(parentState.imports.constants.FORM_MODE_USER_SELF_REGISTER);
   }
 
   /* Updates the selected user. */
@@ -269,7 +298,7 @@ const FormManager = ({
   useEffect(() => {
     if (parentState?.imports) {
       if (
-        parentState.formType === parentState.imports.constants.FORM_TYPE_GAME &&
+        parentState.formType === parentState.imports.constants.FORM_TYPE_GAME_MENU &&
         parentState.formMode === parentState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE
         )
       {
@@ -314,13 +343,14 @@ const FormManager = ({
     parentState?.formMode &&
     parentState?.formData &&
     parentState?.imports &&
-    parentState.formType === parentState.imports.constants.FORM_TYPE_GAME && 
+    parentState.formType === parentState.imports.constants.FORM_TYPE_GAME_MENU && 
     parentState.imports?.formDataIs_NewGame(parentState.formData)
     ) {
     return (
-      <parentState.imports.Form_Game parentState={{
+      <parentState.imports.Form_GameMenu parentState={{
         ...parentState,
         handleNewGameClicked     : handleNewGameClicked,
+        handleSignOutClicked     : handleSignOutClicked,
         onGameNewFormChange      : onGameNewFormChange,
       }}/>
     );

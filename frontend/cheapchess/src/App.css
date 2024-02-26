@@ -42,7 +42,7 @@
   border: 2px solid lightskyblue;
 }
 
-.button-signup {
+.button-signup, .button-signout {
   background-color: white;
   border-color: #007bff;
   color: #007bff;
@@ -74,7 +74,7 @@
   width: 804px;
 }
 
-.button-signup {
+.button-signup, .button-signout {
   margin-left: 2em;
 }
 
@@ -119,8 +119,17 @@
   padding: 0px;
 }
 
+.form-container {
+  margin-left: 2em;
+  margin-right: 2em;
+}
+
 .game-main-container {
   display: flex;
+}
+
+.intro-paragraph {
+  text-align: justify;
 }
 
 .square {

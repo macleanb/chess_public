@@ -71,7 +71,8 @@ class UsersView(APIView):
         output = [UserSerializer(obj, context={"request": request}).data for obj in UserModel.objects.all()]
         
         return Response(output)
-    
+
+    # This could be used by administrators
     def post(self, request):
         # Make sure basic users aren't able to add is_staff if they don't have permissions
         if request.data.get('is_staff') == 'true':
@@ -89,7 +90,7 @@ class UsersView(APIView):
 
             # Add new user to Basic User Group
             if (new_user):
-                basic_user_group = Group.objects.get(name="Basic User")
+                basic_user_group = Group.objects.get(name="basicusers")
                 new_user.groups.add(basic_user_group)
 
             return Response(serializer.data)
@@ -152,20 +153,20 @@ class UserView(APIView):
 
 
 class UserRegister(APIView):
-# If users need to be able to self-register, we can't enforce is_authenticated 
-# or 'Can add chessuser' permission because users that are registering
-# won't be logged in yet and they won't have any permissions.
+    # If users need to be able to self-register, we can't enforce is_authenticated 
+    # or 'Can add chessuser' permission because users that are registering
+    # won't be logged in yet and they won't have any permissions.
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request):
         # Make sure self-registering users aren't able to add is_staff
         if request.data.get('is_staff') == 'true':
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        
+
         # Make sure self-registering users aren't able to add is_superuser
         if request.data.get('is_superuser') == 'true':
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-            
+
         data = request.data
         # data validation would normally take place here 
         #serializer = UserRegisterSerializer(data=data)
@@ -189,13 +190,15 @@ class UserLogin(APIView):
     authentication_classes = (SessionAuthentication,)
     
     def post(self, request):
+
         data = request.data
         # data validation would normally take place here 
         serializer = UserLoginSerializer(data=data)
+
         if serializer.is_valid(raise_exception=True):
             try:
                 user = serializer.check_user(data)
-            except ValidationError:
+            except ValidationError as ve:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
 
             if user:
@@ -205,8 +208,6 @@ class UserLogin(APIView):
                 permission_list = get_permissions_for_user(user=user_obj)
 
                 return Response({'user': serializer.data, 'permissions': JSONRenderer().render(permission_list)}, status=status.HTTP_200_OK)
-        
-        # catch any validation errors
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
 

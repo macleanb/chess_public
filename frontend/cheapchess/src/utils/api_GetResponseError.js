@@ -7,7 +7,7 @@ const getResponseError = (error) => {
 
   if (error.response) {
     if (error.response.status === 401) {
-      const errorData = { Error: 'You are not authorized to add staff/superuser permissions to new users.' };
+      const errorData = { Error: 'Invalid email or password.' };
       return errorData;
     } else if (error.response.data) {
 

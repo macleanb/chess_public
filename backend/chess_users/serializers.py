@@ -64,6 +64,7 @@ class UserLoginSerializer(serializers.Serializer):
     # Convert e-mail provided by user to lowercase
     def check_user(self, clean_data):
         clean_data['email'] = clean_data['email'].lower()
+
         user = authenticate(email=clean_data['email'], password=clean_data['password'])
         if not user:
             raise ValidationError('user not found')

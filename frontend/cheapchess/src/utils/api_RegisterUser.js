@@ -45,9 +45,7 @@ const registerUser = async (
         //   }
         // }
 
-        // if (userData.is_active) {
-        //   form_data.append("is_active", userData.is_active);
-        // }
+        form_data.append("is_active", true);
 
         // if (formData.image && formData.imageFileName.length > 0) {
         //   form_data.append("image", formData.image, formData.imageFileName);

@@ -3,16 +3,26 @@
 ////////////////
 
 /* External Imports */
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 
 /* Internal Imports */
+import AuthContext from '../contexts/AuthProvider';
+import MessageContext from '../contexts/MessageProvider';
 
 /* This form provides a select component and a button for users
    to create new games */
-const Form_Game = ({
+const Form_GameMenu = ({
   parentState,
 }) => 
 {
+
+  ///////////////////////
+  ///   Declarations  ///
+  ///////////////////////
+
+  /* Context Declarations */
+  const { messages, setMessages } = useContext(MessageContext);
+  const { auth, setAuth } = useContext(AuthContext);
 
   ///////////////////////
   ///   Use Effects   ///
@@ -40,17 +50,13 @@ const Form_Game = ({
   return (
     <div className="form-container">
       <br/>
-      <h1><b>CheapChess</b></h1>
       <br/>
-      "The leading free chess tutor that leverages AI technology for guided, experiential learning."
-      <br/>
-               - Unattributed Author
-      <br/>
-      <br/>
-      Welcome to CheapChess, where beginners who don't want to pay the high cost of exquisite chess tutors can settle for the best
-      that artificial intelligence can offer.  Of course, large-language models (LLMs) aren't perfect - they can be slow, and they
-      can be wrong.  But, as beginners to the game of chess, we aren't aiming for perfect.  Mediocrity is just fine with us --
-      as long as we have fun, and save some cash!
+      {
+        auth?.user
+        ?
+        <h1>Welcome {auth.user.first_name}!</h1>
+        : ''
+      }
       <br/>
       <br/>
       {
@@ -110,6 +116,23 @@ const Form_Game = ({
                 }
               </div>
             </parentState.imports.Form.Group>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <parentState.imports.Button
+              className="button-signout"
+              onClick={ parentState.handleSignOutClicked }
+            >
+              Sign Out
+            </parentState.imports.Button>
           </parentState.imports.Form>
         :
           ''
@@ -118,4 +141,4 @@ const Form_Game = ({
   );
 }
 
-export default Form_Game;
+export default Form_GameMenu;

@@ -53,4 +53,16 @@ Make sure to attribute the icons to flaticon.com wherever you display them by pu
 <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by SBTS2018 - Flaticon</a> (Light Knight)
 <a href="https://www.flaticon.com/free-icons/chess-piece" title="chess piece icons">Chess piece icons created by rizal2109 - Flaticon</a> (Light Bishop)
 
+### Activate Virtual Environment
+Navigate to wherever your virtual environment directory is located (i.e. ~ or CheapChess/backend/)
+source <virtual environment name>/bin/activate (source default/bin/activate)
+
+### Start backend server
+Navigate to CheapChess/backend/
+python manage.py runserver
+
+### Start frontend server/app
+Navigate to CheapChess/frontend/cheapchess
+npm start
+
 
