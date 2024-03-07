@@ -8,11 +8,11 @@
 ### Must Do(s)
 -----------------------------------------------------------------------------------------------------------------------------------------
 *** Name / Task:
-1. Name / Task: (F/B) Brian add user auth, capitalize component names
+1. Name / Task: (F/B) Feature for game play functionality (moving & capturing pieces)
 2. Name / Task: (F/B) New Game Form: 'Join Existing Game' selector that includes unfinished games
-3. Name / Task: (F/B) Feature for game play functionality (moving & capturing pieces)
-4. Name / Task: (F/B) Feature for game chat window to the right of the chess board
-5. Name / Task: (F) Add optional rank/file labels to board (use checkbox to toggle display on and off)
+3. Name / Task: (F/B) Feature for game chat window to the right of the chess board
+4. Name / Task: (F) Add optional rank/file labels to board (use checkbox to toggle display on and off)
+5. Name / Task: 
 6. Name / Task: 
 
 
