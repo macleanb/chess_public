@@ -1,19 +1,18 @@
 /* External Imports */
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 
 /* Internal Imports */
 import MessageContext from '../contexts/MessageProvider';
 
-const Game = (
-  {
-    appState
-  }) =>
+const Game = () => 
 {
   ///////////////////////
   ///   Declarations  ///
   ///////////////////////
 
   /* Context Declarations */
+  const appState = useOutletContext();
   const { messages, setMessages } = useContext(MessageContext);
 
   /* State Declarations */

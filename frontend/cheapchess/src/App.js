@@ -4,8 +4,8 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
+import { Outlet } from 'react-router-dom';
 import React from 'react';
-import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Row from 'react-bootstrap/Row';
 import { useContext, useState } from "react";
 
@@ -32,7 +32,6 @@ import Form_GameMenu from './forms/Form_GameMenu';
 import Form_GameControls from './forms/Form_GameControls';
 import Form_User from './forms/Form_User';
 import FormManager from "./components/FormManager";
-import Game from './pages/game';
 import getAllPieceLocations from "./utils/board_getAllPieceLocations";
 import getClient from "./utils/api_GetClient";
 import getExclusiveRange from './utils/getExclusiveRange';
@@ -86,7 +85,6 @@ function App() {
     Form_GameControls                : Form_GameControls,
     Form_User                        : Form_User,
     FormManager                      : FormManager,
-    Game                             : Game,
     getAllPieceLocations             : getAllPieceLocations,
     getClient                        : getClient,
     getCSRFToken                     : getCSRFToken,
@@ -137,15 +135,7 @@ function App() {
     <AuthProvider>
       <MessageProvider>
         <main className="App">
-          <Router>
-            <Routes>
-
-              {/* Unprotected Routes */}
-              <Route path="/" element={ <Game appState={ appState }/> }/>
-              <Route path="/game" element={ <Game appState={ appState }/> }/>
-
-            </Routes>
-          </Router>
+          <Outlet context={ appState }/>
         </main>
       </MessageProvider>
     </AuthProvider>
