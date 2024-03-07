@@ -134,23 +134,21 @@ function App() {
   });
 
   return (
-    <React.StrictMode>
-      <AuthProvider>
-        <MessageProvider>
-          <main className="App">
-            <Router>
-              <Routes>
+    <AuthProvider>
+      <MessageProvider>
+        <main className="App">
+          <Router>
+            <Routes>
 
-                {/* Unprotected Routes */}
-                <Route path="/" element={ <Game appState={ appState }/> }/>
-                <Route path="/game" element={ <Game appState={ appState }/> }/>
+              {/* Unprotected Routes */}
+              <Route path="/" element={ <Game appState={ appState }/> }/>
+              <Route path="/game" element={ <Game appState={ appState }/> }/>
 
-              </Routes>
-            </Router>
-          </main>
-        </MessageProvider>
-      </AuthProvider>
-    </React.StrictMode>
+            </Routes>
+          </Router>
+        </main>
+      </MessageProvider>
+    </AuthProvider>
   );
 }
 
