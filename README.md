@@ -7,12 +7,12 @@ that artificial intelligence can offer.  Of course, large-language models (LLMs)
 can be wrong.  But, as beginners to the game of chess, we aren't aiming for perfect.  Mediocrity is just fine with us --
 as long as we have fun, and save some cash!
 
-## Frontend - create an app the easy way
+## Frontend setup
   - Navigate to frontend / cheapchess directory
   - npm install
   - copy/paste 'import "bootstrap/dist/css/bootstrap.min.css";' into App.js
 
-### Create .env file to store secrets
+### Backend - create .env file to store secrets
 Create a .env file on the backend and add .env to .gitignore
 The OPENAI API key will be stored here with one line - export OPEN_AI_KEY="abcdefg..."
 The Django secret key will also be stored here with one line - DJANGO_SECRET_KEY = '...' (note: leave off 'export')
