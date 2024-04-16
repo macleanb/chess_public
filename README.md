@@ -25,16 +25,17 @@ source <virtual environment name>/bin/activate (source default/bin/activate)
 Run pip install -r requirements.txt to ensure all required dependiences are installed
 for this Django REST application
 
-### Create a Local Database and migrate
+### Backend - create a Local Database and migrate
 Recommend creating a database using PostgreSQL ($ createdb cheapchess_db)
+make sure to update settings.py with your database name
 cd into backend directory
 python manage.py migrate
 
-### Create a superuser account
+### Backend - create a superuser account
 cd into backend directory
 python manage.py createsuperuser
 
-### Import icon fixtures into database
+### Backend - import icon fixtures into database
 cd into backend directory
 python manage.py loaddata icons_app/fixtures/icon_data.json
 
@@ -51,11 +52,11 @@ Make sure to attribute the icons to flaticon.com wherever you display them by pu
 <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by SBTS2018 - Flaticon</a> (Light Knight)
 <a href="https://www.flaticon.com/free-icons/chess-piece" title="chess piece icons">Chess piece icons created by rizal2109 - Flaticon</a> (Light Bishop)
 
-### Start backend server
+### Backend - start server
 Navigate to CheapChess/backend/
 python manage.py runserver
 
-### Associate icon images to icon data
+### Backend - associate icon images to icon data
 navigate to http://localhost:8000/admin/  and login as superuser
 select icons model
 upload each image you downloaded (above) to the respective icon
