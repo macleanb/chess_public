@@ -8,37 +8,35 @@ can be wrong.  But, as beginners to the game of chess, we aren't aiming for perf
 as long as we have fun, and save some cash!
 
 ## Frontend - create an app the easy way
-Navigate to frontend directory
-npx create-react-app cheapchess
-cd into cheapchess directory and run:
-  - npm install axios
-  - npm install react-router-dom
-  - npm install react-bootstrap
-  - npm install bootstrap@5.3.2 (or latest version), and copy/paste 'import "bootstrap/dist/css/bootstrap.min.css";' into App.js
-  - npm install openai (for openai api calls - I don't think dotenv is needed)
-Create .env file inside app directory (same directory as src) and paste api key (make sure .gitignore ignores this file!)
+  - Navigate to frontend / cheapchess directory
+  - npm install
+  - copy/paste 'import "bootstrap/dist/css/bootstrap.min.css";' into App.js
 
-### OpenAPI guide
-Create a .env file on the backend and add .env to .gitignore (your API key
-will be stored here with one line - export OPEN_AI_KEY="abcdefg...")
-To access this api key in your env variables, install python-dotenv:
-pip install python-dotenv
-In your view, access the key with:
-from dotenv import load_dotenv
-load_dotenv()
-api_key = os.environ.get("OPEN_AI_KEY")
-https://www.youtube.com/watch?v=_tYuhnlw7OU
-https://www.youtube.com/watch?v=JJ9fkYX7q4A
+### Create .env file to store secrets
+Create a .env file on the backend and add .env to .gitignore
+The OPENAI API key will be stored here with one line - export OPEN_AI_KEY="abcdefg..."
+The Django secret key will also be stored here with one line - DJANGO_SECRET_KEY = '...' (note: leave off 'export')
 
-## Backend - create a Django REST project
-### Install Dependencies
+### Backend - create and activate Virtual Environment
+Navigate to wherever your virtual environment directory is located (i.e. ~ or CheapChess/backend/)
+source <virtual environment name>/bin/activate (source default/bin/activate)
+
+### Backend - Install Dependencies
 Run pip install -r requirements.txt to ensure all required dependiences are installed
 for this Django REST application
 
-### Create a Local Database and a superuser account
+### Create a Local Database and migrate
 Recommend creating a database using PostgreSQL ($ createdb cheapchess_db)
-seed your db with the icons by running the seeds.sql file in the icons_app directory
-This app uses Django REST framework to interact with the database
+cd into backend directory
+python manage.py migrate
+
+### Create a superuser account
+cd into backend directory
+python manage.py createsuperuser
+
+### Import icon fixtures into database
+cd into backend directory
+python manage.py loaddata icons_app/fixtures/icon_data.json
 
 ### Download Free Chess Images
 You can download free chess images from flaticon.com.  Once you download them, you can import them into your database
@@ -53,13 +51,14 @@ Make sure to attribute the icons to flaticon.com wherever you display them by pu
 <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by SBTS2018 - Flaticon</a> (Light Knight)
 <a href="https://www.flaticon.com/free-icons/chess-piece" title="chess piece icons">Chess piece icons created by rizal2109 - Flaticon</a> (Light Bishop)
 
-### Activate Virtual Environment
-Navigate to wherever your virtual environment directory is located (i.e. ~ or CheapChess/backend/)
-source <virtual environment name>/bin/activate (source default/bin/activate)
-
 ### Start backend server
 Navigate to CheapChess/backend/
 python manage.py runserver
+
+### Associate icon images to icon data
+navigate to http://localhost:8000/admin/  and login as superuser
+select icons model
+upload each image you downloaded (above) to the respective icon
 
 ### Start frontend server/app
 Navigate to CheapChess/frontend/cheapchess

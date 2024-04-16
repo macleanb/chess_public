@@ -1,0 +1,110 @@
+[
+{
+  "model": "icons_app.icon",
+  "pk": 1,
+  "fields": {
+    "name": "darkpawn",
+    "image": "images/darkpawn_qFwjMlV.png",
+    "description": "a dark pawn chess piece"
+  }
+},
+{
+  "model": "icons_app.icon",
+  "pk": 2,
+  "fields": {
+    "name": "darkknight",
+    "image": "images/darkknight_grFMD7x.png",
+    "description": "a dark knight chess piece"
+  }
+},
+{
+  "model": "icons_app.icon",
+  "pk": 3,
+  "fields": {
+    "name": "darkrook",
+    "image": "images/darkrook_2f1iTnh.png",
+    "description": "a dark rook chess piece"
+  }
+},
+{
+  "model": "icons_app.icon",
+  "pk": 4,
+  "fields": {
+    "name": "darkbishop",
+    "image": "images/darkbishop_5FgaaHI.png",
+    "description": "a dark bishop chess piece"
+  }
+},
+{
+  "model": "icons_app.icon",
+  "pk": 5,
+  "fields": {
+    "name": "darkqueen",
+    "image": "images/darkqueen_TT2IdWO.png",
+    "description": "a dark queen chess piece"
+  }
+},
+{
+  "model": "icons_app.icon",
+  "pk": 6,
+  "fields": {
+    "name": "darkking",
+    "image": "images/darkking_kN3fid5.png",
+    "description": "a dark king chess piece"
+  }
+},
+{
+  "model": "icons_app.icon",
+  "pk": 7,
+  "fields": {
+    "name": "lightknight",
+    "image": "images/lightknight_w1B4mJz.png",
+    "description": "a light knight chess piece"
+  }
+},
+{
+  "model": "icons_app.icon",
+  "pk": 8,
+  "fields": {
+    "name": "lightrook",
+    "image": "images/lightrook_x3fmrNd.png",
+    "description": "a light rook chess piece"
+  }
+},
+{
+  "model": "icons_app.icon",
+  "pk": 9,
+  "fields": {
+    "name": "lightbishop",
+    "image": "images/lightbishop_t723KIr.png",
+    "description": "a light bishop chess piece"
+  }
+},
+{
+  "model": "icons_app.icon",
+  "pk": 10,
+  "fields": {
+    "name": "lightking",
+    "image": "images/lightking_xRRjgzG.png",
+    "description": "a light king chess piece"
+  }
+},
+{
+  "model": "icons_app.icon",
+  "pk": 11,
+  "fields": {
+    "name": "lightqueen",
+    "image": "images/lightqueen_Biwe2Ie.png",
+    "description": "a light queen chess piece"
+  }
+},
+{
+  "model": "icons_app.icon",
+  "pk": 12,
+  "fields": {
+    "name": "lightpawn",
+    "image": "images/lightpawn_BtL6uwU.png",
+    "description": "a light pawn chess piece"
+  }
+}
+]
