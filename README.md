@@ -8,7 +8,7 @@ can be wrong.  But, as beginners to the game of chess, we aren't aiming for perf
 as long as we have fun, and save some cash!
 
 ## Database Design / Schema
-![CheapChess Database](./images/schema.png)
+![CheapChess Database](./resources/schema.png)
 
 ## Frontend setup
   - Navigate to frontend / cheapchess directory
