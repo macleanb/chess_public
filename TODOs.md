@@ -16,7 +16,7 @@
 5. TBD / (F/B): Feature for game chat window to the right of the chess board
 6. TBD / (F): Add optional rank/file labels to board (use checkbox to toggle display on and off)
 7. Brian / (B): Ensure new games (open) created_datetime is set. 
-8. Name / Task: 
+8. Brian / (B): Update Game model with player1 / player2 / whose_turn / game_winner fields as foreign keys to ChessUser model.  Create a ChessUser 'Computer'.
 
 
 ### Requests for Help, Design Changes

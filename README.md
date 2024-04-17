@@ -7,6 +7,9 @@ that artificial intelligence can offer.  Of course, large-language models (LLMs)
 can be wrong.  But, as beginners to the game of chess, we aren't aiming for perfect.  Mediocrity is just fine with us --
 as long as we have fun, and save some cash!
 
+## Database Design / Schema
+![CheapChess Database](./images/schema.png)
+
 ## Frontend setup
   - Navigate to frontend / cheapchess directory
   - npm install
