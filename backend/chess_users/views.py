@@ -217,6 +217,10 @@ class UserLogout(APIView):
     authentication_classes = (SessionAuthentication,)
 
     def post(self, request):
+        # test
+        print('here in views.py, user info:')
+        print(request.user.id)
+
         logout(request)
         return Response(status=status.HTTP_200_OK)
 

@@ -25,6 +25,23 @@ const Form_GameControls = ({
       <br/>
       <h1><b>Game Controls</b></h1>
       <br/>
+      <div>
+        {
+          parentState?.gameDataFromServer?.player1?.first_name
+          ?
+            <h5>{`Player 1: ${parentState.gameDataFromServer.player1.first_name}`}</h5>
+          :
+            <h5>{`Player 1: Open`}</h5>
+        }
+        {
+          parentState?.gameDataFromServer?.player2?.first_name
+          ?
+            <h5>{`Player 2: ${parentState.gameDataFromServer.player2.first_name}`}</h5>
+          :
+            <h5>{`Player 2: Open`}</h5>
+        }
+      </div>
+      <br/>
       {
         parentState?.hasOwnProperty('handleSuggestMoveClicked') &&
         parentState?.hasOwnProperty('handleQuitGameClicked') &&

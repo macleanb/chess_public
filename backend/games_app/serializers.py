@@ -7,17 +7,38 @@ from rest_framework.utils.serializer_helpers import ReturnDict
 from icons_app.models import Icon
 from .models import Game, Piece
 from icons_app.serializers import IconSerializer
+from chess_users.serializers import UserSerializer, ChessUser
 
 class GameSerializer(serializers.ModelSerializer):
     """
     Serializer for Game class
     """
+    # Couldn't get this to work
+    # player1 = UserSerializer()
+
     class Meta:
         """
         Meta settings to the Game serializer class
         """
         model = Game
         fields = '__all__'
+    
+    # Override deserialization because the above field setting
+    # wouldn't work
+    def to_representation(self, instance):
+        """ Overrides deserialization """
+        result = super().to_representation(instance)
+        player1_id = result['player1']
+        player1 = ChessUser.objects.get(pk=player1_id)
+        player1_serialized = UserSerializer(player1)
+        result['player1'] = player1_serialized.data
+
+        player2_id = result['player2']
+        if player2_id is not None:
+            player2 = ChessUser.objects.get(pk=player2_id)
+            player2_serialized = UserSerializer(player2)
+            result['player2'] = player2_serialized.data
+        return result
 
 class PieceSerializer(serializers.ModelSerializer):
     """
