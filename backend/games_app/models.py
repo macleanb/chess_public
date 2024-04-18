@@ -5,20 +5,25 @@ from django.utils import timezone
 
 # Internal Imports
 from icons_app.models import Icon
+from chess_users.models import ChessUser
 
 class Game(models.Model):
     """ A class for managing chess games """
-    player1 = models.CharField(  # later: player model
-        max_length=200,
-        blank=True,
-        null=True
-        )
+    player1 = models.ForeignKey(
+        ChessUser,
+        blank = True,
+        null = True,
+        on_delete=models.CASCADE,
+        related_name='games_as_player1'
+    )
 
-    player2 = models.CharField( # later: player model
-        max_length=200,
-        blank=True,
-        null=True
-        )
+    player2 = models.ForeignKey(
+        ChessUser,
+        blank = True,
+        null = True,
+        on_delete=models.CASCADE,
+        related_name='games_as_player2'
+    )
 
     player1_color = models.CharField(  # later: player model
         max_length=200,
@@ -158,4 +163,3 @@ class Piece(models.Model):
         blank=True,
         null=True
         )
-

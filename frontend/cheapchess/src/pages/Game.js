@@ -148,13 +148,9 @@ const Game = () =>
   /* Set formMode and formType once page is loaded */
   useEffect(() => {
     if (appState?.imports) {
-      // test delete
+      // TODO: check for CSRF Cookies and set Auth if one exists
       setFormMode(appState.imports.constants.FORM_MODE_USER_SIGNIN);
       setFormType(appState.imports.constants.FORM_TYPE_USER);
-
-      // test uncomment
-      //setFormMode(appState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE);
-      //setFormType(appState.imports.constants.FORM_TYPE_GAME_MENU);
     }
   }, []); // shouldn't need to watch appState?.imports
 
@@ -191,7 +187,7 @@ const Game = () =>
     }
   }, [gameDataFromServer, playerColor]);
 
-  // For troubleshooting: prints boardData whenever it changes
+  // For dev/test: prints boardData whenever it changes
   // useEffect(() => {
   //   console.log(`here in game, board data updated!`);
   //   if (Array.isArray(boardData)) {
@@ -204,7 +200,7 @@ const Game = () =>
 
   // }, [boardData]);
 
-  // For troubleshooting: prints gameDataFromServer whenever it changes
+  // For dev/test: prints gameDataFromServer whenever it changes
   // useEffect(() => {
   //   console.log(`here in game, game data updated!`);
   //   if (gameDataFromServer) {
@@ -231,6 +227,7 @@ const Game = () =>
                   formData                                    : formData,
                   formMode                                    : formMode,
                   formType                                    : formType,
+                  gameDataFromServer                          : gameDataFromServer,
                   handleGameQuit                              : handleGameQuit,
                   handleNewGameCreated                        : handleNewGameCreated,
                   handleSuggestedMoveReceived                 : handleSuggestedMoveReceived,

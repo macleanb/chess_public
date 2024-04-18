@@ -156,9 +156,9 @@ const constants = {
 
   /* URLs */
   URL_AUTHENTICATED_USER: 'http://localhost:8000/users/authenticateduser',
-  URL_BACKEND_BASE: 'http://127.0.0.1:8000',
-  URL_GAMES: 'http://127.0.0.1:8000/games/',
-  URL_ICONS: 'http://127.0.0.1:8000/icons/',
+  URL_BACKEND_BASE: 'http://localhost:8000', // was 127.0.0
+  URL_GAMES: 'http://localhost:8000/games/',
+  URL_ICONS: 'http://localhost:8000/icons/', // was 127.0.0
   URL_LOGIN: 'http://localhost:8000/users/login',
   URL_LOGOUT: 'http://localhost:8000/users/logout',
   URL_OPENAI: 'https://api.openai.com/v1/completions',
