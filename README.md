@@ -67,3 +67,7 @@ by logging into your database as an admin.
 * ```npm start```
 
 
+### Troubleshooting
+* Registration / login not working
+- A user may not have logged out properly.  You may need delete the CSRF tokens from Application/cookies in developer tools.
+

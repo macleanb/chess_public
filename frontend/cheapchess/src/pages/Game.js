@@ -204,6 +204,14 @@ const Game = () =>
 
   // }, [boardData]);
 
+  // For troubleshooting: prints gameDataFromServer whenever it changes
+  // useEffect(() => {
+  //   console.log(`here in game, game data updated!`);
+  //   if (gameDataFromServer) {
+  //     console.log(gameDataFromServer);
+  //   }
+  // }, [gameDataFromServer]);
+
   ////////////
   /* Render */
   ////////////
