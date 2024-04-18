@@ -43,11 +43,13 @@ class Game(models.Model):
         default=False
         ) # indicates whether others can watch the game
 
-    whose_turn = models.CharField( # player1 or player2
-        max_length=200,
-        blank=True,
-        null=True
-        )
+    whose_turn = models.ForeignKey(
+        ChessUser,
+        blank = True,
+        null = True,
+        on_delete=models.CASCADE,
+        related_name='games_as_player_whose_turn_it_is'
+    )
 
     last_turn_datetime = models.DateTimeField(
         blank=True,
@@ -82,11 +84,13 @@ class Game(models.Model):
         null=True
         )
 
-    game_winner = models.CharField( # player1 or player2
-        max_length=200,
-        blank=True,
-        null=True
-        )
+    game_winner = models.ForeignKey(
+        ChessUser,
+        blank = True,
+        null = True,
+        on_delete=models.CASCADE,
+        related_name='games_won'
+    )
 
     def __repr__(self):
         return self.__str__()

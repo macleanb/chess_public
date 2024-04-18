@@ -38,6 +38,16 @@ class GameSerializer(serializers.ModelSerializer):
             player2 = ChessUser.objects.get(pk=player2_id)
             player2_serialized = UserSerializer(player2)
             result['player2'] = player2_serialized.data
+        
+        player_whose_turn_it_is = instance.whose_turn
+        if player_whose_turn_it_is is not None:
+            serialized_player_whose_turn_it_is = UserSerializer(player_whose_turn_it_is)
+            result['whose_turn'] = serialized_player_whose_turn_it_is.data
+
+        player_game_winner = instance.game_winner
+        if player_game_winner is not None:
+            serialized_game_winner = UserSerializer(player_game_winner)
+            result['game_winner'] = serialized_game_winner.data
         return result
 
 class PieceSerializer(serializers.ModelSerializer):

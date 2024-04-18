@@ -1,7 +1,4 @@
 describe("0-Login and Logout Tests", () => {
-  /* NOTE: This will create an actual user.  If you want to continuously
-     run this test you must delete the testuser from the database or
-     assign a random number to the user email */
   it("Test the basic functionality of the Login page: logging in and logging out", () => {
     cy.visit("/");
 

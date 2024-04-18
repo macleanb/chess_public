@@ -26,7 +26,7 @@ describe("0a-Create Game Tests", () => {
     cy.get("h1").should("have.text", "Game Controls");
 
     /* Ensure Player information is populated correctly */
-    cy.get("h5").should("have.text", "Player 1: TestPlayer 2: Open");
+    cy.get("h5").should("have.text", "Player 1: TestPlayer 2: OpenIt's Test's turn");
 
     /* Click signout button and ensure we return to Sign In component */
     cy.get("form button").contains('Quit Game').click();
