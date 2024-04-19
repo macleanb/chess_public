@@ -57,6 +57,25 @@ class Game(models.Model):
         default=None
         )
 
+    # Notional move structure:
+    # { 'moves' :
+    #   [
+    #     {
+    #      'player_id' : int,
+    #      'origin_rank' : int,
+    #      'origin_file' : char,
+    #      'destination_rank' : int,
+    #      'destination_file' : int,
+    #      'moving_piece_id' : int,
+    #      'captured_piece_id' : int (or null) 
+    #     }, ...
+    #   ]
+    # }
+    moves_made = models.JSONField(
+        blank = True,
+        null = True
+    )
+
     created_date = models.DateField(default=datetime.date.today)
 
     started_datetime = models.DateTimeField(

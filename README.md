@@ -66,8 +66,21 @@ by logging into your database as an admin.
 * Navigate to CheapChess/frontend/cheapchess
 * ```npm start```
 
-
 ### Troubleshooting
 * Registration / login not working
 - A user may not have logged out properly.  You may need delete the CSRF tokens from Application/cookies in developer tools.
+
+### Project Update Flow
+0. Create a project and link the issues to your project (only once)
+
+1. Add issues to your repo
+2. Create a branch from a certain issue
+3. Copy/paste the fetch/checkout commands GitHub provides into your local command line git directory
+- git fetch origin
+- git checkout <branch_name>
+4. Update code and fixtures as required.  Migrate as required.
+5. add, commit, and push back to the GitHub branch
+6. Add a comment in the issue and upload an image showing tests complete or other evidence
+7. Initiate a pull request into main branch and merge
+8. On local machine, checkout main and do a git pull to catch back up (migrate as required)
 

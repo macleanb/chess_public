@@ -59,12 +59,27 @@ class GamesView(APIView):
             # Serialize each piece, 
             # add each piece to pieces dict (keyed by square i.e. 'a1')
             pieces = create_pieces_for_new_game(new_game)
-
             serialized_pieces = [PieceSerializer(piece).data for piece in pieces]
             serialized_pieces_dict = {}
             for serialized_piece in serialized_pieces:
                 key = serialized_piece['current_file'] + serialized_piece['current_rank']
                 serialized_pieces_dict[key] = serialized_piece
+
+            # Attach a moves_made dict with an empty list
+            moves_made = {
+                'moves' : [
+                    # {
+                    #  'player_id' : int,
+                    #  'origin_rank' : int,
+                    #  'origin_file' : char,
+                    #  'destination_rank' : int,
+                    #  'destination_file' : int,
+                    #  'moving_piece_id' : int,
+                    #  'captured_piece_id' : int (or null) 
+                    # }, ...
+                ]
+            }
+            new_game.moves_made = moves_made
 
             new_game.save()
 
