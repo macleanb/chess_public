@@ -2,6 +2,7 @@
    chess board . */
 
 /* External Imports */
+//import { useEffect } from 'react';
 
 /* Internal Imports */
    
@@ -21,6 +22,11 @@ const Square = (
   ///////////////////
   /// Use Effects ///
   ///////////////////
+
+  // useEffect(() => {
+  //   // test
+  //   console.log(parentState.squareData);
+  // },[parentState?.squareData]);
 
   //////////////
   /// Render ///

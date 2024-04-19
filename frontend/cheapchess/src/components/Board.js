@@ -21,7 +21,7 @@ const Board = (
   /* Get and display possible moves when a piece is clicked */
   const handlePieceClicked = async (e, pieceData) => {
     e.preventDefault();
-    e.stopPropagation(); 
+    e.stopPropagation();
 
     if (parentState?.imports?.apiGetPossibleMoves) {
       const response = await parentState.imports.apiGetPossibleMoves(

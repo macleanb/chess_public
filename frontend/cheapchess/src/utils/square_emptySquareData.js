@@ -13,7 +13,8 @@ const emptySquareData = (color, file, rank) => {
     rank  : rank, // [12345678]
     file  : file, // [abcdefgh]
     color : color,
-    piece : null
+    piece : null,
+    selected : false // indicates whether the user has clicked on it or not
   };
   return result;
 };

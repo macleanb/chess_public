@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
 /* Internal Imports */
+import AuthContext from '../contexts/AuthProvider';
 import MessageContext from '../contexts/MessageProvider';
 
 const Game = () => 
@@ -13,6 +14,7 @@ const Game = () =>
 
   /* Context Declarations */
   const appState = useOutletContext();
+  const { auth, setAuth } = useContext(AuthContext);
   const { messages, setMessages } = useContext(MessageContext);
 
   /* State Declarations */
@@ -207,6 +209,14 @@ const Game = () =>
   //     console.log(gameDataFromServer);
   //   }
   // }, [gameDataFromServer]);
+
+  // For dev/test: prints auth whenever it changes
+  // useEffect(() => {
+  //   console.log(`here in game, auth data updated!`);
+  //   if (auth) {
+  //     console.log(auth);
+  //   }
+  // }, [auth]);
 
   ////////////
   /* Render */
