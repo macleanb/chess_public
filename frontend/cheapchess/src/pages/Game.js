@@ -4,6 +4,7 @@ import { useOutletContext } from 'react-router-dom';
 
 /* Internal Imports */
 import AuthContext from '../contexts/AuthProvider';
+import constants from '../constants';
 import MessageContext from '../contexts/MessageProvider';
 
 const Game = () => 
@@ -149,12 +150,18 @@ const Game = () =>
 
   /* Set formMode and formType once page is loaded */
   useEffect(() => {
-    if (appState?.imports) {
-      // TODO: check for CSRF Cookies and set Auth if one exists
-      setFormMode(appState.imports.constants.FORM_MODE_USER_SIGNIN);
-      setFormType(appState.imports.constants.FORM_TYPE_USER);
+    if (appState?.imports && constants && auth) {
+      if (auth && auth.status === constants.STATUS_AUTHENTICATED) {
+        setFormMode(appState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE);
+        setFormType(appState.imports.constants.FORM_TYPE_GAME_MENU);
+        const initializedBoardData = appState.imports.initializeBoardData(playerColor);
+        setBoardData(initializedBoardData);
+      } else {
+        setFormMode(appState.imports.constants.FORM_MODE_USER_SIGNIN);
+        setFormType(appState.imports.constants.FORM_TYPE_USER);
+      }
     }
-  }, []); // shouldn't need to watch appState?.imports
+  }, [auth]); // shouldn't need to watch appState?.imports 
 
   /* Once player color has been set, initialize boardData. */
   useEffect(() => {

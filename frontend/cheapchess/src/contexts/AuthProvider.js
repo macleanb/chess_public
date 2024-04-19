@@ -11,6 +11,7 @@ import { createContext, useState, useEffect } from "react";
 /* Internal Imports */
 import constants from '../constants';
 import getClient from '../utils/api_GetClient';
+import getCSRFToken from '../utils/api_GetCSRFToken';
 import parseAndSetAuth from '../utils/auth_ParseAndSetAuth';
 
 const AuthContext = createContext({});
@@ -31,8 +32,17 @@ export const AuthProvider = ({ children }) => {
   /* Only fetch from the backend if user context is null.  Ensure each of
     these dependencies (auth, navigate, client) are active
     before proceeding */
-    if (auth && auth.status && client && (auth.status === constants.STATUS_AWAITING_DATA)) {
-      client.get(constants.URL_AUTHENTICATED_USER).then(
+    const csrfToken = getCSRFToken();
+
+    if (auth && auth.status && client && csrfToken && (auth.status === constants.STATUS_AWAITING_DATA)) {
+      client.get(
+        constants.URL_AUTHENTICATED_USER,
+        {
+          headers : {
+            'X-CSRFToken' : csrfToken
+          },
+          withCredentials : true
+        }).then(
         function(response) {
           if (response?.data?.user) {
             parseAndSetAuth(response.data, setAuth);
