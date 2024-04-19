@@ -7,6 +7,9 @@ that artificial intelligence can offer.  Of course, large-language models (LLMs)
 can be wrong.  But, as beginners to the game of chess, we aren't aiming for perfect.  Mediocrity is just fine with us --
 as long as we have fun, and save some cash!
 
+## Feature Map
+![Feature Map](./resources/Moscow.png)
+
 ## Database Design / Schema
 ![CheapChess Database](./resources/schema.png)
 
