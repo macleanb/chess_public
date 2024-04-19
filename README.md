@@ -7,6 +7,12 @@ that artificial intelligence can offer.  Of course, large-language models (LLMs)
 can be wrong.  But, as beginners to the game of chess, we aren't aiming for perfect.  Mediocrity is just fine with us --
 as long as we have fun, and save some cash!
 
+# Description
+For aspiring chess players who find personal tutoring cost-prohibitive, CheapChessTutor is an interactive platform that leverages artificial intelligence to provide personalized chess training. Unlike traditional online courses or costly one-on-one sessions, our app offers a dynamic learning environment where users can create games, receive instant feedback on optimal moves, and engage in real-time with other players. Using the OpenAI API, CheapChessTutor translates complex board positions into easy-to-understand visual cues, making advanced chess strategies accessible to everyone. Affordable and user-friendly, CheapChessTutor democratizes chess learning, helping users enhance their skills at their own pace and budget.\
+\
+                       - Judith Sol Dyess\
+                       _Strategic Consultant_
+
 ## Feature Map
 ![Feature Map](./resources/Moscow.png)
 
