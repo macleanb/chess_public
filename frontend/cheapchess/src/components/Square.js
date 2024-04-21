@@ -5,7 +5,8 @@
 //import { useEffect } from 'react';
 
 /* Internal Imports */
-   
+import styles from './Square.module.css';
+
 const Square = (
   {
     parentState
@@ -23,8 +24,10 @@ const Square = (
   /// Use Effects ///
   ///////////////////
 
+  // For dev/test
   // useEffect(() => {
   //   // test
+  //   console.log('Here in Square.js');
   //   console.log(parentState.squareData);
   // },[parentState?.squareData]);
 
@@ -33,7 +36,15 @@ const Square = (
   //////////////
 
   return (
-    <div className={ `${ parentState?.squareData?.color ? parentState.squareData.color : ''} square` }>
+    <div className={ `${ parentState?.squareData?.color ? parentState.squareData.color : ''} ${styles.relativesquare} square` }>
+      {
+        parentState?.showFileRankLabels
+        ?
+          <div className={styles.fileranklabel}>
+            {`${parentState.squareData.file}${parentState.squareData.rank}`}
+          </div>
+        : null
+      }
       {
         parentState?.squareData?.piece && parentState?.imports?.Piece ?
           <parentState.imports.Piece parentState={ parentState } />

@@ -82,10 +82,12 @@ const FormManager = ({
     }
   }
 
-  /* Make an API call to create a game on backend, then populate the
-     gameDataFromServer with pieces from the backend server */
+  /* Set board data to null, set board state to INITIALIZING, set player color.
+     The rest will be handled at Game.js */
   const handleNewGameClicked = async (e) => {
-    const form_Data = {}
+    const form_Data = {};
+    parentState.setBoardData(null);
+    parentState.setBoardInitializationState(parentState.imports.constants.STATUS_INITIALIZING);
 
     if (( // TODO: refactor to just use formData
           parentState.imports.constants &&
@@ -105,32 +107,16 @@ const FormManager = ({
     } else {
       form_Data['player1Color'] = parentState.imports.constants.COLOR_PIECE_LIGHT;
     }
-    const newGameData = await parentState.imports.newGame(form_Data, setMessages);
 
-    /* For some reason the backend PieceSerializer wouldn't include full (absolute)
-        file paths for icons, so we update those here */
-    if (parentState.iconData) {
-      for (const square of Object.keys(newGameData.pieces)) {
-        const newGamePieceData = newGameData.pieces[square];
-        const iconKey = newGamePieceData.color + newGamePieceData.piece_type;
-        const directIconData = parentState.iconData[iconKey];
-        newGamePieceData.fk_icon = directIconData;
-      }
-    }
-
-    /* Update playerColor state */
+    /* Update playerColor state.  Once this is updated in
+       the Game page, it will request new game data from the server */
     parentState.setPlayerColor(form_Data['player1Color']);
-
-    /* Update gameDataFromServer state */
-    parentState.setGameDataFromServer(newGameData);
-
-    /* Notify parent that a new game was created */
-    parentState.handleNewGameCreated();
   }
 
   /* Handle quitting game if they click the Quit Game button */
   const handleQuitGameClicked = () => {
-    // Placeholder for quit game logic here
+    parentState.setHighlightedSquares([]);
+    parentState.setShowFileRankLabels(false);
 
     /* Notify parent that game has been quit */
     if (parentState) {
@@ -215,6 +201,15 @@ const FormManager = ({
         parentState.handleSuggestedMoveReceived(response);
       }
     }
+  }
+
+  /* Handles button click to toggle file/rank labels on board */
+  const handleToggleFileRankLabelsClicked = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    /* Reverse the boolean state value */
+    parentState.setShowFileRankLabels(!parentState.showFileRankLabels);
   }
 
   /* Handles changes to NewGame Form */
@@ -365,8 +360,9 @@ const FormManager = ({
     return (
       <parentState.imports.Form_GameControls parentState={{
         ...parentState,
-        handleSuggestMoveClicked     : handleSuggestMoveClicked,
-        handleQuitGameClicked        : handleQuitGameClicked,
+        handleSuggestMoveClicked          : handleSuggestMoveClicked,
+        handleQuitGameClicked             : handleQuitGameClicked,
+        handleToggleFileRankLabelsClicked : handleToggleFileRankLabelsClicked,
       }}/>
     );
   } else if (
@@ -390,79 +386,5 @@ const FormManager = ({
       />
     );
   }
-
-  // if (formType === constants.FORM_TYPE_USER && (formMode === constants.MODE_USER_ADD || formMode === constants.MODE_USER_UPDATE_DELETE) && formDataIsUser()) {
-  //   return (
-  //     <UserForm
-  //       handleAddUserClicked={ handleAddUserClicked }
-  //       handleAssignResidencesClicked={ parentHandlers.handleAssignResidencesClicked }
-  //       handleClearImageClicked={ handleClearImageClicked }
-  //       handleDoneAssigningResidencesClicked={ parentHandlers.handleDoneAssigningResidencesClicked }
-  //       handleRemoveResidenceClicked={ handleRemoveResidenceClicked }
-  //       handleUpdateUserClicked={ handleUpdateUserClicked }
-  //       handleDeleteUserClicked={ handleDeleteUserClicked }
-  //       handleSwitchModeToAddClicked={ parentHandlers.handleSwitchUserModeToAddClicked }
-  //       handleAddMailingAddressClicked={ () =>
-  //         {
-  //           setFormData(null);
-  //           parentHandlers.handleAddMailingAddressClicked();
-  //         }
-  //       }
-  //       handleUpdateMailingAddressClicked={ () =>
-  //         {
-  //           setFormData(null);
-  //           parentHandlers.handleUpdateMailingAddressClicked();
-  //         }
-  //       }
-  //       mode={ formMode }
-  //       onChange={ onUserFormChange }
-  //       residenceInputMode={ parentState.residenceInputMode }
-  //       selectedResidenceIDInResidenceSelect={ parentState.selectedResidenceIDInResidenceSelect }
-  //       setSelectedResidenceIDInResidenceSelect={ parentState.setSelectedResidenceIDInResidenceSelect }
-  //       userData={ formData }
-  //       parentRefs={ parentRefs }
-  //     />
-  //   );
-  // } else if (formType === constants.FORM_TYPE_USER && formMode === constants.MODE_USER_SELF_REGISTER && formDataIsUser()) {
-  //   return (
-  //     <UserForm
-  //       handleAddUserClicked={ handleAddUserClicked }
-  //       handleClearImageClicked={ handleClearImageClicked }
-  //       handleAddMailingAddressClicked={ () =>
-  //         {
-  //           setFormData(null);
-  //           parentHandlers.handleAddMailingAddressClicked();
-  //         }
-  //       }
-  //       mode={ formMode }
-  //       onChange={ onUserFormChange }
-  //       userData={ formData }
-  //       parentRefs={ parentRefs }
-  //     />
-  //   );
-  // } else if (formType === constants.FORM_TYPE_USER && formMode === constants.MODE_USER_PROFILE && formDataIsUser()) {
-  //   return (
-  //     <UserForm
-  //       handleUpdateUserClicked={ handleUpdateUserClicked }
-  //       handleClearImageClicked={ handleClearImageClicked }
-  //       handleAddMailingAddressClicked={ () =>
-  //         {
-  //           setFormData(null);
-  //           parentHandlers.handleAddMailingAddressClicked();
-  //         }
-  //       }
-  //       handleUpdateMailingAddressClicked={ () =>
-  //         {
-  //           setFormData(null);
-  //           parentHandlers.handleUpdateMailingAddressClicked();
-  //         }
-  //       }
-  //       mode={ formMode }
-  //       onChange={ onUserFormChange }
-  //       userData={ formData }
-  //       parentRefs={ parentRefs }
-  //     />
-  //   );
-  // }
 }
 export default FormManager;

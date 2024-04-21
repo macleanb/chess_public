@@ -33,6 +33,12 @@ const Game = () =>
      constants file. */
   const [ boardData, setBoardData ] = useState(null);
 
+  /* Stores a boolean value to indicate whether or not the board has been
+     initialized according to player color (setting square file/ranks according
+     to player color)
+  */
+  const [ boardInitializationState, setBoardInitializationState ] = useState(constants.STATUS_NOT_INITIALIZED);
+
   /* Stores data as state for any form being displayed */
   const [ formData, setFormData ] = useState();
 
@@ -58,6 +64,9 @@ const Game = () =>
   /* Holds state for the selected color option in NewGameForm */
   const [ selectedColorOptionInColorOptionSelect, setSelectedColorOptionInColorOptionSelect ] = useState();
 
+  /* Holds state (boolean) for whether file/rank labels should be displayed on board */
+  const [ showFileRankLabels, setShowFileRankLabels ] = useState(false);
+
   /* Ref Declarations */
   const inputEmailRef = useRef(null);
   const inputPasswordRef = useRef(null);
@@ -75,8 +84,9 @@ const Game = () =>
   /* After new game is created, update game form mode */
   const handleGameQuit = () => {
     if (appState?.imports) {
-      const initializedBoardData = appState.imports.initializeBoardData(playerColor);
-      setBoardData(initializedBoardData);
+      const clearedBoard = appState.imports.initializeBoardData('light');
+      setBoardInitializationState(constants.STATUS_NOT_INITIALIZED);
+      setBoardData(clearedBoard);
       
       setFormMode(appState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE);
       setFormType(appState.imports.constants.FORM_TYPE_GAME_MENU);
@@ -154,26 +164,73 @@ const Game = () =>
       if (auth && auth.status === constants.STATUS_AUTHENTICATED) {
         setFormMode(appState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE);
         setFormType(appState.imports.constants.FORM_TYPE_GAME_MENU);
-        const initializedBoardData = appState.imports.initializeBoardData(playerColor);
-        setBoardData(initializedBoardData);
       } else {
         setFormMode(appState.imports.constants.FORM_MODE_USER_SIGNIN);
         setFormType(appState.imports.constants.FORM_TYPE_USER);
+        const emptyBoardData = appState.imports.initializeBoardData('light');
+        setBoardData(emptyBoardData);
       }
     }
-  }, [auth]); // shouldn't need to watch appState?.imports 
+  }, [auth, boardInitializationState]); // shouldn't need to watch appState?.imports 
 
-  /* Once player color has been set, initialize boardData. */
+  /* Once player color has been set and boardData has been result to null, initialize boardData. */
   useEffect(() => {
     if (
       playerColor &&
-      boardData === null // Don't overwrite boardData if it isn't null
+      boardData === null,
+      boardInitializationState === appState.imports.constants.STATUS_INITIALIZING
       )
     {
+      /* Now that a new player color has been selected for a game that is initializing,
+         initialize the game board for the player color.  This will arrange the square
+         files/ranks appropriate to the player color and orientation of the board
+         relative to the user */ 
       const initializedBoardData = appState.imports.initializeBoardData(playerColor);
       setBoardData(initializedBoardData);
     }
-  }, [playerColor]);
+  }, [boardData, boardInitializationState, playerColor]);
+
+  /* Once board data has been set with initialized data, update initialization state to initialized. */
+  useEffect(() => {
+    if (
+      boardData &&
+      boardInitializationState === appState.imports.constants.STATUS_INITIALIZING
+      )
+    {
+      setBoardInitializationState(appState.imports.constants.STATUS_INITIALIZED);
+    }
+  }, [boardData, boardInitializationState]);
+
+  /* Once board initialization status is INITIALIZED, fetch game data from server. */
+  useEffect(() => {
+    if (
+      boardData &&
+      boardInitializationState === appState.imports.constants.STATUS_INITIALIZED
+      )
+    {
+      const form_Data = {};
+      form_Data['player1Color'] = playerColor;
+
+      appState.imports.newGame(form_Data, setMessages).then((newGameData) => {
+        /* For some reason the backend PieceSerializer wouldn't include full (absolute)
+          file paths for icons, so we update those here */
+          if (iconData) {
+            for (const square of Object.keys(newGameData.pieces)) {
+              const newGamePieceData = newGameData.pieces[square];
+              const iconKey = newGamePieceData.color + newGamePieceData.piece_type;
+              const directIconData = iconData[iconKey];
+              newGamePieceData.fk_icon = directIconData;
+            }
+          }
+      
+          /* Update gameDataFromServer state */
+          setGameDataFromServer(newGameData);
+      
+          /* Notify parent that a new game was created */
+          handleNewGameCreated();
+      });
+    }
+  }, [boardInitializationState]);
 
   /* Whenever gameDataFromServer changes, update boardData (will update UI). */
   useEffect(() => {
@@ -181,7 +238,8 @@ const Game = () =>
       gameDataFromServer &&
       boardData &&
       boardData !== null &&
-      playerColor
+      playerColor &&
+      boardInitializationState === appState.imports.constants.STATUS_INITIALIZED
       )
     {
 
@@ -251,12 +309,17 @@ const Game = () =>
                   iconData                                    : iconData,
                   playerColor                                 : playerColor,
                   selectedColorOptionInColorOptionSelect      : selectedColorOptionInColorOptionSelect,
+                  setBoardData                                : setBoardData,
+                  setBoardInitializationState                 : setBoardInitializationState,
                   setFormData                                 : setFormData,
                   setFormMode                                 : setFormMode,
                   setFormType                                 : setFormType,
                   setGameDataFromServer                       : setGameDataFromServer,
+                  setHighlightedSquares                       : setHighlightedSquares,
                   setPlayerColor                              : setPlayerColor,
                   setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
+                  setShowFileRankLabels                       : setShowFileRankLabels,
+                  showFileRankLabels                          : showFileRankLabels,
                 }}
                 parentRefs={{
                   inputEmailRef       : inputEmailRef,
@@ -272,6 +335,7 @@ const Game = () =>
                 playerColor             :   playerColor,
                 setBoardData            :   setBoardData,
                 setHighlightedSquares   :   setHighlightedSquares,
+                showFileRankLabels      :   showFileRankLabels,
               }}/>
           </div>
           <div>

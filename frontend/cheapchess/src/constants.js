@@ -42,6 +42,9 @@ const constants = {
 
 
   /* Mappings */
+
+  /* For this mapping, the key is the row index and the
+     value is the rank */
   MAPPING_ROWINDEX_TO_RANK_LIGHT : { // for player color = light
     0 : '8',
     1 : '7',
@@ -53,6 +56,8 @@ const constants = {
     7 : '1',
   },
 
+  /* For this mapping, the key is the row index and the
+     value is the rank */
   MAPPING_ROWINDEX_TO_RANK_DARK : { // for player color = dark
     0 : '1',
     1 : '2',
@@ -64,6 +69,8 @@ const constants = {
     7 : '8',
   },
 
+  /* For this mapping, the key is the rank and the
+     value is the row index */
   MAPPING_RANK_TO_ROWINDEX_LIGHT : { // for player color = light
     '1' : 7,
     '2' : 6,
@@ -75,6 +82,8 @@ const constants = {
     '8' : 0,
   },
 
+  /* For this mapping, the key is the rank and the
+     value is the row index */
   MAPPING_RANK_TO_ROWINDEX_DARK : { // for player color = dark
     '1' : 0,
     '2' : 1,
@@ -86,6 +95,8 @@ const constants = {
     '8' : 7,
   },
 
+  /* For this mapping, the key is the col index and the
+     value is the file */
   MAPPING_COLINDEX_TO_FILE_LIGHT : { // for player color = light
     0 : 'a',
     1 : 'b',
@@ -97,6 +108,8 @@ const constants = {
     7 : 'h',
   },
 
+  /* For this mapping, the key is the col index and the
+     value is the file */
   MAPPING_COLINDEX_TO_FILE_DARK : { // for player color = dark
     0 : 'h',
     1 : 'g',
@@ -108,6 +121,8 @@ const constants = {
     7 : 'a',
   },
 
+  /* For this mapping, the key is the file and the
+     value is the col index */
   MAPPING_FILE_TO_COLINDEX_LIGHT : { // for player color = light
     'a' : 0,
     'b' : 1,
@@ -119,6 +134,8 @@ const constants = {
     'h' : 7,
   },
 
+  /* For this mapping, the key is the file and the
+     value is the col index */
   MAPPING_FILE_TO_COLINDEX_DARK : { // for player color = dark
     'a' : 7,
     'b' : 6,
@@ -153,6 +170,11 @@ const constants = {
   STATUS_AWAITING_DATA: 'AWAITING_DATA_STATUS',
   STATUS_NOT_AUTHENTICATED: 'NOT_AUTHENTICATED',
   STATUS_AUTHENTICATED: 'AUTHENTICATED',
+
+  /* Initialization Status (for board) */
+  STATUS_NOT_INITIALIZED: 'NOT_INITIALIZED',
+  STATUS_INITIALIZING: 'INITIALIZING',
+  STATUS_INITIALIZED: 'INITIALIZED',
 
   /* URLs */
   URL_AUTHENTICATED_USER: 'http://localhost:8000/users/authenticateduser',
