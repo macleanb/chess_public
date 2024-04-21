@@ -1,0 +1,13 @@
+.fileranklabel {
+  position: absolute;
+  top: 0px;
+  left: 3px;
+}
+
+/* Allows square to be 'positioned' so that setting
+   position: absolute on child elements (like above)
+   will be relative to this 'positioned' (square) ancestor
+*/
+.relativesquare {
+  position: relative;
+}

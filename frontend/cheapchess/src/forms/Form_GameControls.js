@@ -63,6 +63,19 @@ const Form_GameControls = ({
                   Suggest Move
                 </parentState.imports.Button>
               </div>
+              <div className="d-flex justify-content-around">
+                <parentState.imports.Button variant="primary" className="h-40 w-80 mt-1 mb-1" onClick={ parentState.handleToggleFileRankLabelsClicked }>
+                  {`
+                    ${
+                      parentState.showFileRankLabels
+                      ?
+                        'Hide '
+                      : 'Show '
+                    }
+                    File/Rank Labels
+                  `}
+                </parentState.imports.Button>
+              </div>
               <div className="d-flex mt-5 justify-content-around">
                 <parentState.imports.Button variant="primary" className="h-40 w-80 mt-1 mb-1" onClick={ parentState.handleQuitGameClicked }>
                   Quit Game

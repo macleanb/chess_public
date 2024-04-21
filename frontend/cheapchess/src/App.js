@@ -47,6 +47,7 @@ import parseAndSetAuth from './utils/auth_ParseAndSetAuth';
 import Piece from './components/Piece';
 import pieceExistsBetweenTwoSquares from './utils/board_pieceExistsBetweenTwoSquares';
 import registerUser from "./utils/api_RegisterUser";
+import removeAllPieces from './utils/piece_RemoveAllPieces';
 import reportUserFormValidity from './utils/form_reportUserFormValidity';
 import signIn from './utils/api_SignIn';
 import signOut from './utils/api_SignOut';
@@ -100,6 +101,7 @@ function App() {
     Piece                            : Piece,
     pieceExistsBetweenTwoSquares     : pieceExistsBetweenTwoSquares,
     registerUser                     : registerUser,
+    removeAllPieces                  : removeAllPieces,
     reportUserFormValidity           : reportUserFormValidity,
     Row                              : Row,
     signIn                           : signIn,

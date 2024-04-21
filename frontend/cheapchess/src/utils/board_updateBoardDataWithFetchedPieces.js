@@ -6,7 +6,7 @@ import removeAllPieces from './piece_RemoveAllPieces';
 /**
  * Copies boardData.
  * Updates copied boardData with pieces, icons, from backend server.
- * Returns copied boardData
+ * Returns copied boardData 
  * @param {Array} boardData
  * @param {Object} fetchedData
  * @param {str} playerColor
@@ -28,23 +28,22 @@ const updateBoardDataWithFetchedPieces = (
   }
 
   /* Get a copy of boardData will all pieces removed */
-  const result = removeAllPieces(boardData);
+  const newBoard = removeAllPieces(boardData);
 
   /* Iterate through all pieces from server game data and add
      them to copied boardData */
   for (const squareID of Object.keys(fetchedData.pieces)) {
     const squareData = getSquareData(
-      result,
+      newBoard,
       squareID,
       playerColor
     );
 
     const piece = fetchedData.pieces[squareID];
-
     squareData.piece = piece;
   }
 
-  return result;
+  return newBoard;
 };
 
 export default updateBoardDataWithFetchedPieces;
