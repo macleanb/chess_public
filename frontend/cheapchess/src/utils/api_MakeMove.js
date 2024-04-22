@@ -2,12 +2,12 @@
 import getCSRFToken from './api_GetCSRFToken';
 import getClient from './api_GetClient';
 import getResponseError from './api_GetResponseError';
-import getURL_Game from './getURL_Game';
+import getURL_MakeMove from './getURL_MakeMove';
 
 /* Retrieves a single icon from the backend server */
 const api_MakeMove = async (gameID, formData, setMessages) => {
   try {
-    const gameURL = getURL_Game();
+    const makeMoveURL = getURL_MakeMove(gameID);
     const client = getClient();
     const csrfToken = getCSRFToken();
     const form_data = new FormData();
@@ -18,8 +18,8 @@ const api_MakeMove = async (gameID, formData, setMessages) => {
       form_data.append("destination_square_id", formData.destinationSquareID);
     }
 
-    const response = await client.post(
-      gameURL,
+    const response = await client.put(
+      makeMoveURL,
       form_data,
       {
         headers: {

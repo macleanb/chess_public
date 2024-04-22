@@ -25,10 +25,17 @@ const Board = (
 
 
     // test/dev only
-    // const response = await makeMove(
-    //   /* Pass in gameID */
-    //   parentState.gameDataFromServer.id
-    // );
+    console.log('Piece was clicked!');
+    const response = await makeMove(
+      /* Pass in gameID */
+      parentState.gameDataFromServer.id,
+      pieceData.id,
+      //pieceData.current_file + pieceData.current_rank,
+      'b3',
+      parentState.setGameDataFromServer,
+      parentState.setMessages
+    );
+    console.log(response);
 
     if (parentState?.imports?.apiGetPossibleMoves) {
       const response = await parentState.imports.apiGetPossibleMoves(
