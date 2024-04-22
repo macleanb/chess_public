@@ -89,3 +89,17 @@ class GamesView(APIView):
 
             return Response(serialized_game)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class GameView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
+
+    # Populates user info, adds pieces (with icons)
+    # and returns all piece data and icon data in the API response
+    def put(self, request, game_id):
+        """
+        Method for updating Game objects
+        """
+        put_data = request.data.copy()
+        return Response({"data" : "Hey I got your put request"})

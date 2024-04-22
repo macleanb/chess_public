@@ -330,6 +330,7 @@ const Game = () =>
               <appState.imports.Board parentState={{
                 ...appState,
                 boardData               :   boardData,
+                gameDataFromServer      : gameDataFromServer,
                 highlightedSquares      :   highlightedSquares,
                 playerColor             :   playerColor,
                 setBoardData            :   setBoardData,

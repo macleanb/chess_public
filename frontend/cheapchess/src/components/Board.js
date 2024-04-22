@@ -3,7 +3,7 @@
 /* External Imports */
 
 /* Internal Imports */
-   
+import makeMove from "../utils/board_MakeMove";
    
 const Board = (
   {
@@ -22,6 +22,13 @@ const Board = (
   const handlePieceClicked = async (e, pieceData) => {
     e.preventDefault();
     e.stopPropagation();
+
+
+    // test/dev only
+    // const response = await makeMove(
+    //   /* Pass in gameID */
+    //   parentState.gameDataFromServer.id
+    // );
 
     if (parentState?.imports?.apiGetPossibleMoves) {
       const response = await parentState.imports.apiGetPossibleMoves(
