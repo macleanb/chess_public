@@ -95,10 +95,15 @@ by logging into your database as an admin.
 9. Checkout your feature branch
 10. Merge current main branch into feature branch (local machine) -- commit again.
 ```git merge main```
-* Open source control and click on any files that have conflicts
-* "Current change" is my stuff
-* "Incoming" / everything below the equals sign is the main stuff
-* You can click the buttons VS code provides in the code for what you want to accept
+* If there are no conflicts, just enter the merge (commit) message and close the file
+* If there ARE conflicts:
+* * Open source control and click on any files that have conflicts (at the bottom)
+* * You can click the button on the right to use the merge tool
+* * "Current change" is my stuff
+* * "Incoming" / everything below the equals sign is the main stuff
+* * You can click the buttons VS code provides in the code for what you want to accept
+* * Once complete, it will save the updates in your file and stage (add) it. 
+* * The last thing you need to do is commit it.
 * You can squash your feature commits with:
 ```git rebase -i HEAD~X``` (where -i is interactive mode and X is the number of most recent commits not including HEAD)\
 ```git rebase --abort`` aborts the rebase
