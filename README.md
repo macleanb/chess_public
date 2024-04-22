@@ -83,14 +83,30 @@ by logging into your database as an admin.
 1. Add issues to your repo
 2. Create a project and link the issues to your project
 3. Make sure your local main branch is all caught up with origin (main)\
-```git status```
-4. Create a branch for a certain issue
+```git checkout main```\
+```git pull```
+4. Create a branch for a certain issue (GitHub issue page)
 5. Copy/paste the commands GitHub provides into your local terminal directory\
 ```git fetch origin```\
 ```git checkout <branch_name>```
 6. Update code
-7. add, commit, and push back to the GitHub branch
-8. Add a comment in the issue and upload an image showing tests complete
-9. Initiate a pull request into main branch and merge
-10. On local machine, checkout main and do a git pull to catch back up
+7. add, commit your feature work.  Create a backup to your feature branch before merging if needed.
+8. Checkout main again (locally) and pull again to ensure it's updated
+9. Checkout your feature branch
+10. Merge current main branch into feature branch (local machine) -- commit again.
+```git merge main```
+* Open source control and click on any files that have conflicts
+* "Current change" is my stuff
+* "Incoming" / everything below the equals sign is the main stuff
+* You can click the buttons VS code provides in the code for what you want to accept
+* You can squash your feature commits with:
+```git rebase -i HEAD~X``` (where -i is interactive mode and X is the number of most recent commits not including HEAD)\
+```git rebase --abort`` aborts the rebase
+11. push back to the GitHub feature branch
+12. Run tests to ensure the codebase still works once feature is merged
+13. Add a comment in the issue and upload an image showing tests complete
+14. Initiate a pull request into main branch
+15. Accomplish code review with two others
+16. Merge pull request into main on GitHub
+17. On local machine, checkout main and do a git pull to catch back up
 

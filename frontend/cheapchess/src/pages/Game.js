@@ -264,7 +264,6 @@ const Game = () =>
   //       }
   //     }
   //   }
-
   // }, [boardData]);
 
   // For dev/test: prints gameDataFromServer whenever it changes
