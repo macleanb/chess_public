@@ -12,7 +12,7 @@ from rest_framework import permissions, status
 # Internal Imports
 from .create_pieces_for_new_game import create_pieces_for_new_game
 from .models import Game
-from .serializers import GameSerializer, PieceSerializer
+from .serializers import GameSerializer, PieceSerializer, Piece
 
 
 class GamesView(APIView):
@@ -101,5 +101,36 @@ class GameView(APIView):
         """
         Method for updating Game objects
         """
-        put_data = request.data.copy()
-        return Response({"data" : "Hey I got your put request"})
+        try:
+            put_data = request.data.copy()
+            updated_game = Game.objects.get(pk=game_id)
+
+            piece_id = put_data['piece_id']
+            destination_square_id = put_data['destination_square_id']
+
+            updated_piece = Piece.objects.get(pk=piece_id)
+
+            updated_piece.current_file = destination_square_id[0]
+            updated_piece.current_rank = destination_square_id[1]
+            updated_piece.save()
+
+            # Create pieces, add icons, and pass new_game to their game fields
+            # Serialize each piece, 
+            # add each piece to pieces dict (keyed by square i.e. 'a1')
+
+            pieces = updated_game.pieces.all()
+            serialized_pieces = [PieceSerializer(piece).data for piece in pieces]
+            serialized_pieces_dict = {}
+            for serialized_piece in serialized_pieces:
+                key = serialized_piece['current_file'] + serialized_piece['current_rank']
+                serialized_pieces_dict[key] = serialized_piece
+            
+            serialized_game = GameSerializer(updated_game).data
+            serialized_game['pieces'] = serialized_pieces_dict
+
+            return Response(serialized_game)
+            
+
+            #return Response({"data" : f"Hey I got your put request.  Piece ID was {piece_id} and destination square was {destination_square_id}"})
+        except Game.DoesNotExist:
+            return Response(status=404)
