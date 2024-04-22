@@ -12,7 +12,7 @@ from rest_framework import permissions, status
 # Internal Imports
 from .create_pieces_for_new_game import create_pieces_for_new_game
 from .models import Game
-from .serializers import GameSerializer, PieceSerializer
+from .serializers import GameSerializer, PieceSerializer, Piece
 
 
 class GamesView(APIView):
@@ -89,3 +89,50 @@ class GamesView(APIView):
 
             return Response(serialized_game)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class GameView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
+
+    # Populates user info, adds pieces (with icons)
+    # and returns all piece data and icon data in the API response
+    def put(self, request, game_id):
+        """
+        Method for updating Game objects
+        """
+        try:
+            put_data = request.data.copy()
+            updated_game = Game.objects.get(pk=game_id)
+
+            piece_id = put_data['piece_id']
+            destination_square_id = put_data['destination_square_id']
+
+            updated_piece = Piece.objects.get(pk=piece_id)
+
+            updated_piece.current_file = destination_square_id[0]
+            updated_piece.current_rank = destination_square_id[1]
+            updated_piece.save()
+
+            # Create pieces, add icons, and pass new_game to their game fields
+            # Serialize each piece, 
+            # add each piece to pieces dict (keyed by square i.e. 'a1')
+
+            pieces = updated_game.pieces.all()
+            serialized_pieces = [PieceSerializer(piece).data for piece in pieces]
+            serialized_pieces_dict = {}
+            for serialized_piece in serialized_pieces:
+                key = serialized_piece['current_file'] + serialized_piece['current_rank']
+                serialized_pieces_dict[key] = serialized_piece
+            
+            serialized_game = GameSerializer(updated_game).data
+            serialized_game['pieces'] = serialized_pieces_dict
+
+            print('Here in games_app views.py')
+            print(serialized_game)
+
+            return Response(serialized_game)
+
+            #return Response({"data" : f"Hey I got your put request.  Piece ID was {piece_id} and destination square was {destination_square_id}"})
+        except Game.DoesNotExist:
+            return Response(status=404)

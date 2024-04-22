@@ -3,7 +3,7 @@
 /* External Imports */
 
 /* Internal Imports */
-   
+import makeMove from "../utils/board_MakeMove";
    
 const Board = (
   {
@@ -22,6 +22,21 @@ const Board = (
   const handlePieceClicked = async (e, pieceData) => {
     e.preventDefault();
     e.stopPropagation();
+
+
+    // test/dev only
+    // console.log('Piece was clicked!');
+    // const response = await makeMove(
+    //   /* Pass in gameID */
+    //   parentState.gameDataFromServer.id,
+    //   pieceData.id,
+    //   //pieceData.current_file + pieceData.current_rank,
+    //   'b3',
+    //   parentState.iconData,
+    //   parentState.setGameDataFromServer,
+    //   parentState.setMessages
+    // );
+    // console.log(await response);
 
     if (parentState?.imports?.apiGetPossibleMoves) {
       const response = await parentState.imports.apiGetPossibleMoves(
