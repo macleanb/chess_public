@@ -158,7 +158,7 @@ class Piece(models.Model):
     fk_game = models.ForeignKey(
         Game,
         on_delete=models.CASCADE,
-        related_name='games',
+        related_name='pieces',
         blank=True,
         null=True
     )
