@@ -332,6 +332,7 @@ const Game = () =>
                 boardData               :   boardData,
                 gameDataFromServer      :   gameDataFromServer,
                 highlightedSquares      :   highlightedSquares,
+                iconData                :   iconData,
                 playerColor             :   playerColor,
                 setBoardData            :   setBoardData,
                 setGameDataFromServer   :   setGameDataFromServer,

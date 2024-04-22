@@ -5,6 +5,7 @@ const makeMove = async (
   gameID,
   pieceID,
   destinationSquareID,
+  iconData,
   setGameDataFromServer,
   setMessages
 ) => {
@@ -14,15 +15,26 @@ const makeMove = async (
     destinationSquareID : destinationSquareID
   }
 
-  const response = await api_MakeMove(
+  const updatedGameData = await api_MakeMove(
     gameID, 
     formData,
     setMessages
   );
 
+  /* For some reason the backend PieceSerializer wouldn't include full (absolute)
+    file paths for icons, so we update those here */
+  if (iconData) {
+    for (const square of Object.keys(updatedGameData.pieces)) {
+      const newGamePieceData = updatedGameData.pieces[square];
+      const iconKey = newGamePieceData.color + newGamePieceData.piece_type;
+      const directIconData = iconData[iconKey];
+      newGamePieceData.fk_icon = directIconData;
+    }
+  }
+
   // TODO uncomment
-  // setGameDataFromServer(response.data);
-  return response.data;
+  setGameDataFromServer(updatedGameData);
+  return updatedGameData;
 };
 
 export default makeMove;

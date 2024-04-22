@@ -128,8 +128,10 @@ class GameView(APIView):
             serialized_game = GameSerializer(updated_game).data
             serialized_game['pieces'] = serialized_pieces_dict
 
+            print('Here in games_app views.py')
+            print(serialized_game)
+
             return Response(serialized_game)
-            
 
             #return Response({"data" : f"Hey I got your put request.  Piece ID was {piece_id} and destination square was {destination_square_id}"})
         except Game.DoesNotExist:
