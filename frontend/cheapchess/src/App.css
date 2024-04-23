@@ -140,8 +140,12 @@
   text-align: start;
 }
 
-
-
-
+.message-history-box {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  max-height: 200px; /* Adjust as needed */
+  overflow-y: auto; /* Enable vertical scroll if content overflows */
+}
 
 
