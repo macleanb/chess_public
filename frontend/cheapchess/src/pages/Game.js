@@ -298,6 +298,7 @@ const Game = () =>
               <appState.imports.FormManager
                 parentState={{
                   ...appState,
+                  auth                                        : auth,
                   boardData                                   : boardData,
                   formData                                    : formData,
                   formMode                                    : formMode,
@@ -319,7 +320,7 @@ const Game = () =>
                   setPlayerColor                              : setPlayerColor,
                   setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
                   setShowFileRankLabels                       : setShowFileRankLabels,
-                  showFileRankLabels                          : showFileRankLabels,
+                  showFileRankLabels                          : showFileRankLabels
                 }}
                 parentRefs={{
                   inputEmailRef       : inputEmailRef,
