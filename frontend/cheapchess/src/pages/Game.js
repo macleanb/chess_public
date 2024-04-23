@@ -158,20 +158,21 @@ const Game = () =>
     }
   }, []); // shouldn't need to watch appState?.imports
 
-  /* Set formMode and formType once page is loaded */
+  /* Set formMode and formType once page is loaded
+     depending on user auth state */
   useEffect(() => {
-    if (appState?.imports && constants && auth) {
-      if (auth && auth.status === constants.STATUS_AUTHENTICATED) {
-        setFormMode(appState.imports.constants.FORM_MODE_GAME_NEW_CONTINUE);
-        setFormType(appState.imports.constants.FORM_TYPE_GAME_MENU);
+    if (auth && appState?.imports) {
+      if (auth.status === constants.STATUS_AUTHENTICATED) {
+        setFormMode(constants.FORM_MODE_GAME_NEW_CONTINUE);
+        setFormType(constants.FORM_TYPE_GAME_MENU);
       } else {
-        setFormMode(appState.imports.constants.FORM_MODE_USER_SIGNIN);
-        setFormType(appState.imports.constants.FORM_TYPE_USER);
+        setFormMode(constants.FORM_MODE_USER_SIGNIN);
+        setFormType(constants.FORM_TYPE_USER);
         const emptyBoardData = appState.imports.initializeBoardData('light');
         setBoardData(emptyBoardData);
       }
     }
-  }, [auth, boardInitializationState]); // shouldn't need to watch appState?.imports 
+  }, [auth, appState?.imports]);
 
   /* Once player color has been set and boardData has been result to null, initialize boardData. */
   useEffect(() => {
