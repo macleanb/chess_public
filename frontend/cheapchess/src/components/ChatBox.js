@@ -1,33 +1,47 @@
 import React, { useState } from 'react';
 
-const ChatBox = ({ onMessageSubmit }) => {
+const ChatBox = ({ onMessageSubmit, userName }) => {
   const [message, setMessage] = useState('');
+  const [messageHistory, setMessageHistory] = useState([]);
 
-  const handleMessageChange = (event) => {
+  const handleChange = (event) => {
     setMessage(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = () => {
     if (message.trim() !== '') {
-      onMessageSubmit(message);
+      onMessageSubmit({ message, userName });
       setMessage('');
+      setMessageHistory([...messageHistory, { message, userName }]);
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSubmit(); 
     }
   };
 
   return (
     <div className="chat-box">
-      <div className="message-container">
-      </div>
-      <div className="message-input">
-        <input
-          type="text"
-          placeholder="Type your message..."
-          value={message}
-          onChange={handleMessageChange}
-        />
-        <button onClick={handleSubmit}>Send</button>
-      </div>
+      {messageHistory.length > 0 && (
+        <div className="message-history-box">
+          {messageHistory.map((msg, index) => (
+            <div key={index} className="message">
+              <span className="user-name">{msg.userName}</span>: {msg.message}
+            </div>
+          ))}
+        </div>
+      )}
+      <input
+        type="text"
+        placeholder="Type your message..."
+        value={message}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+      />
+      <button type="button" onClick={handleSubmit}>Send</button>
     </div>
   );
 };

@@ -10,8 +10,23 @@ import ChatBox from '../components/ChatBox';
 import React from 'react';
 
 const Form_GameControls = ({
-  parentState,
+  parentState
 }) => {
+
+  const onMessageSubmit = (message) => {
+    console.log(message);
+  };
+
+  // this sets userName based on the current player or default to player1's name
+  const currentPlayerId = parentState?.gameDataFromServer?.whose_turn?.id;
+  const currentPlayer = currentPlayerId === parentState?.gameDataFromServer?.player1?.id
+    ? parentState.gameDataFromServer.player1
+    : parentState.gameDataFromServer.player2;
+
+  const userName = currentPlayer
+    ? currentPlayer.first_name
+    : parentState.gameDataFromServer.player1?.first_name;
+
 
   ///////////////////////
   ///   Use Effects   ///
@@ -79,7 +94,10 @@ const Form_GameControls = ({
               </div>
               {/* ChatBox inserted here */}
               <div className="d-flex justify-content-around">
-                <ChatBox />
+              <ChatBox
+                  onMessageSubmit={onMessageSubmit}
+                  userName={userName}
+              />
               </div>
               <div className="d-flex mt-5 justify-content-around">
                 <parentState.imports.Button variant="primary" className="h-40 w-80 mt-1 mb-1" onClick={ parentState.handleQuitGameClicked }>
