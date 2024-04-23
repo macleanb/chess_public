@@ -140,14 +140,18 @@ const FormManager = ({
 
     if (parentState.formData && formIsValid) {
       if (parentState.formMode === parentState.imports.constants.FORM_MODE_USER_SIGNIN) {
-        apiResponse = await parentState.imports.signIn(
+        const apiResponse = await parentState.imports.signIn(
           parentState.formData,
           setMessages
         );
-        
+
+        // test
+        console.log('Here in FormManager handleSignIn.  apiResponse:');
+        console.log(apiResponse);
+
         /* If the response contains user data, transition to form 
            for starting a new game or continuing an existing game */
-        if (apiResponse?.data?.user?.first_name) {
+        if (await apiResponse?.status === 200) {
           /* Update Authentication context */
           parentState.imports.parseAndSetAuth(apiResponse.data, setAuth);
           
