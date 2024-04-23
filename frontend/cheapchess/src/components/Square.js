@@ -36,7 +36,18 @@ const Square = (
   //////////////
 
   return (
-    <div className={ `${ parentState?.squareData?.color ? parentState.squareData.color : ''} ${styles.relativesquare} square` }>
+    <div
+      className={ `${ parentState?.squareData?.color ? parentState.squareData.color : ''} ${styles.relativesquare} square` }
+      onClick={ parentState?.handleSquareClicked && parentState?.squareData
+        ?
+        (e) => {
+          parentState?.handleSquareClicked(
+            e,
+            parentState.squareData
+            )
+        }
+        : null}
+    >
       {
         parentState?.showFileRankLabels
         ?

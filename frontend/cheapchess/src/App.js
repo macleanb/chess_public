@@ -39,6 +39,7 @@ import getRankFileStr from "./utils/getRankFileStr";
 import getSquaresBetween from './utils/board_getSquaresBetween';
 import getSquareData from './utils/board_getSquareData';
 import initializeBoardData from "./utils/board_initializeBoardData";
+import isValidMove from './utils/board_isValidMove';
 import MessageDisplay from './components/MessageDisplay';
 import MessageContext from './contexts/MessageProvider';
 import { MessageProvider } from './contexts/MessageProvider';
@@ -95,6 +96,7 @@ function App() {
     getSquaresBetween                : getSquaresBetween,
     getSquareData                    : getSquareData,
     initializeBoardData              : initializeBoardData,
+    isValidMove                      : isValidMove,
     MessageDisplay                   : MessageDisplay,
     newGame                          : newGame,
     parseAndSetAuth                  : parseAndSetAuth,
