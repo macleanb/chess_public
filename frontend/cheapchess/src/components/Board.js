@@ -95,6 +95,21 @@ const Board = (
     }
   };
 
+  /* Handle click behavior for square components */
+  const handleSquareClicked = async (e, squareData) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // test/dev
+    // TODO complete this.  For now, we'll just validate whether
+    // this is a valid move
+    const moveIsValid = parentState.imports.isValidMove(
+      squareData
+    );
+
+    console.log(`Here in Board.js.  The move ${moveIsValid ? 'is' : 'is not'} valid!`)
+  };
+
   ///////////////////
   /// Use Effects ///
   ///////////////////
@@ -121,8 +136,9 @@ const Board = (
                             <parentState.imports.Col className="column" key={ colIndex }>
                               <parentState.imports.Square parentState={{
                                 ...parentState,
-                                squareData         :   squareData,
-                                handlePieceClicked :   handlePieceClicked,
+                                squareData          :   squareData,
+                                handlePieceClicked  :   handlePieceClicked,
+                                handleSquareClicked :   handleSquareClicked,
                               }}/>
                             </parentState.imports.Col>
                           )
