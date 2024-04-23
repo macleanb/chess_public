@@ -319,6 +319,7 @@ const Game = () =>
                   setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
                   setShowFileRankLabels                       : setShowFileRankLabels,
                   showFileRankLabels                          : showFileRankLabels,
+                  auth                                        : auth
                 }}
                 parentRefs={{
                   inputEmailRef       : inputEmailRef,

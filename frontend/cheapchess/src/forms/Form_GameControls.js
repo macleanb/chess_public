@@ -17,16 +17,6 @@ const Form_GameControls = ({
     console.log(message);
   };
 
-  // this sets userName based on the current player or default to player1's name
-  const currentPlayerId = parentState?.gameDataFromServer?.whose_turn?.id;
-  const currentPlayer = currentPlayerId === parentState?.gameDataFromServer?.player1?.id
-    ? parentState.gameDataFromServer.player1
-    : parentState.gameDataFromServer.player2;
-
-  const userName = currentPlayer
-    ? currentPlayer.first_name
-    : parentState.gameDataFromServer.player1?.first_name;
-
 
   ///////////////////////
   ///   Use Effects   ///
@@ -96,7 +86,7 @@ const Form_GameControls = ({
               <div className="d-flex justify-content-around">
               <ChatBox
                   onMessageSubmit={onMessageSubmit}
-                  userName={userName}
+                  userName={ parentState?.auth?.user?.first_name }
               />
               </div>
               <div className="d-flex mt-5 justify-content-around">
