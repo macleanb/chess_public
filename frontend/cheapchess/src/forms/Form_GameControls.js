@@ -5,12 +5,13 @@
 /* External Imports */
 
 /* Internal Imports */
-
+import ChatBox from '../components/ChatBox';
 /* This form provides controls for playing chess games */
+import React from 'react';
+
 const Form_GameControls = ({
   parentState,
-}) => 
-{
+}) => {
 
   ///////////////////////
   ///   Use Effects   ///
@@ -75,6 +76,10 @@ const Form_GameControls = ({
                     File/Rank Labels
                   `}
                 </parentState.imports.Button>
+              </div>
+              {/* ChatBox inserted here */}
+              <div className="d-flex justify-content-around">
+                <ChatBox />
               </div>
               <div className="d-flex mt-5 justify-content-around">
                 <parentState.imports.Button variant="primary" className="h-40 w-80 mt-1 mb-1" onClick={ parentState.handleQuitGameClicked }>
