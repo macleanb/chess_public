@@ -129,7 +129,6 @@ const FormManager = ({
     if (e) {
       e.preventDefault();
     }
-    let apiResponse = null;
 
     /* Check for validation errors and report as needed. */
     const formIsValid = parentState.imports.reportUserFormValidity(
@@ -144,10 +143,6 @@ const FormManager = ({
           parentState.formData,
           setMessages
         );
-
-        // test
-        console.log('Here in FormManager handleSignIn.  apiResponse:');
-        console.log(apiResponse);
 
         /* If the response contains user data, transition to form 
            for starting a new game or continuing an existing game */

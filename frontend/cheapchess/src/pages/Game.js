@@ -276,12 +276,12 @@ const Game = () =>
   // }, [gameDataFromServer]);
 
   // For dev/test: prints auth whenever it changes
-  useEffect(() => {
-    console.log(`here in game, auth data updated!`);
-    if (auth) {
-      console.log(auth);
-    }
-  }, [auth]);
+  // useEffect(() => {
+  //   console.log(`here in game, auth data updated!`);
+  //   if (auth) {
+  //     console.log(auth);
+  //   }
+  // }, [auth]);
 
   ////////////
   /* Render */
