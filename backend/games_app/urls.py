@@ -4,7 +4,7 @@ from django.urls import path
 
 # Internal Imports
 # from .views import GameViewSet
-from .views import GamesView, GameView
+from .views import GamesView, GameView, PlayableGamesView
 
 app_name = 'games_app'
 
@@ -14,5 +14,6 @@ app_name = 'games_app'
 
 urlpatterns = [
     path('', GamesView.as_view(), name='all_games'),
+    path('playable/', PlayableGamesView.as_view(), name='playable_games'),
     path('<int:game_id>/', GameView.as_view(), name='a_game'),
 ]

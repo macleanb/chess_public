@@ -58,6 +58,9 @@ const Game = () =>
   /* Stores iconData (including images) for chess pieces */
   const [ iconData, setIconData ] = useState();
 
+  /* Stores all games that the logged-in user can play */
+  const [ playableGames, setPlayableGames ] = useState();
+
   /* Stores color selected by player */
   const [ playerColor, setPlayerColor ] = useState('light');
 
@@ -174,6 +177,27 @@ const Game = () =>
     }
   }, [auth, appState?.imports]);
 
+  /* Get playable games data once user is logged in and 
+     game menu is requested from FormManager */
+  useEffect(() => {
+    if (
+      appState?.imports &&
+      auth?.status === constants.STATUS_AUTHENTICATED &&
+      formMode === constants.FORM_MODE_GAME_NEW_CONTINUE &&
+      formType === constants.FORM_TYPE_GAME_MENU
+      )
+    {
+      appState.imports.getPlayableGames().then((result) => {      
+        if (result) {
+          setPlayableGames(result);
+        }
+      }).catch( error => { 
+        setMessages({Error: 'Failed to fetch playable games (see console).' });
+        console.error('Failed to fetch playable games:', error);
+      });
+    }
+  }, [appState.imports, auth?.status, formMode, formType]);
+
   /* Once player color has been set and boardData has been result to null, initialize boardData. */
   useEffect(() => {
     if (
@@ -274,6 +298,15 @@ const Game = () =>
   //     console.log(gameDataFromServer);
   //   }
   // }, [gameDataFromServer]);
+
+  // For dev/test: prints gameDataFromServer whenever it changes
+  // useEffect(() => {
+  //   console.log(`here in Game.js, playable games:`);
+  //   if (playableGames) {
+  //     console.log(playableGames);
+  //   }
+  // }, [playableGames]); 
+
 
   // For dev/test: prints auth whenever it changes
   // useEffect(() => {

@@ -35,6 +35,7 @@ import FormManager from "./components/FormManager";
 import getAllPieceLocations from "./utils/board_getAllPieceLocations";
 import getClient from "./utils/api_GetClient";
 import getExclusiveRange from './utils/getExclusiveRange';
+import getPlayableGames from './utils/api_GetPlayableGames';
 import getRankFileStr from "./utils/getRankFileStr";
 import getSquaresBetween from './utils/board_getSquaresBetween';
 import getSquareData from './utils/board_getSquareData';
@@ -92,6 +93,7 @@ function App() {
     getCSRFToken                     : getCSRFToken,
     getExclusiveRange                : getExclusiveRange,
     getIcons                         : api_GetIcons,
+    getPlayableGames                 : getPlayableGames,
     getRankFileStr                   : getRankFileStr,
     getSquaresBetween                : getSquaresBetween,
     getSquareData                    : getSquareData,
