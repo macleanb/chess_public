@@ -305,7 +305,7 @@ const Game = () =>
   //   if (playableGames) {
   //     console.log(playableGames);
   //   }
-  // }, [playableGames]);
+  // }, [playableGames]); 
 
 
   // For dev/test: prints auth whenever it changes
