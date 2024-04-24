@@ -40,6 +40,12 @@ const constants = {
   FORM_TYPE_GAME_CONTROLS        : 'GAME_CONTROLS_FORM_TYPE',
   FORM_TYPE_USER                 : 'USER_FORM_TYPE',
 
+  /* Declare constants for different types of Game Data fetches.
+     These can be new games, joining open games, or continuing
+     existing games */
+  GAME_FETCH_NEW : 'NEW_GAME',
+  GAME_FETCH_JOIN : 'JOIN_GAME',
+  GAME_FETCH_CONTINUE : 'CONTINUE_GAME',
 
   /* Mappings */
 

@@ -22,6 +22,7 @@ import boardDataIsInitialized from "./utils/board_dataIsInitialized";
 import clearFormErrors from './utils/form_ClearFormErrors';
 import constants from './constants';
 import convertArrayToDict from './utils/convertArrayToDict';
+import createGameFetchDataObj from "./utils/game_CreateFetchDataObj";
 import { emptyFormData_GameControls } from './utils/formData_GameControls';
 import { emptyFormData_NewGame } from "./utils/formData_NewGame";
 import { emptyFormData_User } from './utils/formData_User';
@@ -55,6 +56,7 @@ import signIn from './utils/api_SignIn';
 import signOut from './utils/api_SignOut';
 import Square from './components/Square';
 import updateBoardDataWithFetchedPieces from './utils/board_updateBoardDataWithFetchedPieces';
+import updateIconURLs from "./utils/game_UpdateIconURLs";
 import UserInputs from './components/UserInputs';
 import validateStrArg from './utils/validateStrArg';
 
@@ -77,6 +79,7 @@ function App() {
     constants                        : constants,
     Container                        : Container,
     convertArrayToDict               : convertArrayToDict,
+    createGameFetchDataObj           : createGameFetchDataObj,
     emptyFormData_GameControls       : emptyFormData_GameControls,
     emptyFormData_NewGame            : emptyFormData_NewGame,
     emptyFormData_User               : emptyFormData_User,
@@ -112,6 +115,7 @@ function App() {
     signOut                          : signOut,
     Square                           : Square,
     updateBoardDataWithFetchedPieces : updateBoardDataWithFetchedPieces,
+    updateIconURLs                   : updateIconURLs,
     UserInputs                       : UserInputs,
     validateStrArg                   : validateStrArg,
   }
