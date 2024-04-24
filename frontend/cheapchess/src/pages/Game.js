@@ -191,6 +191,9 @@ const Game = () =>
         if (result) {
           setPlayableGames(result);
         }
+      }).catch( error => { 
+        setMessages({Error: 'Failed to fetch playable games (see console).' });
+        console.error('Failed to fetch playable games:', error);
       });
     }
   }, [appState.imports, auth?.status, formMode, formType]);
@@ -295,6 +298,15 @@ const Game = () =>
   //     console.log(gameDataFromServer);
   //   }
   // }, [gameDataFromServer]);
+
+  // For dev/test: prints gameDataFromServer whenever it changes
+  // useEffect(() => {
+  //   console.log(`here in Game.js, playable games:`);
+  //   if (playableGames) {
+  //     console.log(playableGames);
+  //   }
+  // }, [playableGames]);
+
 
   // For dev/test: prints auth whenever it changes
   // useEffect(() => {
