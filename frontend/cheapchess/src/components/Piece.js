@@ -36,7 +36,7 @@ const Piece = (
       onClick={ parentState?.handlePieceClicked && parentState?.squareData?.piece
                 ?
                 (e) => {
-                  parentState?.handlePieceClicked(
+                  parentState?.handleSquareClicked(
                     e,
                     parentState.squareData.piece
                     )

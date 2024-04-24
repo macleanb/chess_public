@@ -19,11 +19,11 @@ const Board = (
   //////////////////////
 
   /* Get and display possible moves when a piece is clicked */
-  const handlePieceClicked = async (e, pieceData) => {
+  const handlePieceClicked = async (e, pieceData, boardSquareData) => {
     e.preventDefault();
-    e.stopPropagation();
+    // e.stopPropagation();
 
-
+  
     // test/dev only
     // console.log('Piece was clicked!');
     // const response = await makeMove(
@@ -95,10 +95,23 @@ const Board = (
     }
   };
 
+  /* bring in the state from game.js parent state*/
+  const { selectedOriginSquare, setSelectedOriginSquare } = parentState
+
   /* Handle click behavior for square components */
   const handleSquareClicked = async (e, squareData) => {
     e.preventDefault();
     e.stopPropagation();
+    console.log(squareData)
+
+    if (selectedOriginSquare === squareData){
+      setSelectedOriginSquare(null); //deselect the square if its already selected
+      // e.target.style.border = ''
+    }
+    else{
+      setSelectedOriginSquare(squareData);//select the square
+    // e.target.style.border = "5px solid red"; //make the square red when clicked  
+    }
 
     // test/dev
     // TODO complete this.  For now, we'll just validate whether
@@ -139,6 +152,7 @@ const Board = (
                                 squareData          :   squareData,
                                 handlePieceClicked  :   handlePieceClicked,
                                 handleSquareClicked :   handleSquareClicked,
+                                isSelected          :   selectedOriginSquare === squareData.position
                               }}/>
                             </parentState.imports.Col>
                           )

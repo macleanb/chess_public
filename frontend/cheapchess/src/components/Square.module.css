@@ -11,3 +11,7 @@
 .relativesquare {
   position: relative;
 }
+
+.borderRed{
+  border: 5px solid red;
+}
