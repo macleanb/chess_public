@@ -51,6 +51,22 @@ const Game = () =>
   /* A JSON object received from the game server */
   const [ gameDataFromServer, setGameDataFromServer ] = useState();
 
+  /* gameFetchData state will be an object with the following properties:
+  {
+    requestedPlayerColor : populate w/selected player color from either
+                          the new game select or a selected existing game
+
+    gameID               : null for new games or populated with the
+                           selected existinggame ID
+
+    requestedGameType    : constants.GAME_FETCH_NEW (would POST to /games/) or
+                           constants.GAME_FETCH_JOIN (would POST to /games/<int:game_id>/) or
+                           constants.GAME_FETCH_CONTINUE (would GET to /games/<int:game_id>/)
+
+    playComputer         : true/false (based on 'Play against computer' checkbox)
+  } */
+  const [ gameFetchData, setGameFetchData ] = useState();
+
   /* An array that keeps track of any squares that are highlighted
      with a color different from their original color. */
   const [ highlightedSquares, setHighlightedSquares ] = useState([]);
@@ -198,7 +214,16 @@ const Game = () =>
     }
   }, [appState.imports, auth?.status, formMode, formType]);
 
-  /* Once player color has been set and boardData has been result to null, initialize boardData. */
+  /* Every time gameFetchData is updated, this will set player color
+    to the selected color extracted from gameFetchData */
+  useEffect(() => {
+    if (gameFetchData) {
+      setPlayerColor(gameFetchData.requestedPlayerColor);
+    }
+  }, [gameFetchData]);
+
+  /* Once player color has been set and boardData has been result to null,
+     initialize boardData. */
   useEffect(() => {
     if (
       playerColor &&
@@ -215,7 +240,8 @@ const Game = () =>
     }
   }, [boardData, boardInitializationState, playerColor]);
 
-  /* Once board data has been set with initialized data, update initialization state to initialized. */
+  /* Once board data has been set with initialized data, update initialization
+     state to initialized. */
   useEffect(() => {
     if (
       boardData &&
@@ -226,34 +252,54 @@ const Game = () =>
     }
   }, [boardData, boardInitializationState]);
 
-  /* Once board initialization status is INITIALIZED, fetch game data from server. */
+  /* Once board initialization status is INITIALIZED, fetch game data from server.
+     (Call the appropriate API endpoint to get pieces - save in gameDataFromServer) */
   useEffect(() => {
     if (
       boardData &&
       boardInitializationState === appState.imports.constants.STATUS_INITIALIZED
       )
     {
-      const form_Data = {};
-      form_Data['player1Color'] = playerColor;
+      switch (gameFetchData.requestedGameType) {
 
-      appState.imports.newGame(form_Data, setMessages).then((newGameData) => {
-        /* For some reason the backend PieceSerializer wouldn't include full (absolute)
-          file paths for icons, so we update those here */
-          if (iconData) {
-            for (const square of Object.keys(newGameData.pieces)) {
-              const newGamePieceData = newGameData.pieces[square];
-              const iconKey = newGamePieceData.color + newGamePieceData.piece_type;
-              const directIconData = iconData[iconKey];
-              newGamePieceData.fk_icon = directIconData;
-            }
-          }
-      
-          /* Update gameDataFromServer state */
-          setGameDataFromServer(newGameData);
-      
-          /* Notify parent that a new game was created */
-          handleNewGameCreated();
-      });
+        case constants.GAME_FETCH_NEW:
+          const form_Data = {};
+          form_Data['player1Color'] = gameFetchData.requestedPlayerColor;
+          form_Data['play_computer'] = gameFetchData.playComputer;
+          appState.imports.newGame(form_Data, setMessages).then((newGameData) => {
+            const updatedNewGameData = appState.imports.updateIconURLs(newGameData, iconData);
+            setGameDataFromServer(updatedNewGameData);
+            handleNewGameCreated();
+          });
+          break;
+  
+        /* For later
+        case constants.GAME_FETCH_JOIN:
+          const form_Data = {};
+          const gameID = gameFetchData.gameID;
+          appState.imports.joinGame(gameID, form_Data, setMessages).then((joinedGameData) => {
+            const updatedJoinedGameData = appState.imports.updateIconURLs(joinedGameData, iconData);
+            setGameDataFromServer(updatedJoinedGameData);
+            handleNewGameCreated();
+          });
+          break;
+        */
+  
+        /* For later
+        case constants.GAME_FETCH_CONTINUE:
+          const form_Data = {};
+          const gameID = gameFetchData.gameID;
+          appState.imports.continueGame(gameID, form_Data, setMessages).then((continuedGameData) => {
+            const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
+            setGameDataFromServer(updatedContinuedGameData);
+            handleNewGameCreated();
+          });
+          break;
+        */
+  
+        default:
+          throw new TypeError('Invalid game fetch requested game type');
+      }
     }
   }, [boardInitializationState]);
 
@@ -305,7 +351,7 @@ const Game = () =>
   //   if (playableGames) {
   //     console.log(playableGames);
   //   }
-  // }, [playableGames]); 
+  // }, [playableGames]);
 
 
   // For dev/test: prints auth whenever it changes
@@ -349,6 +395,7 @@ const Game = () =>
                   setFormMode                                 : setFormMode,
                   setFormType                                 : setFormType,
                   setGameDataFromServer                       : setGameDataFromServer,
+                  setGameFetchData                            : setGameFetchData,
                   setHighlightedSquares                       : setHighlightedSquares,
                   setPlayerColor                              : setPlayerColor,
                   setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
