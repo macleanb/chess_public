@@ -19,26 +19,32 @@ const Board = (
   //////////////////////
 
   /* Get and display possible moves when a piece is clicked */
-  const handlePieceClicked = async (e, pieceData, boardSquareData) => {
+  const handlePieceClicked = async (e, pieceData) => {
     e.preventDefault();
+    /* We DO want to propagate the click event to the square */
     // e.stopPropagation();
+  };
 
-  
-    // test/dev only
-    // console.log('Piece was clicked!');
-    // const response = await makeMove(
-    //   /* Pass in gameID */
-    //   parentState.gameDataFromServer.id,
-    //   pieceData.id,
-    //   //pieceData.current_file + pieceData.current_rank,
-    //   'b3',
-    //   parentState.iconData,
-    //   parentState.setGameDataFromServer,
-    //   parentState.setMessages
-    // );
-    // console.log(await response);
+  /* bring in the state from game.js parent state*/
+  const { selectedOriginSquare, setSelectedOriginSquare } = parentState;
 
-    if (parentState?.imports?.apiGetPossibleMoves) {
+  /* Handle click behavior for square components */
+  const handleSquareClicked = async (e, squareData) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log(squareData)
+
+    if (selectedOriginSquare === squareData){
+      setSelectedOriginSquare(null); //deselect the square if its already selected
+    }
+    else{
+      setSelectedOriginSquare(squareData);//select the square
+    }
+
+    /* Get the piece data from the square */
+    const pieceData = squareData.piece;
+
+    if (pieceData && parentState?.imports?.apiGetPossibleMoves) {
       const response = await parentState.imports.apiGetPossibleMoves(
         pieceData.color,
         pieceData.first_move_made,
@@ -93,25 +99,6 @@ const Board = (
       parentState.setBoardData(tempBoardData);
       parentState.setHighlightedSquares(newHighlightedSquares);
     }
-  };
-
-  /* bring in the state from game.js parent state*/
-  const { selectedOriginSquare, setSelectedOriginSquare } = parentState
-
-  /* Handle click behavior for square components */
-  const handleSquareClicked = async (e, squareData) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log(squareData)
-
-    if (selectedOriginSquare === squareData){
-      setSelectedOriginSquare(null); //deselect the square if its already selected
-      // e.target.style.border = ''
-    }
-    else{
-      setSelectedOriginSquare(squareData);//select the square
-    // e.target.style.border = "5px solid red"; //make the square red when clicked  
-    }
 
     // test/dev
     // TODO complete this.  For now, we'll just validate whether
@@ -119,8 +106,21 @@ const Board = (
     const moveIsValid = parentState.imports.isValidMove(
       squareData
     );
+    console.log(`Here in Board.js.  The move ${moveIsValid ? 'is' : 'is not'} valid!`);
 
-    console.log(`Here in Board.js.  The move ${moveIsValid ? 'is' : 'is not'} valid!`)
+    // test/dev only
+    // console.log('Piece or square was clicked!');
+    // const response = await makeMove(
+    //   /* Pass in gameID */
+    //   parentState.gameDataFromServer.id,
+    //   pieceData.id,
+    //   //pieceData.current_file + pieceData.current_rank,
+    //   'b3',
+    //   parentState.iconData,
+    //   parentState.setGameDataFromServer,
+    //   parentState.setMessages
+    // );
+    // console.log(await response);
   };
 
   ///////////////////
