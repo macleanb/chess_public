@@ -88,29 +88,19 @@ const FormManager = ({
     const form_Data = {};
     parentState.setBoardData(null);
     parentState.setBoardInitializationState(parentState.imports.constants.STATUS_INITIALIZING);
+  
+    const selectedColor = parentState.imports.constants.COLOR_OPTIONS[
+      parentState.selectedColorOptionInColorOptionSelect
+    ].color;
 
-    if (( // TODO: refactor to just use formData
-          parentState.imports.constants &&
-          parentState?.selectedColorOptionInColorOptionSelect &&
-          (
-            parentState.selectedColorOptionInColorOptionSelect === 0 ||
-            parentState.selectedColorOptionInColorOptionSelect === 1
-          )
-        )
-      ) {
+    const gameFetchDataObj = parentState.imports.createGameFetchDataObj(
+      selectedColor,
+      null, // GameID
+      parentState.imports.constants.GAME_FETCH_NEW,
+      false // playComputer
+    );
 
-      const selectedColor = parentState.imports.constants.COLOR_OPTIONS[
-        parentState.selectedColorOptionInColorOptionSelect
-      ].color;
-      
-      form_Data['player1Color'] = selectedColor;
-    } else {
-      form_Data['player1Color'] = parentState.imports.constants.COLOR_PIECE_LIGHT;
-    }
-
-    /* Update playerColor state.  Once this is updated in
-       the Game page, it will request new game data from the server */
-    parentState.setPlayerColor(form_Data['player1Color']);
+    parentState.setGameFetchData(gameFetchDataObj);
   }
 
   /* Handle quitting game if they click the Quit Game button */

@@ -117,7 +117,6 @@ class GameView(APIView):
             # Create pieces, add icons, and pass new_game to their game fields
             # Serialize each piece, 
             # add each piece to pieces dict (keyed by square i.e. 'a1')
-
             pieces = updated_game.pieces.all()
             serialized_pieces = [PieceSerializer(piece).data for piece in pieces]
             serialized_pieces_dict = {}
@@ -128,11 +127,32 @@ class GameView(APIView):
             serialized_game = GameSerializer(updated_game).data
             serialized_game['pieces'] = serialized_pieces_dict
 
-            print('Here in games_app views.py')
-            print(serialized_game)
-
             return Response(serialized_game)
+        except Game.DoesNotExist:
+            return Response(status=404)
 
-            #return Response({"data" : f"Hey I got your put request.  Piece ID was {piece_id} and destination square was {destination_square_id}"})
+class PlayableGamesView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
+
+    def get(self, request):
+        """
+        Method for getting all playable Game objects
+        """
+        try:
+            # Get all open games that do not have this user as player 1
+            open_games = Game.objects.filter(player2 = None).exclude(player1 = request.user.id)
+
+            # Get all games where user is either player1 or player2
+            user_games_as_player_1 = Game.objects.filter(player1 = request.user.id)
+            user_games_as_player_2 = Game.objects.filter(player2 = request.user.id)
+
+            # Combine the query sets (all=False means no duplicates)
+            combined_set = open_games.union(user_games_as_player_1, all=False)
+            combined_set = combined_set.union(user_games_as_player_2, all=False)
+
+            serialized_games = GameSerializer(combined_set, many=True).data
+
+            return Response(serialized_games)
         except Game.DoesNotExist:
             return Response(status=404)
