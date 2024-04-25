@@ -20,8 +20,7 @@ const ListOfPlayableGames = () => {
 
     const fetchPlayableGames = async () => {
         try {
-            // const response = await axios.get('/games/playable/', {
-            const response = await axios.get('http://localhost:8000/games/playable/', {
+            const response = await axios.get('/games/playable/', {
                 withCredentials: true
             })
             const sortedGames = response.data.sort((a, b) => a.id - b.id);
