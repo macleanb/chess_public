@@ -12,6 +12,7 @@
   position: relative;
 }
 
-.borderGreen{
-  border: 5px solid lightgreen;
+.borderColor{
+  /* border: 5px solid lightgreen; */
+  border: 5px solid rgb(255, 170, 0);
 }
