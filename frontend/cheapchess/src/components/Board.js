@@ -33,10 +33,18 @@ const Board = (
     e.preventDefault();
     e.stopPropagation();
 
-    if (parentState.selectedOriginSquare === squareData){
-      parentState.setSelectedOriginSquare(null); //deselect the square if its already selected
+    if (parentState.selectedOriginSquare === squareData) {
+      /* Deselect the square if its already selected */
+      parentState.setSelectedOriginSquare(null);
     }
-    else{
+    else if (
+      /* Only select a square if it has a user's piece in it */
+      squareData.piece && (
+        squareData.piece.starting_rank === "1" ||
+        squareData.piece.starting_rank === "2"
+        )
+      )
+    {
       parentState.setSelectedOriginSquare(squareData);//select the square
     }
 
@@ -159,16 +167,29 @@ const Board = (
           parentState.playerColor
           );
 
-        /* Make sure there is no piece before highlighting */
+        /* Before highlighting, make sure there is no piece that
+           belongs to the user on a possible move square, AND that
+           there are no pieces between the selected piece and the
+           possible move square (unless the selected piece is a knight) */
         if (
-          possibleMoveSquareData.piece === null &&
-          !parentState.imports.pieceExistsBetweenTwoSquares(
-            tempBoardData,
-            selectedPiecesSquare,
-            possibleMoveSquare,
-            parentState.playerColor
-            )
+          (
+            possibleMoveSquareData.piece === null ||
+            possibleMoveSquareData.piece.starting_rank === "7" ||
+            possibleMoveSquareData.piece.starting_rank === "8"
           )
+
+          &&
+
+          (
+            !parentState.imports.pieceExistsBetweenTwoSquares(
+              tempBoardData,
+              selectedPiecesSquare,
+              possibleMoveSquare,
+              parentState.playerColor
+              ) ||
+            pieceData.piece_type === 'knight'
+          )
+        )
         {
           const originalSquareColor = possibleMoveSquareData.color;
           possibleMoveSquareData.color = 'greensquare';
