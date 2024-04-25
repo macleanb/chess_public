@@ -117,7 +117,7 @@ const Form_GameMenu = ({
                 }
               </div>
             </parentState.imports.Form.Group>
-            <ListOfPlayableGames /> 
+            <ListOfPlayableGames parentState = { parentState } /> 
             <br/>
             <br/>
             <br/>
