@@ -8,6 +8,7 @@ import { useContext, useEffect } from 'react';
 /* Internal Imports */
 import AuthContext from '../contexts/AuthProvider';
 import MessageContext from '../contexts/MessageProvider';
+import ListOfPlayableGames from '../components/ListOfPlayableGames';
 
 /* This form provides a select component and a button for users
    to create new games */
@@ -116,6 +117,7 @@ const Form_GameMenu = ({
                 }
               </div>
             </parentState.imports.Form.Group>
+            <ListOfPlayableGames /> 
             <br/>
             <br/>
             <br/>
