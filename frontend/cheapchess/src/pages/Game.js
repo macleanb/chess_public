@@ -86,6 +86,12 @@ const Game = () =>
   /* Holds state (boolean) for whether file/rank labels should be displayed on board */
   const [ showFileRankLabels, setShowFileRankLabels ] = useState(false);
 
+  /*holds state for the selected square */
+  const [ selectedOriginSquare, setSelectedOriginSquare ] = useState();
+
+  /* Holds state for the destination square */
+  const [destinationSquare, setDestinationSquare] = useState()
+
   /* Ref Declarations */
   const inputEmailRef = useRef(null);
   const inputPasswordRef = useRef(null);
@@ -389,6 +395,8 @@ const Game = () =>
                   iconData                                    : iconData,
                   playerColor                                 : playerColor,
                   selectedColorOptionInColorOptionSelect      : selectedColorOptionInColorOptionSelect,
+                  selectedOriginSquare                        : selectedOriginSquare,
+                  destinationSquare                           : destinationSquare,
                   setBoardData                                : setBoardData,
                   setBoardInitializationState                 : setBoardInitializationState,
                   setFormData                                 : setFormData,
@@ -400,6 +408,8 @@ const Game = () =>
                   setPlayerColor                              : setPlayerColor,
                   setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
                   setShowFileRankLabels                       : setShowFileRankLabels,
+                  setSelectedOriginSquare                     : setSelectedOriginSquare,
+                  setDestinationSquare                        : setDestinationSquare,
                   showFileRankLabels                          : showFileRankLabels
                 }}
                 parentRefs={{
@@ -421,6 +431,8 @@ const Game = () =>
                 setHighlightedSquares   :   setHighlightedSquares,
                 setMessages             :   setMessages,
                 showFileRankLabels      :   showFileRankLabels,
+                selectedOriginSquare    :   selectedOriginSquare,
+                setSelectedOriginSquare :   setSelectedOriginSquare,
               }}/>
           </div>
           <div>

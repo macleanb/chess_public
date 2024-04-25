@@ -21,7 +21,7 @@ const Board = (
   /* Get and display possible moves when a piece is clicked */
   const handlePieceClicked = async (e, pieceData) => {
     e.preventDefault();
-    e.stopPropagation();
+    // e.stopPropagation();
 
 
     // test/dev only
@@ -95,10 +95,31 @@ const Board = (
     }
   };
 
-  /* Handle click behavior for square components */
-  const handleSquareClicked = async (e, squareData) => {
+  const { selectedOriginSquare, setSelectedOriginSquare } = parentState;
+
+   /* Handle click behavior for square components */
+   const handleSquareClicked = async (e, squareData) => {
     e.preventDefault();
     e.stopPropagation();
+    // console.log(squareData)
+
+    if (selectedOriginSquare === squareData){
+      setSelectedOriginSquare(null); //deselect the square if its already selected
+
+    }
+    else{
+      setSelectedOriginSquare(squareData);//select the square 
+
+      /*
+          -Take piece in selected square and see if we can move it to destination square
+          -Validate the move
+            -Check to see if square is already occupied(Can I take that piece?)
+            -See if any piece is blocking path (Knight being an exception)
+            -It's not an illegal move
+          -
+      */
+    }
+
 
     // test/dev
     // TODO complete this.  For now, we'll just validate whether

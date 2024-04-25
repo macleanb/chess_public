@@ -45,3 +45,4 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+chess_venv/
