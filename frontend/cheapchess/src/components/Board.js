@@ -19,7 +19,7 @@ const Board = (
   //////////////////////
 
   /* Get and display possible moves when a piece is clicked */
-  const handlePieceClicked = async (e, pieceData, boardSquareData) => {
+  const handlePieceClicked = async (e, pieceData) => {
     e.preventDefault();
     // e.stopPropagation();
 
@@ -96,21 +96,19 @@ const Board = (
   };
 
   /* bring in the state from game.js parent state*/
-  const { selectedOriginSquare, setSelectedOriginSquare } = parentState
+  const { selectedOriginSquare, setSelectedOriginSquare } = parentState;
 
   /* Handle click behavior for square components */
   const handleSquareClicked = async (e, squareData) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(squareData)
+    // console.log(squareData)
 
     if (selectedOriginSquare === squareData){
       setSelectedOriginSquare(null); //deselect the square if its already selected
-      // e.target.style.border = ''
     }
     else{
-      setSelectedOriginSquare(squareData);//select the square
-    // e.target.style.border = "5px solid red"; //make the square red when clicked  
+      setSelectedOriginSquare(squareData);//select the square 
     }
 
     // test/dev
