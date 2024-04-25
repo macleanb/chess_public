@@ -205,7 +205,7 @@ const Game = () =>
     {
       appState.imports.getPlayableGames().then((result) => {      
         if (result) {
-          setPlayableGames(result);
+          setPlayableGames(result.data);
         }
       }).catch( error => { 
         setMessages({Error: 'Failed to fetch playable games (see console).' });
@@ -387,6 +387,7 @@ const Game = () =>
                   handleNewGameCreated                        : handleNewGameCreated,
                   handleSuggestedMoveReceived                 : handleSuggestedMoveReceived,
                   iconData                                    : iconData,
+                  playableGames                               : playableGames,
                   playerColor                                 : playerColor,
                   selectedColorOptionInColorOptionSelect      : selectedColorOptionInColorOptionSelect,
                   setBoardData                                : setBoardData,
