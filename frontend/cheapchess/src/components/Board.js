@@ -33,42 +33,47 @@ const Board = (
     e.preventDefault();
     e.stopPropagation();
 
+    const userIsPlayer1 = parentState.gameDataFromServer.player1.id === parentState.auth.user.id;
+    const playerColor = userIsPlayer1
+                        ?
+                          parentState.gameDataFromServer.player1_color
+                        : parentState.gameDataFromServer.player2_color;
+  
+
     if (parentState.selectedOriginSquare === squareData) {
       /* Deselect the square if its already selected */
       parentState.setSelectedOriginSquare(null);
     }
-    else if (
-      /* Only select a square if it has a user's piece in it */
-      squareData.piece && (
-        squareData.piece.starting_rank === "1" ||
-        squareData.piece.starting_rank === "2"
-        )
-      )
-    {
+    else if (squareData.piece && squareData.piece.color === playerColor) {
+    /* Only select a square if it has a user's piece in it */
       parentState.setSelectedOriginSquare(squareData);//select the square
     }
 
     // test/dev
     // TODO complete this.  For now, we'll just validate whether
     // this is a valid move
-    const moveIsValid = parentState.imports.isValidMove(
-      squareData
-    );
-    //console.log(`Here in Board.js.  The move ${moveIsValid ? 'is' : 'is not'} valid!`);
-
-    // test/dev only
-    // console.log('Piece or square was clicked!');
-    // const response = await makeMove(
-    //   /* Pass in gameID */
-    //   parentState.gameDataFromServer.id,
-    //   pieceData.id,
-    //   //pieceData.current_file + pieceData.current_rank,
-    //   'b3',
-    //   parentState.iconData,
-    //   parentState.setGameDataFromServer,
-    //   parentState.setMessages
+    // const moveIsValid = parentState.imports.isValidMove(
+    //   squareData
     // );
-    // console.log(await response);
+
+    // if (moveIsValid) {
+    //   console.log(`Here in Board.js.  The move ${moveIsValid ? 'is' : 'is not'} valid!`);
+    //   console.log(`parentState.selectedOriginSquare: `, parentState.selectedOriginSquare);
+    //   // test/dev only
+    //   // console.log('Piece or square was clicked!');
+    //   const response = await makeMove(
+    //     /* Pass in gameID */
+    //     parentState.gameDataFromServer.id,
+    //     parentState.selectedOriginSquare.piece.id,
+    //     //pieceData.current_file + pieceData.current_rank,
+    //     //'b3',
+    //     squareData.file + squareData.rank,
+    //     parentState.iconData,
+    //     parentState.setGameDataFromServer,
+    //     parentState.setMessages
+    //   );
+    //   console.log(await response);
+    // }
   };
 
   ///////////////////
@@ -156,6 +161,12 @@ const Board = (
       /* Get the piece data from the selected square */
       const pieceData = parentState.selectedOriginSquare.piece;
 
+      const userIsPlayer1 = parentState.gameDataFromServer.player1.id === parentState.auth.user.id;
+      const playerColor = userIsPlayer1
+                          ?
+                            parentState.gameDataFromServer.player1_color
+                          : parentState.gameDataFromServer.player2_color;
+
       /* For each square in possible moves, color the square on our
       board green IF there isn't already a piece on it */
       const newHighlightedSquares = [];
@@ -174,8 +185,7 @@ const Board = (
         if (
           (
             possibleMoveSquareData.piece === null ||
-            possibleMoveSquareData.piece.starting_rank === "7" ||
-            possibleMoveSquareData.piece.starting_rank === "8"
+            possibleMoveSquareData.piece.color !== playerColor
           )
 
           &&

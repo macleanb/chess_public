@@ -336,6 +336,7 @@ const Game = () =>
               />
               <appState.imports.Board parentState={{
                 ...appState,
+                auth                    :   auth,
                 boardData               :   boardData,
                 gameDataFromServer      :   gameDataFromServer,
                 highlightedSquares      :   highlightedSquares,
