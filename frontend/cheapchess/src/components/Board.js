@@ -63,7 +63,13 @@ const Board = (
         parentState.setGameDataFromServer,
         parentState.setMessages
       );
-    } else if (parentState.selectedOriginSquare) {
+    } else if (
+      parentState.selectedOriginSquare && // user may be attempting to make a move
+      (
+        squareData.piece === null || // an attempt was made to move to an empty square
+        squareData.piece.color !== playerColor // an attempt was made to capture opponent piece
+      )
+      ) {
       parentState.setMessages({'Nice try' : "you can't move there...or maybe you can...but OpenAI isn't always right!"});
     }
   };
