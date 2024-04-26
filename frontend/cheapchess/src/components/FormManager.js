@@ -85,6 +85,7 @@ const FormManager = ({
   const handleJoinGameClicked = (e, game) => {
     parentState.setBoardData(null);
     parentState.setBoardInitializationState(parentState.imports.constants.STATUS_INITIALIZING);
+    parentState.setPlayerColor(null);
     
     let gameFetchDataObj;
     const userIsPlayer1 = game?.player1?.id === auth.user.id;
@@ -134,7 +135,8 @@ const FormManager = ({
   const handleNewGameClicked = async (e) => {
     parentState.setBoardData(null);
     parentState.setBoardInitializationState(parentState.imports.constants.STATUS_INITIALIZING);
-  
+    parentState.setPlayerColor(null);
+
     const selectedColor = parentState.imports.constants.COLOR_OPTIONS[
       parentState.selectedColorOptionInColorOptionSelect
     ].color;

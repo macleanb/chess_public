@@ -224,10 +224,11 @@ const Game = () =>
     // test
     console.log('Here in Game.js useEffect [gameFetchData]', gameFetchData);
 
-    if (gameFetchData) {
+    /* Ensure playerColor is reset before continuing */
+    if (gameFetchData && playerColor === null) {
       setPlayerColor(gameFetchData.requestedPlayerColor);
     }
-  }, [gameFetchData]);
+  }, [gameFetchData, playerColor]);
 
   /* Once player color has been set and boardData has been result to null,
      initialize boardData. */
