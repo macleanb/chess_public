@@ -107,6 +107,7 @@ const Game = () =>
   /* After new game is created, update game form mode */
   const handleGameQuit = () => {
     if (appState?.imports) {
+      setGameDataFromServer(null);
       const clearedBoard = appState.imports.initializeBoardData('light');
       setBoardInitializationState(constants.STATUS_NOT_INITIALIZED);
       setBoardData(clearedBoard);
@@ -224,10 +225,11 @@ const Game = () =>
     // test
     console.log('Here in Game.js useEffect [gameFetchData]', gameFetchData);
 
-    if (gameFetchData) {
+    /* Ensure player color is reset before continuing */
+    if (gameFetchData && playerColor === null) {
       setPlayerColor(gameFetchData.requestedPlayerColor);
     }
-  }, [gameFetchData]);
+  }, [gameFetchData, playerColor]);
 
   /* Once player color has been set and boardData has been result to null,
      initialize boardData. */
@@ -294,7 +296,6 @@ const Game = () =>
           });
           break;
         
-  
         case constants.GAME_FETCH_CONTINUE:
           appState.imports.continueGame(gameID, formData, setMessages).then((continuedGameData) => {
             const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
@@ -342,6 +343,16 @@ const Game = () =>
     /* Update boardData state */
     setBoardData(updatedBoardData);
     }
+
+    /* TODO: Refresh the board every 5s */
+    // if (gameDataFromServer) {
+    //   setTimeout(() => {
+    //     appState.imports.continueGame(gameDataFromServer.id, {}, setMessages).then((continuedGameData) => {
+    //       const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
+    //       setGameDataFromServer(updatedContinuedGameData);
+    //     });
+    //   }, 5000);
+    // }
   }, [gameDataFromServer, playerColor]);
 
   // For dev/test: prints boardData whenever it changes
@@ -417,6 +428,7 @@ const Game = () =>
                   setGameDataFromServer                       : setGameDataFromServer,
                   setGameFetchData                            : setGameFetchData,
                   setHighlightedSquares                       : setHighlightedSquares,
+                  setMessages                                 : setMessages,
                   setPlayerColor                              : setPlayerColor,
                   setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
                   setShowFileRankLabels                       : setShowFileRankLabels,
