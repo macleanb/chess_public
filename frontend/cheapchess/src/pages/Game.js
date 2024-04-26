@@ -348,8 +348,10 @@ const Game = () =>
       ) {
       setTimeout(() => {
         appState.imports.continueGame(gameDataFromServer.id, {}, setMessages).then((continuedGameData) => {
-          const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
-          setGameDataFromServer(updatedContinuedGameData);
+          if (continuedGameData?.pieces) {
+            const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
+            setGameDataFromServer(updatedContinuedGameData);
+          }
         });
       }, 5000);
     }
