@@ -221,17 +221,18 @@ const Game = () =>
   /* Every time gameFetchData is updated, this will set player color
     to the selected color extracted from gameFetchData */
   useEffect(() => {
-    if (gameFetchData) {
+    /* Ensure playerColor is reset before continuing */
+    if (gameFetchData && playerColor === null) {
       setPlayerColor(gameFetchData.requestedPlayerColor);
     }
-  }, [gameFetchData]);
+  }, [gameFetchData, playerColor]);
 
   /* Once player color has been set and boardData has been result to null,
      initialize boardData. */
   useEffect(() => {
     if (
       playerColor &&
-      boardData === null,
+      boardData === null &&
       boardInitializationState === appState.imports.constants.STATUS_INITIALIZING
       )
     {
@@ -264,42 +265,38 @@ const Game = () =>
       boardInitializationState === appState.imports.constants.STATUS_INITIALIZED
       )
     {
+      const formData = {};
+      const gameID = gameFetchData.gameID;
+      
       switch (gameFetchData.requestedGameType) {
 
         case constants.GAME_FETCH_NEW:
-          const form_Data = {};
-          form_Data['player1Color'] = gameFetchData.requestedPlayerColor;
-          form_Data['play_computer'] = gameFetchData.playComputer;
-          appState.imports.newGame(form_Data, setMessages).then((newGameData) => {
+          formData['player1Color'] = gameFetchData.requestedPlayerColor;
+          formData['play_computer'] = gameFetchData.playComputer;
+          appState.imports.newGame(formData, setMessages).then((newGameData) => {
             const updatedNewGameData = appState.imports.updateIconURLs(newGameData, iconData);
             setGameDataFromServer(updatedNewGameData);
             handleNewGameCreated();
           });
           break;
-  
-        /* For later
+
         case constants.GAME_FETCH_JOIN:
-          const form_Data = {};
-          const gameID = gameFetchData.gameID;
-          appState.imports.joinGame(gameID, form_Data, setMessages).then((joinedGameData) => {
+          appState.imports.joinGame(gameID, formData, setMessages).then((joinedGameData) => {
             const updatedJoinedGameData = appState.imports.updateIconURLs(joinedGameData, iconData);
             setGameDataFromServer(updatedJoinedGameData);
             handleNewGameCreated();
           });
           break;
-        */
+        
   
-        /* For later
         case constants.GAME_FETCH_CONTINUE:
-          const form_Data = {};
-          const gameID = gameFetchData.gameID;
-          appState.imports.continueGame(gameID, form_Data, setMessages).then((continuedGameData) => {
+          appState.imports.continueGame(gameID, formData, setMessages).then((continuedGameData) => {
             const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
             setGameDataFromServer(updatedContinuedGameData);
             handleNewGameCreated();
           });
           break;
-        */
+        
   
         default:
           throw new TypeError('Invalid game fetch requested game type');
@@ -368,7 +365,6 @@ const Game = () =>
   //     console.log(playableGames);
   //   }
   // }, [playableGames]);
-
 
   // For dev/test: prints auth whenever it changes
   // useEffect(() => {

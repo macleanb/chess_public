@@ -21,6 +21,7 @@ import Board from './components/Board';
 import boardDataIsInitialized from "./utils/board_dataIsInitialized";
 import clearFormErrors from './utils/form_ClearFormErrors';
 import constants from './constants';
+import continueGame from "./utils/api_ContinueGame";
 import convertArrayToDict from './utils/convertArrayToDict';
 import createGameFetchDataObj from "./utils/game_CreateFetchDataObj";
 import { emptyFormData_GameControls } from './utils/formData_GameControls';
@@ -42,6 +43,7 @@ import getSquaresBetween from './utils/board_getSquaresBetween';
 import getSquareData from './utils/board_getSquareData';
 import initializeBoardData from "./utils/board_initializeBoardData";
 import isValidMove from './utils/board_isValidMove';
+import joinGame from './utils/api_JoinGame';
 import MessageDisplay from './components/MessageDisplay';
 import MessageContext from './contexts/MessageProvider';
 import { MessageProvider } from './contexts/MessageProvider';
@@ -78,6 +80,7 @@ function App() {
     Col                              : Col,
     constants                        : constants,
     Container                        : Container,
+    continueGame                     : continueGame,
     convertArrayToDict               : convertArrayToDict,
     createGameFetchDataObj           : createGameFetchDataObj,
     emptyFormData_GameControls       : emptyFormData_GameControls,
@@ -102,6 +105,7 @@ function App() {
     getSquareData                    : getSquareData,
     initializeBoardData              : initializeBoardData,
     isValidMove                      : isValidMove,
+    joinGame                         : joinGame,
     MessageDisplay                   : MessageDisplay,
     newGame                          : newGame,
     parseAndSetAuth                  : parseAndSetAuth,
