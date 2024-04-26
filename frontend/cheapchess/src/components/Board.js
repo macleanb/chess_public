@@ -52,28 +52,28 @@ const Board = (
     // test/dev
     // TODO complete this.  For now, we'll just validate whether
     // this is a valid move
-    // const moveIsValid = parentState.imports.isValidMove(
-    //   squareData
-    // );
+    const moveIsValid = parentState.imports.isValidMove(
+      squareData
+    );
 
-    // if (moveIsValid) {
-    //   console.log(`Here in Board.js.  The move ${moveIsValid ? 'is' : 'is not'} valid!`);
-    //   console.log(`parentState.selectedOriginSquare: `, parentState.selectedOriginSquare);
-    //   // test/dev only
-    //   // console.log('Piece or square was clicked!');
-    //   const response = await makeMove(
-    //     /* Pass in gameID */
-    //     parentState.gameDataFromServer.id,
-    //     parentState.selectedOriginSquare.piece.id,
-    //     //pieceData.current_file + pieceData.current_rank,
-    //     //'b3',
-    //     squareData.file + squareData.rank,
-    //     parentState.iconData,
-    //     parentState.setGameDataFromServer,
-    //     parentState.setMessages
-    //   );
-    //   console.log(await response);
-    // }
+    if (moveIsValid) {
+      console.log(`Here in Board.js.  The move ${moveIsValid ? 'is' : 'is not'} valid!`);
+      console.log(`parentState.selectedOriginSquare: `, parentState.selectedOriginSquare);
+      // test/dev only
+      // console.log('Piece or square was clicked!');
+      const response = await makeMove(
+        /* Pass in gameID */
+        parentState.gameDataFromServer.id,
+        parentState.selectedOriginSquare.piece.id,
+        //pieceData.current_file + pieceData.current_rank,
+        //'b3',
+        squareData.file + squareData.rank,
+        parentState.iconData,
+        parentState.setGameDataFromServer,
+        parentState.setMessages
+      );
+      console.log(await response);
+    }
   };
 
   ///////////////////
