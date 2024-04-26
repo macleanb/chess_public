@@ -19,7 +19,7 @@ const ListOfPlayableGames = ({ parentState }) => {
                     <ul>
                         {parentState?.playableGames?.sort((a, b) => a.id - b.id).map(game => (
                             <li key={game.id}>
-                                Game #{game.id} <Button variant="primary" onClick={() => console.log("Joining game #", game.id)}>
+                                Game #{game.id} <Button variant="primary" onClick={(e) => parentState.handleJoinGameClicked(e, game)}>
                                     Join
                                 </Button> <br />
                                 {game.player1?.email} vs {game.player2?.email || 'Waiting for player to join'}

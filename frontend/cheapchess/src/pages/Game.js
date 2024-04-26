@@ -263,42 +263,38 @@ const Game = () =>
       boardInitializationState === appState.imports.constants.STATUS_INITIALIZED
       )
     {
+      const formData = {};
+      const gameID = gameFetchData.gameID;
+      
       switch (gameFetchData.requestedGameType) {
 
         case constants.GAME_FETCH_NEW:
-          const form_Data = {};
-          form_Data['player1Color'] = gameFetchData.requestedPlayerColor;
-          form_Data['play_computer'] = gameFetchData.playComputer;
-          appState.imports.newGame(form_Data, setMessages).then((newGameData) => {
+          formData['player1Color'] = gameFetchData.requestedPlayerColor;
+          formData['play_computer'] = gameFetchData.playComputer;
+          appState.imports.newGame(formData, setMessages).then((newGameData) => {
             const updatedNewGameData = appState.imports.updateIconURLs(newGameData, iconData);
             setGameDataFromServer(updatedNewGameData);
             handleNewGameCreated();
           });
           break;
-  
-        /* For later
+
         case constants.GAME_FETCH_JOIN:
-          const form_Data = {};
-          const gameID = gameFetchData.gameID;
-          appState.imports.joinGame(gameID, form_Data, setMessages).then((joinedGameData) => {
+          appState.imports.joinGame(gameID, formData, setMessages).then((joinedGameData) => {
             const updatedJoinedGameData = appState.imports.updateIconURLs(joinedGameData, iconData);
             setGameDataFromServer(updatedJoinedGameData);
             handleNewGameCreated();
           });
           break;
-        */
+        
   
-        /* For later
         case constants.GAME_FETCH_CONTINUE:
-          const form_Data = {};
-          const gameID = gameFetchData.gameID;
-          appState.imports.continueGame(gameID, form_Data, setMessages).then((continuedGameData) => {
+          appState.imports.continueGame(gameID, formData, setMessages).then((continuedGameData) => {
             const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
             setGameDataFromServer(updatedContinuedGameData);
             handleNewGameCreated();
           });
           break;
-        */
+        
   
         default:
           throw new TypeError('Invalid game fetch requested game type');

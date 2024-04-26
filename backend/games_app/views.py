@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework import permissions, status
+from django.utils import timezone
 
 # Internal Imports
 from .create_pieces_for_new_game import create_pieces_for_new_game
@@ -130,6 +131,40 @@ class GameView(APIView):
             return Response(serialized_game)
         except Game.DoesNotExist:
             return Response(status=404)
+        
+    def get(self, request, game_id):
+        """
+        Continuing game
+        """
+        try:
+            game = Game.objects.get(id=game_id)
+            return Response(GameSerializer(game).data, status=status.HTTP_200_OK)
+        except Game.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+    def post(self, request, game_id):
+        """
+        Joining specific game as second player
+        """
+        try:
+            game = Game.objects.get(id=game_id, player2__isnull=True)
+            # if game.player1 == request.user.id:
+            # if game.player1 == request.user:
+                # return Response({'error': 'You are already player 1 in this game.'}, status=status.HTTP_400_BAD_REQUEST)
+                # which shouldn't happen due to filtering playable games where user is player 1
+            
+            game.player2 = request.user.id
+            game.player2_color = 'light' if game.player1_color == 'dark' else 'dark'
+            game.started_datetime = timezone.now()
+            game.game_status = 'ACTIVE'
+            game.game_type = 'HUMAN V. HUMAN'
+            game.save()
+            
+            return Response(GameSerializer(game).data, status=status.HTTP_200_OK)
+        
+        except Game.DoesNotExist:
+            return Response({'error': 'Game not found or not joinable.'}, status=status.HTTP_404_NOT_FOUND)
+            
 
 class PlayableGamesView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -141,7 +176,7 @@ class PlayableGamesView(APIView):
         """
         try:
             # Get all open games that do not have this user as player 1
-            open_games = Game.objects.filter(player2 = None).exclude(player1 = request.user.id)
+            open_games = Game.objects.filter(player2 = None)#.exclude(player1 = request.user.id)
 
             # Get all games where user is either player1 or player2
             user_games_as_player_1 = Game.objects.filter(player1 = request.user.id)
