@@ -6,6 +6,7 @@ import { useOutletContext } from 'react-router-dom';
 import AuthContext from '../contexts/AuthProvider';
 import constants from '../constants';
 import MessageContext from '../contexts/MessageProvider';
+import getSquareData from '../utils/board_getSquareData';
 
 const Game = () => 
 {
@@ -318,7 +319,19 @@ const Game = () =>
       gameDataFromServer,
       playerColor,
     );
+    /* handles deselection of the origin square and piece after move is made
+    and removes the green highlight from recommended squares.*/
+    for (const highlightedSquare of highlightedSquares) {
+      const squareData = getSquareData(
+        updatedBoardData,
+        highlightedSquare.square,
+        playerColor
+      );
+      squareData.color = highlightedSquare.originalColor;
+    }
 
+    setSelectedOriginSquare(null);
+    
     /* Update boardData state */
     setBoardData(updatedBoardData);
     }

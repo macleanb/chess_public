@@ -49,31 +49,29 @@ const Board = (
       parentState.setSelectedOriginSquare(squareData);//select the square
     }
 
-    // test/dev
-    // TODO complete this.  For now, we'll just validate whether
-    // this is a valid move
-    // const moveIsValid = parentState.imports.isValidMove(
-    //   squareData
-    // );
+    const moveIsValid = parentState.imports.isValidMove(
+      squareData
+    );
 
-    // if (moveIsValid) {
-    //   console.log(`Here in Board.js.  The move ${moveIsValid ? 'is' : 'is not'} valid!`);
-    //   console.log(`parentState.selectedOriginSquare: `, parentState.selectedOriginSquare);
-    //   // test/dev only
-    //   // console.log('Piece or square was clicked!');
-    //   const response = await makeMove(
-    //     /* Pass in gameID */
-    //     parentState.gameDataFromServer.id,
-    //     parentState.selectedOriginSquare.piece.id,
-    //     //pieceData.current_file + pieceData.current_rank,
-    //     //'b3',
-    //     squareData.file + squareData.rank,
-    //     parentState.iconData,
-    //     parentState.setGameDataFromServer,
-    //     parentState.setMessages
-    //   );
-    //   console.log(await response);
-    // }
+    if (moveIsValid) {
+      const response = await makeMove(
+        /* Pass in gameID */
+        parentState.gameDataFromServer.id,
+        parentState.selectedOriginSquare.piece.id,
+        squareData.file + squareData.rank,
+        parentState.iconData,
+        parentState.setGameDataFromServer,
+        parentState.setMessages
+      );
+    } else if (
+      parentState.selectedOriginSquare && // user may be attempting to make a move
+      (
+        squareData.piece === null || // an attempt was made to move to an empty square
+        squareData.piece.color !== playerColor // an attempt was made to capture opponent piece
+      )
+      ) {
+      parentState.setMessages({'Nice try' : "you can't move there...or maybe you can...but OpenAI isn't always right!"});
+    }
   };
 
   ///////////////////
