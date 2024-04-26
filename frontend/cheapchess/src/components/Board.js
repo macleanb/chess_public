@@ -49,9 +49,6 @@ const Board = (
       parentState.setSelectedOriginSquare(squareData);//select the square
     }
 
-    // test/dev
-    // TODO complete this.  For now, we'll just validate whether
-    // this is a valid move
     const moveIsValid = parentState.imports.isValidMove(
       squareData
     );
