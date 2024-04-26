@@ -125,7 +125,11 @@ const FormManager = ({
     parentState.setBoardData(null);
     parentState.setBoardInitializationState(parentState.imports.constants.STATUS_INITIALIZING);
     parentState.setPlayerColor(null);
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 2-join-existing-games-edits
     const selectedColor = parentState.imports.constants.COLOR_OPTIONS[
       parentState.selectedColorOptionInColorOptionSelect
     ].color;
