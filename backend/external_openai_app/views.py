@@ -9,6 +9,7 @@ from openai import OpenAI
 from .prompt_builder import build_possible_moves_prompt
 from .prompt_builder import build_suggested_move_prompt
 
+
 class PossibleMoves(APIView):
     """
     View to return a list of JSON dicts containing

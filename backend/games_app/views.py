@@ -1,4 +1,7 @@
 # External Imports
+from dotenv import load_dotenv
+from openai import OpenAI
+from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -10,8 +13,10 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework import permissions, status
 
 # Internal Imports
+import logging
 from .create_pieces_for_new_game import create_pieces_for_new_game
 from .models import Game
+#from ..external_openai_app.prompt_builder import build_checkmate_detection_prompt
 from .serializers import GameSerializer, PieceSerializer, Piece
 
 
@@ -113,6 +118,24 @@ class GameView(APIView):
             updated_piece.current_file = destination_square_id[0]
             updated_piece.current_rank = destination_square_id[1]
             updated_piece.save()
+            
+            # Check if there is a piece to be captured
+            captured_piece = updated_game.pieces.filter(
+                current_file=destination_square_id[0],
+                current_rank=destination_square_id[1]
+            ).exclude(pk=piece_id).first()
+
+            # If there is, set on_board= false
+            if captured_piece:
+                captured_piece.on_board = False
+                captured_piece.save()
+                
+            #if self.is_checkmate(updated_game):
+                # Update game status, ended datetime, and winner
+            #    updated_game.game_status = 'completed'
+            #    updated_game.ended_datetime = timezone.now()
+            #    updated_game.game_winner = updated_game.whose_turn
+            #    updated_game.save()
 
             # Create pieces, add icons, and pass new_game to their game fields
             # Serialize each piece, 
@@ -130,6 +153,60 @@ class GameView(APIView):
             return Response(serialized_game)
         except Game.DoesNotExist:
             return Response(status=404)
+        
+    #def is_checkmate(self, updated_game):
+        try:
+            player_color = updated_game.whose_turn.player_color
+            all_piece_locations = self.get_all_piece_locations(updated_game)
+            is_checkmate = self.send_checkmate_request(player_color, all_piece_locations)
+            return is_checkmate
+        except Exception as e:
+            print(f"Error in is_checkmate function: {e}")
+            return False
+
+    #def get_all_piece_locations(self, updated_game):
+        all_piece_locations = {}
+
+        for piece in updated_game.pieces.all():
+            current_position = piece.current_file + piece.current_rank
+            if piece.on_board:
+                all_piece_locations[piece.piece_color] = all_piece_locations.get(piece.piece_color, [])
+                all_piece_locations[piece.piece_color].append(current_position)
+        return all_piece_locations
+    
+    #def send_checkmate_request(self, player_color, all_piece_locations):
+        prompt = self.build_checkmate_detection_prompt({
+            'playerColor': player_color,
+            'allPieceLocations': all_piece_locations
+        })
+
+        client = OpenAI()
+
+        try:
+            completion = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a chess tutor, skilled at suggesting " \
+                                                "chess moves to a novice chess player."},
+                    {"role": "user", "content": prompt}
+                ]
+            )
+
+            if completion.choices:
+                response_content = completion.choices[0].message.content
+                is_checkmate = True if 'Answer: Yes' in response_content else False
+                return {'is_checkmate': is_checkmate}
+            else:
+                return {}
+
+        except Exception as e:
+            logging.error(f"Error in send_checkmate_request: {e}")
+            return {}
+
+
+
+
+
 
 class PlayableGamesView(APIView):
     permission_classes = (permissions.IsAuthenticated,)

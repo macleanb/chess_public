@@ -71,3 +71,23 @@ def build_suggested_move_prompt(data):
             " Do not enclose your entire answer in brackets.  For example please do not " \
             "respond with [Answer: a3, a4].  Put only the chess board " \
             "squares between brackets."
+
+def build_checkmate_detection_prompt(data):
+    """ Returns a string prompt for checking if the game is in checkmate """
+    player_color = data['playerColor']
+    piece_locations = data['allPieceLocations']
+
+    # Update server status to console
+    print(f'Checking if the game is in checkmate for {player_color} player...')
+
+    return "You are a chess expert. " \
+           "I am playing a game of chess and need your help to determine if the game is in checkmate. " \
+           "The current board state will be described, and you will determine if the game is in checkmate. " \
+           "The color of the chess pieces will be enclosed by brackets like '[' and ']'. " \
+           f"I am playing with the [{player_color}] colored pieces." \
+           "Below are the current locations of all chess pieces on the board:\n" \
+           f"{piece_locations}" \
+           "Please respond with a 'Yes' or 'No' indicating whether the game is in checkmate. " \
+           "Your response should be formatted as 'Answer: Yes' or 'Answer: No'. " \
+           "Make sure to capitalize 'Yes' or 'No' and include the colon after 'Answer'." \
+           "Do not include any additional information or punctuation in your response."
