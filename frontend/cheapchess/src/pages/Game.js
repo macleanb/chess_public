@@ -221,6 +221,9 @@ const Game = () =>
   /* Every time gameFetchData is updated, this will set player color
     to the selected color extracted from gameFetchData */
   useEffect(() => {
+    // test
+    console.log('Here in Game.js useEffect [gameFetchData]', gameFetchData);
+
     if (gameFetchData) {
       setPlayerColor(gameFetchData.requestedPlayerColor);
     }
@@ -231,7 +234,7 @@ const Game = () =>
   useEffect(() => {
     if (
       playerColor &&
-      boardData === null,
+      boardData === null &&
       boardInitializationState === appState.imports.constants.STATUS_INITIALIZING
       )
     {
@@ -266,6 +269,10 @@ const Game = () =>
     {
       const formData = {};
       const gameID = gameFetchData.gameID;
+
+      // test
+      console.log('Here in Game.js switch game fetch useEffect');
+      console.log(gameFetchData);
       
       switch (gameFetchData.requestedGameType) {
 
@@ -338,24 +345,24 @@ const Game = () =>
   }, [gameDataFromServer, playerColor]);
 
   // For dev/test: prints boardData whenever it changes
-  // useEffect(() => {
-  //   console.log(`here in game, board data updated!`);
-  //   if (Array.isArray(boardData)) {
-  //     for (const row of boardData) {
-  //       for (const squareData of row) {
-  //         console.log(`Square: ${JSON.stringify(squareData)}`);
-  //       }
-  //     }
-  //   }
-  // }, [boardData]);
+  useEffect(() => {
+    console.log(`here in game, board data updated!`);
+    if (Array.isArray(boardData)) {
+      for (const row of boardData) {
+        for (const squareData of row) {
+          console.log(`Square: ${JSON.stringify(squareData)}`);
+        }
+      }
+    }
+  }, [boardData]);
 
   // For dev/test: prints gameDataFromServer whenever it changes
-  // useEffect(() => {
-  //   console.log(`here in game, game data updated!`);
-  //   if (gameDataFromServer) {
-  //     console.log(gameDataFromServer);
-  //   }
-  // }, [gameDataFromServer]);
+  useEffect(() => {
+    console.log(`here in game, game data updated!`);
+    if (gameDataFromServer) {
+      console.log(gameDataFromServer);
+    }
+  }, [gameDataFromServer]);
 
   // For dev/test: prints gameDataFromServer whenever it changes
   // useEffect(() => {
@@ -364,7 +371,6 @@ const Game = () =>
   //     console.log(playableGames);
   //   }
   // }, [playableGames]);
-
 
   // For dev/test: prints auth whenever it changes
   // useEffect(() => {

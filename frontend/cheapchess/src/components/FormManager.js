@@ -83,9 +83,19 @@ const FormManager = ({
   }
 
   const handleJoinGameClicked = (e, game) => {
+    parentState.setBoardData(null);
+    parentState.setBoardInitializationState(parentState.imports.constants.STATUS_INITIALIZING);
+    
     let gameFetchDataObj;
     const userIsPlayer1 = game?.player1?.id === auth.user.id;
     const userIsPlayer2 = game?.player2 === null ? false :  game?.player2?.id === auth.user.id;
+
+    // test
+    console.log('Here in handleJoinGameClicked');
+    console.log(game);
+    console.log('auth: ', auth);
+    console.log('user is player 1?', userIsPlayer1);
+    console.log('user is player 2? ', userIsPlayer2);
 
     /* If the user WAS already a player in an existing game */
     if (userIsPlayer1 || userIsPlayer2) {
@@ -110,6 +120,10 @@ const FormManager = ({
         parentState.imports.constants.GAME_FETCH_JOIN,
         false // playComputer
       );
+
+      // test
+      console.log('Here in FormManager...user was NOT a player');
+      console.log(gameFetchDataObj);
     }
 
     parentState?.setGameFetchData(gameFetchDataObj);
@@ -118,7 +132,6 @@ const FormManager = ({
   /* Set board data to null, set board state to INITIALIZING, set player color.
      The rest will be handled at Game.js */
   const handleNewGameClicked = async (e) => {
-    const form_Data = {};
     parentState.setBoardData(null);
     parentState.setBoardInitializationState(parentState.imports.constants.STATUS_INITIALIZING);
   
@@ -233,8 +246,6 @@ const FormManager = ({
     /* Reverse the boolean state value */
     parentState.setShowFileRankLabels(!parentState.showFileRankLabels);
   }
-
-
 
   /* Handles changes to NewGame Form */
   const onGameNewFormChange = e => {
@@ -368,6 +379,7 @@ const FormManager = ({
     return (
       <parentState.imports.Form_GameMenu parentState={{
         ...parentState,
+        handleJoinGameClicked    : handleJoinGameClicked,
         handleNewGameClicked     : handleNewGameClicked,
         handleSignOutClicked     : handleSignOutClicked,
         onGameNewFormChange      : onGameNewFormChange,

@@ -4,7 +4,7 @@ import getClient from './api_GetClient';
 import getResponseError from './api_GetResponseError';
 import getURL_Game from './getURL_Game';
 
-const api_JoinGame = async (gameID, formData, setMessages) => {
+const joinGame = async (gameID, formData, setMessages) => {
   try {
     const gameURL = getURL_Game(gameID);
     const client = getClient();
@@ -22,11 +22,16 @@ const api_JoinGame = async (gameID, formData, setMessages) => {
         withCredentials: true,
       }
     );
-    return await response?.data;
+
+    // test
+    console.log('Here in joinGame');
+    console.log(response);
+
+    return await response.data;
   } catch (e) {
     console.log(e);
     setMessages(getResponseError(e));
   }
 };
 
-export default api_JoinGame;
+export default joinGame;

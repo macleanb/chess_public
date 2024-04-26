@@ -100,7 +100,7 @@ class GameView(APIView):
     # and returns all piece data and icon data in the API response
     def put(self, request, game_id):
         """
-        Method for updating Game objects
+        Method for updating Game objects (making moves)
         """
         try:
             put_data = request.data.copy()
@@ -114,6 +114,25 @@ class GameView(APIView):
             updated_piece.current_file = destination_square_id[0]
             updated_piece.current_rank = destination_square_id[1]
             updated_piece.save()
+
+            if updated_game.whose_turn == updated_game.player1:
+                updated_game.whose_turn = updated_game.player2
+            else:
+                updated_game.whose_turn = updated_game.player1
+            updated_game.save()
+
+            # Alternative logic to the above that enforces player
+            # changes on whose_turn based on who is logged in
+            # user_is_player1 = True
+            # if updated_game.player1 != request.user:
+            #     user_is_player1 = False
+            
+            # print(user_is_player1)
+
+            # if user_is_player1:
+            #     updated_game.whose_turn = updated_game.player2
+            # else:
+            #     updated_game.whose_turn = updated_game.player1
 
             # Create pieces, add icons, and pass new_game to their game fields
             # Serialize each piece, 
@@ -138,7 +157,21 @@ class GameView(APIView):
         """
         try:
             game = Game.objects.get(id=game_id)
-            return Response(GameSerializer(game).data, status=status.HTTP_200_OK)
+
+            # Create pieces, add icons, and pass new_game to their game fields
+            # Serialize each piece, 
+            # add each piece to pieces dict (keyed by square i.e. 'a1')
+            pieces = game.pieces.all()
+            serialized_pieces = [PieceSerializer(piece).data for piece in pieces]
+            serialized_pieces_dict = {}
+            for serialized_piece in serialized_pieces:
+                key = serialized_piece['current_file'] + serialized_piece['current_rank']
+                serialized_pieces_dict[key] = serialized_piece
+            
+            serialized_game = GameSerializer(game).data
+            serialized_game['pieces'] = serialized_pieces_dict
+
+            return Response(serialized_game, status=status.HTTP_200_OK)
         except Game.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
@@ -153,14 +186,27 @@ class GameView(APIView):
                 # return Response({'error': 'You are already player 1 in this game.'}, status=status.HTTP_400_BAD_REQUEST)
                 # which shouldn't happen due to filtering playable games where user is player 1
             
-            game.player2 = request.user.id
+            game.player2 = request.user
             game.player2_color = 'light' if game.player1_color == 'dark' else 'dark'
             game.started_datetime = timezone.now()
             game.game_status = 'ACTIVE'
             game.game_type = 'HUMAN V. HUMAN'
             game.save()
+
+            # Create pieces, add icons, and pass new_game to their game fields
+            # Serialize each piece, 
+            # add each piece to pieces dict (keyed by square i.e. 'a1')
+            pieces = game.pieces.all()
+            serialized_pieces = [PieceSerializer(piece).data for piece in pieces]
+            serialized_pieces_dict = {}
+            for serialized_piece in serialized_pieces:
+                key = serialized_piece['current_file'] + serialized_piece['current_rank']
+                serialized_pieces_dict[key] = serialized_piece
             
-            return Response(GameSerializer(game).data, status=status.HTTP_200_OK)
+            serialized_game = GameSerializer(game).data
+            serialized_game['pieces'] = serialized_pieces_dict
+
+            return Response(serialized_game, status=status.HTTP_200_OK)
         
         except Game.DoesNotExist:
             return Response({'error': 'Game not found or not joinable.'}, status=status.HTTP_404_NOT_FOUND)
