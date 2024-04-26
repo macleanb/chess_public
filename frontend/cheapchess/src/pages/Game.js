@@ -345,14 +345,14 @@ const Game = () =>
     }
 
     /* TODO: Refresh the board every 5s */
-    // if (gameDataFromServer) {
-    //   setTimeout(() => {
-    //     appState.imports.continueGame(gameDataFromServer.id, {}, setMessages).then((continuedGameData) => {
-    //       const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
-    //       setGameDataFromServer(updatedContinuedGameData);
-    //     });
-    //   }, 5000);
-    // }
+    if (gameDataFromServer && gameDataFromServer.whose_turn?.id !== auth?.user?.id && playerColor) {
+      setTimeout(() => {
+        appState.imports.continueGame(gameDataFromServer.id, {}, setMessages).then((continuedGameData) => {
+          const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
+          setGameDataFromServer(updatedContinuedGameData);
+        });
+      }, 5000);
+    }
   }, [gameDataFromServer, playerColor]);
 
   // For dev/test: prints boardData whenever it changes
