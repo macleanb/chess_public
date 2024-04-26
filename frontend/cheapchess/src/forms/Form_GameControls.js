@@ -47,11 +47,11 @@ const Form_GameControls = ({
             <h5>{`Player 2: Open`}</h5>
         }
         {
-          parentState?.gameDataFromServer?.whose_turn
+          parentState?.gameDataFromServer?.whose_turn && parentState.gameDataFromServer?.player2
           ?
             <h5>{`It's ${parentState.gameDataFromServer.whose_turn.first_name}'s turn`}</h5>
           :
-            <h5>{`A second player must join the game to begin.`}</h5>
+            <h5>{`Waiting for opponent to join...`}</h5>
         }
       </div>
       <br/>

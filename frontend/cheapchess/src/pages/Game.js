@@ -338,7 +338,14 @@ const Game = () =>
     }
 
     /* TODO: Refresh the board every 5s */
-    if (gameDataFromServer && gameDataFromServer.whose_turn?.id !== auth?.user?.id && playerColor) {
+    if (
+      gameDataFromServer &&
+      (
+        gameDataFromServer.whose_turn?.id !== auth?.user?.id ||
+        gameDataFromServer.game_status === 'not_started'
+      ) &&
+      playerColor
+      ) {
       setTimeout(() => {
         appState.imports.continueGame(gameDataFromServer.id, {}, setMessages).then((continuedGameData) => {
           const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
