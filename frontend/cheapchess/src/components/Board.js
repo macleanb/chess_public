@@ -57,10 +57,6 @@ const Board = (
     );
 
     if (moveIsValid) {
-      console.log(`Here in Board.js.  The move ${moveIsValid ? 'is' : 'is not'} valid!`);
-      console.log(`parentState.selectedOriginSquare: `, parentState.selectedOriginSquare);
-      // test/dev only
-    
       const response = await makeMove(
         /* Pass in gameID */
         parentState.gameDataFromServer.id,
@@ -70,7 +66,8 @@ const Board = (
         parentState.setGameDataFromServer,
         parentState.setMessages
       );
-      console.log(await response);
+    } else if (parentState.selectedOriginSquare) {
+      parentState.setMessages({'Nice try' : "you can't move there...or maybe you can...but OpenAI isn't always right!"});
     }
   };
 
