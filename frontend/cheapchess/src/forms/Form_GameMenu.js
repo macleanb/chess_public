@@ -8,6 +8,7 @@ import { useContext, useEffect } from 'react';
 /* Internal Imports */
 import AuthContext from '../contexts/AuthProvider';
 import MessageContext from '../contexts/MessageProvider';
+import ListOfPlayableGames from '../components/ListOfPlayableGames';
 
 /* This form provides a select component and a button for users
    to create new games */
@@ -42,6 +43,13 @@ const Form_GameMenu = ({
     parentState?.setSelectedColorOptionInColorOptionSelect,
     parentState?.imports?.constants?.COLOR_OPTIONS?.length
   ]);
+
+  const handleCheckboxChange = (e) => {
+    parentState.onFormChange({
+      ...parentState.formData,
+      playComputer: e.target.checked,
+    });
+  };
 
   //////////////////
   ///   Render   ///
@@ -115,7 +123,16 @@ const Form_GameMenu = ({
                   : ''
                 }
               </div>
+              <label>
+                Play against computer?
+                <input
+                    type="checkbox"
+                    checked={parentState.formData.playComputer}
+                    onChange={handleCheckboxChange}
+                />
+            </label>
             </parentState.imports.Form.Group>
+            <ListOfPlayableGames parentState = { parentState } />
             <br/>
             <br/>
             <br/>

@@ -14,6 +14,7 @@ const newGame = async (formData, setMessages) => {
 
     if (formData) {
       form_data.append("player1_color", formData.player1Color);
+      form_data.append("play_computer", formData.playComputer);
     }
 
     const response = await client.post(

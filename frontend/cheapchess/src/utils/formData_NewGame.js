@@ -5,6 +5,7 @@
 export const emptyFormData_NewGame = () => {
   return {
     player1Color  :  null,
+    playComputer  :  false, //this is default value
   }
 };
 

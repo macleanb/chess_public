@@ -84,35 +84,47 @@ const FormManager = ({
 
   /* Set board data to null, set board state to INITIALIZING, set player color.
      The rest will be handled at Game.js */
-  const handleNewGameClicked = async (e) => {
-    const form_Data = {};
-    parentState.setBoardData(null);
-    parentState.setBoardInitializationState(parentState.imports.constants.STATUS_INITIALIZING);
-
-    if (( // TODO: refactor to just use formData
-          parentState.imports.constants &&
-          parentState?.selectedColorOptionInColorOptionSelect &&
-          (
-            parentState.selectedColorOptionInColorOptionSelect === 0 ||
-            parentState.selectedColorOptionInColorOptionSelect === 1
-          )
-        )
-      ) {
-
-      const selectedColor = parentState.imports.constants.COLOR_OPTIONS[
-        parentState.selectedColorOptionInColorOptionSelect
-      ].color;
-      
-      form_Data['player1Color'] = selectedColor;
-    } else {
-      form_Data['player1Color'] = parentState.imports.constants.COLOR_PIECE_LIGHT;
+     const handleNewGameClicked = async () => {
+      // Resetting board and player state to initial
+      // parentState.setBoardData(null);
+      // parentState.setBoardInitializationState(parentState.imports.constants.STATUS_INITIALIZING);
+      parentState.setPlayerColor(null);
+    
+      // Validate form data
+      if (!validateNewGameFormData(parentState.formData)) {
+        alert("Invalid game settings. Please check your selections and try again.");
+        return; // Exit the function if validation fails
+      }
+    
+      const { playerColor, playComputer } = parentState.formData;
+      const gameFetchDataObj = parentState.imports.createGameFetchDataObj(
+        playerColor,
+        null, // No game ID for a new game
+        parentState.imports.constants.GAME_FETCH_NEW,
+        playComputer
+      );
+    
+      try {
+        const newGameResponse = await parentState.imports.apiCreateNewGame(gameFetchDataObj);
+        if (newGameResponse.status === 200) {
+          parentState.setGameFetchData(newGameResponse.data);
+          // Possibly navigate to the game screen or display a success message
+        } else {
+          // Handle non-200 responses
+          alert("Failed to create a new game. Please try again.");
+        }
+      } catch (error) {
+        // Handle errors from the API request
+        console.error("Error creating new game:", error);
+        alert("An error occurred while creating the game. Please try again.");
+      }
+    };
+    
+    function validateNewGameFormData(formData) {
+      // Implement validation logic here (e.g., check if playerColor is selected)
+      // This is a simple example; adapt it according to your form data structure and requirements
+      return formData.playerColor && (formData.playComputer === true || formData.playComputer === false);
     }
-
-    /* Update playerColor state.  Once this is updated in
-       the Game page, it will request new game data from the server */
-    parentState.setPlayerColor(form_Data['player1Color']);
-  }
-
   /* Handle quitting game if they click the Quit Game button */
   const handleQuitGameClicked = () => {
     parentState.setHighlightedSquares([]);
