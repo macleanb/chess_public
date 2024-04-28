@@ -90,6 +90,9 @@ const Game = () =>
   /*holds state for the selected square */
   const [ selectedOriginSquare, setSelectedOriginSquare ] = useState();
 
+  /* sets other player to Opponent or another Human */
+  const [ isComputerOpponent, setIsComputerOpponent ] = useState(false);
+
   /* Ref Declarations */
   const inputEmailRef = useRef(null);
   const inputPasswordRef = useRef(null);
@@ -399,6 +402,7 @@ const Game = () =>
                   handleNewGameCreated                        : handleNewGameCreated,
                   handleSuggestedMoveReceived                 : handleSuggestedMoveReceived,
                   iconData                                    : iconData,
+                  isComputerOpponent                          : isComputerOpponent,
                   playableGames                               : playableGames,
                   playerColor                                 : playerColor,
                   selectedColorOptionInColorOptionSelect      : selectedColorOptionInColorOptionSelect,
@@ -411,6 +415,7 @@ const Game = () =>
                   setGameDataFromServer                       : setGameDataFromServer,
                   setGameFetchData                            : setGameFetchData,
                   setHighlightedSquares                       : setHighlightedSquares,
+                  setIsComputerOpponent                       : setIsComputerOpponent,
                   setPlayerColor                              : setPlayerColor,
                   setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
                   setShowFileRankLabels                       : setShowFileRankLabels,

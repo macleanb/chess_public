@@ -123,14 +123,14 @@ const Form_GameMenu = ({
                   : ''
                 }
               </div>
-              <label>
-                Play against computer?
-                <input
-                    type="checkbox"
-                    checked={parentState.formData.playComputer}
-                    onChange={handleCheckboxChange}
-                />
-            </label>
+            <parentState.imports.Form.Check
+              className=""
+              type="checkbox"
+              name="playComputerCheckbox"
+              label={<b className="">Play Against Computer</b>}
+              onChange={ parentState.onChange }
+              checked={ parentState.isComputerOpponent ? parentState.isComputerOpponent : false }
+            />
             </parentState.imports.Form.Group>
             <ListOfPlayableGames parentState = { parentState } /> 
             <br/>

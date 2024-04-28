@@ -126,6 +126,14 @@ const FormManager = ({
     parentState.setBoardData(null);
     parentState.setBoardInitializationState(parentState.imports.constants.STATUS_INITIALIZING);
     parentState.setPlayerColor(null);
+  
+        if (checked) {
+          parentState.setIsComputerOpponent(true);
+        } else {
+          parentState.setIsComputerOpponent(false);
+        }
+      } 
+    }
 
     function validateNewGameFormData(formData) {
       return formData.playerColor && (formData.playComputer === true || formData.playComputer === false);
@@ -157,6 +165,12 @@ const FormManager = ({
       alert("An error occurred while creating the game. Please try again.");
     }
   }; 
+
+  const handleCheckboxChange = (e) => {
+    if (e.target.name === 'playComputerCheckbox') {
+        parentState.setIsComputerOpponent(e.target.checked);
+    }
+  };
     
 
   /* Handle quitting game if they click the Quit Game button */
