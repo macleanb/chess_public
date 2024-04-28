@@ -6,6 +6,7 @@ import { useOutletContext } from 'react-router-dom';
 import AuthContext from '../contexts/AuthProvider';
 import constants from '../constants';
 import MessageContext from '../contexts/MessageProvider';
+import getSquareData from '../utils/board_getSquareData';
 
 const Game = () => 
 {
@@ -51,12 +52,31 @@ const Game = () =>
   /* A JSON object received from the game server */
   const [ gameDataFromServer, setGameDataFromServer ] = useState();
 
+  /* gameFetchData state will be an object with the following properties:
+  {
+    requestedPlayerColor : populate w/selected player color from either
+                          the new game select or a selected existing game
+
+    gameID               : null for new games or populated with the
+                           selected existinggame ID
+
+    requestedGameType    : constants.GAME_FETCH_NEW (would POST to /games/) or
+                           constants.GAME_FETCH_JOIN (would POST to /games/<int:game_id>/) or
+                           constants.GAME_FETCH_CONTINUE (would GET to /games/<int:game_id>/)
+
+    playComputer         : true/false (based on 'Play against computer' checkbox)
+  } */
+  const [ gameFetchData, setGameFetchData ] = useState();
+
   /* An array that keeps track of any squares that are highlighted
      with a color different from their original color. */
   const [ highlightedSquares, setHighlightedSquares ] = useState([]);
 
   /* Stores iconData (including images) for chess pieces */
   const [ iconData, setIconData ] = useState();
+
+  /* Stores all games that the logged-in user can play */
+  const [ playableGames, setPlayableGames ] = useState();
 
   /* Stores color selected by player */
   const [ playerColor, setPlayerColor ] = useState('light');
@@ -66,6 +86,9 @@ const Game = () =>
 
   /* Holds state (boolean) for whether file/rank labels should be displayed on board */
   const [ showFileRankLabels, setShowFileRankLabels ] = useState(false);
+
+  /*holds state for the selected square */
+  const [ selectedOriginSquare, setSelectedOriginSquare ] = useState();
 
   /* Ref Declarations */
   const inputEmailRef = useRef(null);
@@ -174,11 +197,42 @@ const Game = () =>
     }
   }, [auth, appState?.imports]);
 
-  /* Once player color has been set and boardData has been result to null, initialize boardData. */
+  /* Get playable games data once user is logged in and 
+     game menu is requested from FormManager */
+  useEffect(() => {
+    if (
+      appState?.imports &&
+      auth?.status === constants.STATUS_AUTHENTICATED &&
+      formMode === constants.FORM_MODE_GAME_NEW_CONTINUE &&
+      formType === constants.FORM_TYPE_GAME_MENU
+      )
+    {
+      appState.imports.getPlayableGames().then((result) => {      
+        if (result) {
+          setPlayableGames(result.data);
+        }
+      }).catch( error => { 
+        setMessages({Error: 'Failed to fetch playable games (see console).' });
+        console.error('Failed to fetch playable games:', error);
+      });
+    }
+  }, [appState.imports, auth?.status, formMode, formType]);
+
+  /* Every time gameFetchData is updated, this will set player color
+    to the selected color extracted from gameFetchData */
+  useEffect(() => {
+    /* Ensure playerColor is reset before continuing */
+    if (gameFetchData && playerColor === null) {
+      setPlayerColor(gameFetchData.requestedPlayerColor);
+    }
+  }, [gameFetchData, playerColor]);
+
+  /* Once player color has been set and boardData has been result to null,
+     initialize boardData. */
   useEffect(() => {
     if (
       playerColor &&
-      boardData === null,
+      boardData === null &&
       boardInitializationState === appState.imports.constants.STATUS_INITIALIZING
       )
     {
@@ -191,7 +245,8 @@ const Game = () =>
     }
   }, [boardData, boardInitializationState, playerColor]);
 
-  /* Once board data has been set with initialized data, update initialization state to initialized. */
+  /* Once board data has been set with initialized data, update initialization
+     state to initialized. */
   useEffect(() => {
     if (
       boardData &&
@@ -202,34 +257,50 @@ const Game = () =>
     }
   }, [boardData, boardInitializationState]);
 
-  /* Once board initialization status is INITIALIZED, fetch game data from server. */
+  /* Once board initialization status is INITIALIZED, fetch game data from server.
+     (Call the appropriate API endpoint to get pieces - save in gameDataFromServer) */
   useEffect(() => {
     if (
       boardData &&
       boardInitializationState === appState.imports.constants.STATUS_INITIALIZED
       )
     {
-      const form_Data = {};
-      form_Data['player1Color'] = playerColor;
+      const formData = {};
+      const gameID = gameFetchData.gameID;
+      
+      switch (gameFetchData.requestedGameType) {
 
-      appState.imports.newGame(form_Data, setMessages).then((newGameData) => {
-        /* For some reason the backend PieceSerializer wouldn't include full (absolute)
-          file paths for icons, so we update those here */
-          if (iconData) {
-            for (const square of Object.keys(newGameData.pieces)) {
-              const newGamePieceData = newGameData.pieces[square];
-              const iconKey = newGamePieceData.color + newGamePieceData.piece_type;
-              const directIconData = iconData[iconKey];
-              newGamePieceData.fk_icon = directIconData;
-            }
-          }
-      
-          /* Update gameDataFromServer state */
-          setGameDataFromServer(newGameData);
-      
-          /* Notify parent that a new game was created */
-          handleNewGameCreated();
-      });
+        case constants.GAME_FETCH_NEW:
+          formData['player1Color'] = gameFetchData.requestedPlayerColor;
+          formData['play_computer'] = gameFetchData.playComputer;
+          appState.imports.newGame(formData, setMessages).then((newGameData) => {
+            const updatedNewGameData = appState.imports.updateIconURLs(newGameData, iconData);
+            setGameDataFromServer(updatedNewGameData);
+            handleNewGameCreated();
+          });
+          break;
+
+        case constants.GAME_FETCH_JOIN:
+          appState.imports.joinGame(gameID, formData, setMessages).then((joinedGameData) => {
+            const updatedJoinedGameData = appState.imports.updateIconURLs(joinedGameData, iconData);
+            setGameDataFromServer(updatedJoinedGameData);
+            handleNewGameCreated();
+          });
+          break;
+        
+  
+        case constants.GAME_FETCH_CONTINUE:
+          appState.imports.continueGame(gameID, formData, setMessages).then((continuedGameData) => {
+            const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
+            setGameDataFromServer(updatedContinuedGameData);
+            handleNewGameCreated();
+          });
+          break;
+        
+  
+        default:
+          throw new TypeError('Invalid game fetch requested game type');
+      }
     }
   }, [boardInitializationState]);
 
@@ -249,7 +320,19 @@ const Game = () =>
       gameDataFromServer,
       playerColor,
     );
+    /* handles deselection of the origin square and piece after move is made
+    and removes the green highlight from recommended squares.*/
+    for (const highlightedSquare of highlightedSquares) {
+      const squareData = getSquareData(
+        updatedBoardData,
+        highlightedSquare.square,
+        playerColor
+      );
+      squareData.color = highlightedSquare.originalColor;
+    }
 
+    setSelectedOriginSquare(null);
+    
     /* Update boardData state */
     setBoardData(updatedBoardData);
     }
@@ -274,6 +357,14 @@ const Game = () =>
   //     console.log(gameDataFromServer);
   //   }
   // }, [gameDataFromServer]);
+
+  // For dev/test: prints gameDataFromServer whenever it changes
+  // useEffect(() => {
+  //   console.log(`here in Game.js, playable games:`);
+  //   if (playableGames) {
+  //     console.log(playableGames);
+  //   }
+  // }, [playableGames]);
 
   // For dev/test: prints auth whenever it changes
   // useEffect(() => {
@@ -308,18 +399,22 @@ const Game = () =>
                   handleNewGameCreated                        : handleNewGameCreated,
                   handleSuggestedMoveReceived                 : handleSuggestedMoveReceived,
                   iconData                                    : iconData,
+                  playableGames                               : playableGames,
                   playerColor                                 : playerColor,
                   selectedColorOptionInColorOptionSelect      : selectedColorOptionInColorOptionSelect,
+                  selectedOriginSquare                        : selectedOriginSquare,
                   setBoardData                                : setBoardData,
                   setBoardInitializationState                 : setBoardInitializationState,
                   setFormData                                 : setFormData,
                   setFormMode                                 : setFormMode,
                   setFormType                                 : setFormType,
                   setGameDataFromServer                       : setGameDataFromServer,
+                  setGameFetchData                            : setGameFetchData,
                   setHighlightedSquares                       : setHighlightedSquares,
                   setPlayerColor                              : setPlayerColor,
                   setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
                   setShowFileRankLabels                       : setShowFileRankLabels,
+                  setSelectedOriginSquare                     : setSelectedOriginSquare,
                   showFileRankLabels                          : showFileRankLabels
                 }}
                 parentRefs={{
@@ -331,6 +426,7 @@ const Game = () =>
               />
               <appState.imports.Board parentState={{
                 ...appState,
+                auth                    :   auth,
                 boardData               :   boardData,
                 gameDataFromServer      :   gameDataFromServer,
                 highlightedSquares      :   highlightedSquares,
@@ -341,6 +437,8 @@ const Game = () =>
                 setHighlightedSquares   :   setHighlightedSquares,
                 setMessages             :   setMessages,
                 showFileRankLabels      :   showFileRankLabels,
+                selectedOriginSquare    : selectedOriginSquare,
+                setSelectedOriginSquare : setSelectedOriginSquare,
               }}/>
           </div>
           <div>

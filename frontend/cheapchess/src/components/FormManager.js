@@ -82,6 +82,43 @@ const FormManager = ({
     }
   }
 
+  const handleJoinGameClicked = (e, game) => {
+    parentState.setBoardData(null);
+    parentState.setBoardInitializationState(parentState.imports.constants.STATUS_INITIALIZING);
+    parentState.setPlayerColor(null);
+    
+    let gameFetchDataObj;
+    const userIsPlayer1 = game?.player1?.id === auth.user.id;
+    const userIsPlayer2 = game?.player2 === null ? false :  game?.player2?.id === auth.user.id;
+
+    /* If the user WAS already a player in an existing game */
+    if (userIsPlayer1 || userIsPlayer2) {
+      const playerColor = userIsPlayer1 ? game.player1_color : game.player2_color;
+
+      gameFetchDataObj = parentState.imports.createGameFetchDataObj(
+        playerColor,
+        game.id,
+        parentState.imports.constants.GAME_FETCH_CONTINUE,
+        false // playComputer
+      );
+    } else {
+      /* If the user was NOT already a player in an existing game */
+      const LIGHT = parentState.imports.constants.COLOR_PIECE_LIGHT;
+      const DARK = parentState.imports.constants.COLOR_PIECE_DARK;
+
+      const playerColor = game.player1_color ===  LIGHT ? DARK : LIGHT;
+
+      gameFetchDataObj = parentState.imports.createGameFetchDataObj(
+        playerColor,
+        game.id,
+        parentState.imports.constants.GAME_FETCH_JOIN,
+        false // playComputer
+      );
+    }
+
+    parentState?.setGameFetchData(gameFetchDataObj);
+  }
+
   /* Set board data to null, set board state to INITIALIZING, set player color.
      The rest will be handled at Game.js */
      const handleNewGameClicked = async () => {
@@ -355,6 +392,7 @@ const FormManager = ({
     return (
       <parentState.imports.Form_GameMenu parentState={{
         ...parentState,
+        handleJoinGameClicked    : handleJoinGameClicked,
         handleNewGameClicked     : handleNewGameClicked,
         handleSignOutClicked     : handleSignOutClicked,
         onGameNewFormChange      : onGameNewFormChange,
