@@ -46,6 +46,8 @@ class GamesView(APIView):
         updated_data['player2'] = None
 
         player1_color = updated_data['player1_color']
+        play_computer = updated_data['play_computer']
+
         if player1_color == 'light':
             updated_data['whose_turn'] = request.user.id
         else:
