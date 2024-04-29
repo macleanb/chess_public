@@ -107,6 +107,7 @@ const Game = () =>
   /* After new game is created, update game form mode */
   const handleGameQuit = () => {
     if (appState?.imports) {
+      setGameDataFromServer(null);
       const clearedBoard = appState.imports.initializeBoardData('light');
       setBoardInitializationState(constants.STATUS_NOT_INITIALIZED);
       setBoardData(clearedBoard);
@@ -288,7 +289,6 @@ const Game = () =>
           });
           break;
         
-  
         case constants.GAME_FETCH_CONTINUE:
           appState.imports.continueGame(gameID, formData, setMessages).then((continuedGameData) => {
             const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
@@ -335,6 +335,25 @@ const Game = () =>
     
     /* Update boardData state */
     setBoardData(updatedBoardData);
+    }
+
+    /* TODO: Refresh the board every 5s */
+    if (
+      gameDataFromServer &&
+      (
+        gameDataFromServer.whose_turn?.id !== auth?.user?.id ||
+        gameDataFromServer.game_status === 'not_started'
+      ) &&
+      playerColor
+      ) {
+      setTimeout(() => {
+        appState.imports.continueGame(gameDataFromServer.id, {}, setMessages).then((continuedGameData) => {
+          if (continuedGameData?.pieces) {
+            const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
+            setGameDataFromServer(updatedContinuedGameData);
+          }
+        });
+      }, 5000);
     }
   }, [gameDataFromServer, playerColor]);
 
@@ -411,6 +430,7 @@ const Game = () =>
                   setGameDataFromServer                       : setGameDataFromServer,
                   setGameFetchData                            : setGameFetchData,
                   setHighlightedSquares                       : setHighlightedSquares,
+                  setMessages                                 : setMessages,
                   setPlayerColor                              : setPlayerColor,
                   setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
                   setShowFileRankLabels                       : setShowFileRankLabels,

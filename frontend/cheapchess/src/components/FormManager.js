@@ -125,7 +125,7 @@ const FormManager = ({
     parentState.setBoardData(null);
     parentState.setBoardInitializationState(parentState.imports.constants.STATUS_INITIALIZING);
     parentState.setPlayerColor(null);
-
+    
     const selectedColor = parentState.imports.constants.COLOR_OPTIONS[
       parentState.selectedColorOptionInColorOptionSelect
     ].color;

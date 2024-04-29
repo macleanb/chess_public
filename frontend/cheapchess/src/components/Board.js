@@ -32,45 +32,69 @@ const Board = (
   const handleSquareClicked = async (e, squareData) => {
     e.preventDefault();
     e.stopPropagation();
-
-    const userIsPlayer1 = parentState.gameDataFromServer.player1.id === parentState.auth.user.id;
-    const playerColor = userIsPlayer1
-                        ?
-                          parentState.gameDataFromServer.player1_color
-                        : parentState.gameDataFromServer.player2_color;
   
-
-    if (parentState.selectedOriginSquare === squareData) {
-      /* Deselect the square if its already selected */
-      parentState.setSelectedOriginSquare(null);
-    }
-    else if (squareData.piece && squareData.piece.color === playerColor) {
-    /* Only select a square if it has a user's piece in it */
-      parentState.setSelectedOriginSquare(squareData);//select the square
-    }
-
-    const moveIsValid = parentState.imports.isValidMove(
-      squareData
-    );
-
-    if (moveIsValid) {
-      const response = await makeMove(
-        /* Pass in gameID */
-        parentState.gameDataFromServer.id,
-        parentState.selectedOriginSquare.piece.id,
-        squareData.file + squareData.rank,
-        parentState.iconData,
-        parentState.setGameDataFromServer,
-        parentState.setMessages
-      );
-    } else if (
-      parentState.selectedOriginSquare && // user may be attempting to make a move
-      (
-        squareData.piece === null || // an attempt was made to move to an empty square
-        squareData.piece.color !== playerColor // an attempt was made to capture opponent piece
+    /* If the game isnt' started yet, pop up a message to the user */
+    if ( 
+      !parentState.gameDataFromServer ||
+      parentState.gameDataFromServer?.game_status === 'not_started'
       )
+    {
+      parentState.setMessages({'Error' : "The game hasn't started yet!  You may need to login first or allow another player to join..."});
+    }
+    /* If it isn't our turn, pop up a message to the user */
+    else if (
+      parentState.gameDataFromServer?.whose_turn &&
+      parentState.gameDataFromServer.whose_turn.id !== parentState.auth.user.id
+      )
+    {
+      parentState.setMessages({'Nice try' : 'wait your turn!'});
+    /* It IS our turn.  Perform additional validation */
+    } else {
+      const userIsPlayer1 = parentState.gameDataFromServer.player1.id === parentState.auth.user.id;
+      const playerColor = userIsPlayer1
+                          ?
+                            parentState.gameDataFromServer.player1_color
+                          : parentState.gameDataFromServer.player2_color;
+
+      /* First determine whether the user is attempting to select
+         an origin square */
+      if (parentState.selectedOriginSquare === squareData) {
+        /* Deselect the square if its already selected */
+        parentState.setSelectedOriginSquare(null);
+      } else if (
+        /* Change selectedOriginSquare if a different square with
+            our piece was just clicked */
+        squareData.piece &&
+        squareData.piece.color === playerColor
       ) {
-      parentState.setMessages({'Nice try' : "you can't move there...or maybe you can...but OpenAI isn't always right!"});
+        /* Only select an origin square if it has a user's piece in it */
+        parentState.setSelectedOriginSquare(squareData);//select the square
+      } else {
+        /* Player is trying to make a move */
+        const moveIsValid = parentState.imports.isValidMove(
+          squareData
+        );
+    
+        if (moveIsValid) {
+          const response = await makeMove(
+            /* Pass in gameID */
+            parentState.gameDataFromServer.id,
+            parentState.selectedOriginSquare.piece.id,
+            squareData.file + squareData.rank,
+            parentState.iconData,
+            parentState.setGameDataFromServer,
+            parentState.setMessages
+          );
+        } else if (
+          parentState.selectedOriginSquare && // user may be attempting to make an invalid move
+          (
+            squareData.piece === null || // an attempt was made to move to an empty square
+            squareData.piece.color !== playerColor // an attempt was made to capture opponent piece
+          )
+          ) {
+          parentState.setMessages({'Nice try' : "you can't move there...or maybe you can...but OpenAI isn't always right!"});
+        }
+      }
     }
   };
 

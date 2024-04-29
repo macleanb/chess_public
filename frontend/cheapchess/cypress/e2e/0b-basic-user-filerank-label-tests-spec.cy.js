@@ -26,7 +26,7 @@ describe("0a-Create Game Tests", () => {
     cy.get("h1").should("have.text", "Game Controls");
 
     /* Ensure Player information is populated correctly */
-    cy.get("h5").should("have.text", "Player 1: TestPlayer 2: OpenIt's Test's turn");
+    cy.get("h5").should("have.text", "Player 1: TestPlayer 2: OpenWaiting for opponent to join...");
 
     /* Click the button to show file/rank labels */
     cy.get('button').contains('Show File/Rank Labels').click();
