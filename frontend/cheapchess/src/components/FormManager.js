@@ -134,7 +134,7 @@ const FormManager = ({
       selectedColor,
       null, // GameID
       parentState.imports.constants.GAME_FETCH_NEW,
-      false // playComputer
+      parentState.isComputerOpponent // playComputer
     );
 
     parentState.setGameFetchData(gameFetchDataObj);
@@ -239,14 +239,20 @@ const FormManager = ({
   }
 
   /* Handles changes to NewGame Form */
-  const onGameNewFormChange = e => {
-    parentState.imports.clearFormErrors(parentRefs);
+  // const onGameNewFormChange = e => {
+  //   parentState.imports.clearFormErrors(parentRefs);
+  //   console.log("does this work?")
+  //   if (parentState.imports.constants) {
+  //     if (e.target.name === "player1Color") {
+  //       /* Handle selected color */
+  //       console.log("new if statement and branch works")
+  //       const selectedColor = parentState.imports.constants.COLOR_OPTIONS[e.target.value];
+  //       parentState.setFormData({ ...parentState.formData, [e.target.name]: selectedColor });
+  //     }
 
-    if (parentState.imports.constants) {
-      const selectedColor = parentState.imports.constants.COLOR_OPTIONS[e.target.value];
-      parentState.setFormData({ ...parentState.formData, [e.target.name]: selectedColor });
-    }
-  }
+      
+  //   }
+  // }
   
   /* Handles changes to UserForm */
   const onUserFormChange = e => {
@@ -373,7 +379,7 @@ const FormManager = ({
         handleJoinGameClicked    : handleJoinGameClicked,
         handleNewGameClicked     : handleNewGameClicked,
         handleSignOutClicked     : handleSignOutClicked,
-        onGameNewFormChange      : onGameNewFormChange,
+        // onGameNewFormChange      : onGameNewFormChange,
       }}/>
     );
   } else if (

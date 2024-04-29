@@ -116,6 +116,18 @@ const Form_GameMenu = ({
                   : ''
                 }
               </div>
+              <div>
+              <parentState.imports.Form.Check
+                className=""
+                type="checkbox"
+                name="playComputerCheckbox"
+                label={<b className="">Play Against Computer</b>}
+                onChange= {(e) => { 
+                  parentState.setIsComputerOpponent(e.target.checked) 
+                }}
+                checked={ parentState.isComputerOpponent ? parentState.isComputerOpponent : false }
+              />
+              </div>
             </parentState.imports.Form.Group>
             <ListOfPlayableGames parentState = { parentState } /> 
             <br/>

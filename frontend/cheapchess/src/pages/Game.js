@@ -75,6 +75,9 @@ const Game = () =>
   /* Stores iconData (including images) for chess pieces */
   const [ iconData, setIconData ] = useState();
 
+  /* State for determing if you're playing against a Computer or Opponent */
+  const [isComputerOpponent, setIsComputerOpponent] = useState(false);
+
   /* Stores all games that the logged-in user can play */
   const [ playableGames, setPlayableGames ] = useState();
 
@@ -89,6 +92,7 @@ const Game = () =>
 
   /*holds state for the selected square */
   const [ selectedOriginSquare, setSelectedOriginSquare ] = useState();
+
 
   /* Ref Declarations */
   const inputEmailRef = useRef(null);
@@ -273,7 +277,7 @@ const Game = () =>
 
         case constants.GAME_FETCH_NEW:
           formData['player1Color'] = gameFetchData.requestedPlayerColor;
-          formData['play_computer'] = gameFetchData.playComputer;
+          formData['playComputer'] = gameFetchData.playComputer;
           appState.imports.newGame(formData, setMessages).then((newGameData) => {
             const updatedNewGameData = appState.imports.updateIconURLs(newGameData, iconData);
             setGameDataFromServer(updatedNewGameData);
@@ -418,6 +422,7 @@ const Game = () =>
                   handleNewGameCreated                        : handleNewGameCreated,
                   handleSuggestedMoveReceived                 : handleSuggestedMoveReceived,
                   iconData                                    : iconData,
+                  isComputerOpponent                          : isComputerOpponent,
                   playableGames                               : playableGames,
                   playerColor                                 : playerColor,
                   selectedColorOptionInColorOptionSelect      : selectedColorOptionInColorOptionSelect,
@@ -430,6 +435,7 @@ const Game = () =>
                   setGameDataFromServer                       : setGameDataFromServer,
                   setGameFetchData                            : setGameFetchData,
                   setHighlightedSquares                       : setHighlightedSquares,
+                  setIsComputerOpponent                       : setIsComputerOpponent,
                   setMessages                                 : setMessages,
                   setPlayerColor                              : setPlayerColor,
                   setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
