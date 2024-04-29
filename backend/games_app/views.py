@@ -234,6 +234,11 @@ class GameView(APIView):
             
             serialized_game = GameSerializer(game).data
             serialized_game['pieces'] = serialized_pieces_dict
+            serialized_game['moves_made'] = game.moves_made['moves']
+
+            # Add possible moves from Python-Chess
+            possible_moves = get_possible_moves(game.moves_made['moves'])
+            serialized_game['possible_moves'] = possible_moves
 
             return Response(serialized_game, status=status.HTTP_200_OK)
         
