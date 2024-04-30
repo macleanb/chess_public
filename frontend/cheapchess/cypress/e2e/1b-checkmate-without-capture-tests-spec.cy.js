@@ -47,7 +47,7 @@ describe("1b Checkmate without Capturing any Pieces Tests", () => {
     cy.get("#AUTH_EMAIL_FIELD").should("exist");
   });
 
-  it("Player 2 joins the new game-2", () => {
+  it("Player2 joins the new game-2", () => {
     cy.visit("/");
 
     /* Make sure Form is visible */
@@ -997,8 +997,8 @@ describe("1b Checkmate without Capturing any Pieces Tests", () => {
     /* Wait for page load*/
     cy.wait(1000);
 
-    /* Click on the pawn in square b3 */
-    cy.get(".board .square").eq(41).click();
+    /* Click on the pawn in square b2 */
+    cy.get(".board .square").eq(49).click();
 
     /* Wait for page load*/
     cy.wait(1000);
@@ -1142,14 +1142,100 @@ describe("1b Checkmate without Capturing any Pieces Tests", () => {
     cy.wait(1000);
 
     /* Click on the king in square e1 */
-    cy.get(".board .square").eq(41).click();
+    cy.get(".board .square").eq(60).click();
 
     /* Wait for page load*/
     cy.wait(1000);
 
-    /* Click on square b4 */
-    cy.get(".board .square").eq(33).click();
+    /* Click on square f1 */
+    cy.get(".board .square").eq(61).click();
 
+    /* Wait for page load*/
+    cy.wait(1000);
+
+    /* Click signout button and ensure we return to Sign In component */
+    cy.get("form button").contains('Quit Game').click();
+
+    /* Wait for page load*/
+    cy.wait(1000);
+
+    /* Click signout button and ensure we return to Sign In component */
+    cy.get("form button").contains('Sign Out').click();
+
+    /* Wait for page load*/
+    cy.wait(1000);
+
+    /* Make sure Form is visible */
+    cy.get("#AUTH_EMAIL_FIELD").should("exist");
+  });
+
+  it("Player2 makes 8th move (Qf2#) -18", () => {
+    cy.visit("/");
+
+    /* Make sure Form is visible */
+    cy.get("#AUTH_EMAIL_FIELD").should("exist");
+
+    /* Enter valid user information and click Sign In button */
+    cy.get("[placeholder='Enter e-mail address']").type('chuck@email.com');
+    cy.get("[placeholder='Enter password']").type('testtest');
+    cy.get("form button").contains('Sign In').click();
+
+    /* Wait for page load*/
+    cy.wait(1000);
+
+    /* Ensure welcome message is visible */
+    cy.get("h1").should("have.text", "Welcome Charles!");
+
+    /* Click show games button */
+    cy.get("form button").contains('Show Playable Games').click();
+
+    /* Wait for page load*/
+    cy.wait(1000);
+
+    /* Ensure playable gamess banner is visible */
+    cy.get(".offcanvas").find(".offcanvas-title").should("have.text", "List of Playable Games");
+
+    /* Ensure Player information is populated correctly */
+    cy.get(".offcanvas button").last().should("have.text", "Join").click();
+
+    /* Wait for page load*/
+    cy.wait(1000);
+
+    /* Select the checkbox to use Python Chess for Possible Moves */
+    cy.get(".form-check-input").check();
+
+    /* Wait for page load*/
+    cy.wait(1000);
+
+    /* Click the button to Show File/Rank Labels */
+    cy.get("form button").contains("Show File/Rank Labels").click();
+
+    /* Wait for page load*/
+    cy.wait(1000);
+
+    /* Click on the queen in square h4 */
+    cy.get(".board .square").eq(24).click();
+
+    /* Wait for page load*/
+    cy.wait(1000);
+
+    /* Click on square f2 */
+    cy.get(".board .square").eq(10).click();
+
+    /* Wait for page load*/
+    cy.wait(3000);
+
+    /* Ensure a modal is displayed with appropriate endgame message */
+    cy.get(".modal-body").should("have.text", "CHECK MATE: Congratulations Charles, you won the game!");
+    cy.get("div button")
+      .filter(':contains("Acknowledge")')
+      .should("have.length", 1)
+      .first()
+      .click();
+
+    /* Wait for page to load */
+    cy.wait(1000);
+  
     /* Wait for page load*/
     cy.wait(1000);
 
