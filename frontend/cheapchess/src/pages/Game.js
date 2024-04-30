@@ -90,9 +90,6 @@ const Game = () =>
   /*holds state for the selected square */
   const [ selectedOriginSquare, setSelectedOriginSquare ] = useState();
 
-  /* Stores whether to use Python-Chess for displaying possible moves */
-  const [ usePythonChessForPossibleMoves, setUsePythonChessForPossibleMoves ] = useState();
-
   /* Ref Declarations */
   const inputEmailRef = useRef(null);
   const inputPasswordRef = useRef(null);
@@ -438,9 +435,7 @@ const Game = () =>
                   setSelectedColorOptionInColorOptionSelect   : setSelectedColorOptionInColorOptionSelect,
                   setShowFileRankLabels                       : setShowFileRankLabels,
                   setSelectedOriginSquare                     : setSelectedOriginSquare,
-                  setUsePythonChessForPossibleMoves           : setUsePythonChessForPossibleMoves,
-                  showFileRankLabels                          : showFileRankLabels,
-                  usePythonChessForPossibleMoves              : usePythonChessForPossibleMoves,
+                  showFileRankLabels                          : showFileRankLabels
                 }}
                 parentRefs={{
                   inputEmailRef       : inputEmailRef,
@@ -451,20 +446,19 @@ const Game = () =>
               />
               <appState.imports.Board parentState={{
                 ...appState,
-                auth                             :   auth,
-                boardData                        :   boardData,
-                gameDataFromServer               :   gameDataFromServer,
-                highlightedSquares               :   highlightedSquares,
-                iconData                         :   iconData,
-                playerColor                      :   playerColor,
-                setBoardData                     :   setBoardData,
-                setGameDataFromServer            :   setGameDataFromServer,
-                setHighlightedSquares            :   setHighlightedSquares,
-                setMessages                      :   setMessages,
-                showFileRankLabels               :   showFileRankLabels,
-                selectedOriginSquare             :   selectedOriginSquare,
-                setSelectedOriginSquare          :   setSelectedOriginSquare,
-                usePythonChessForPossibleMoves   :   usePythonChessForPossibleMoves,
+                auth                    :   auth,
+                boardData               :   boardData,
+                gameDataFromServer      :   gameDataFromServer,
+                highlightedSquares      :   highlightedSquares,
+                iconData                :   iconData,
+                playerColor             :   playerColor,
+                setBoardData            :   setBoardData,
+                setGameDataFromServer   :   setGameDataFromServer,
+                setHighlightedSquares   :   setHighlightedSquares,
+                setMessages             :   setMessages,
+                showFileRankLabels      :   showFileRankLabels,
+                selectedOriginSquare    : selectedOriginSquare,
+                setSelectedOriginSquare : setSelectedOriginSquare,
               }}/>
           </div>
           <div>

@@ -238,18 +238,14 @@ const FormManager = ({
     parentState.setShowFileRankLabels(!parentState.showFileRankLabels);
   }
 
-  /* Handle changes to the checkbox for using Python Chess to select possible
-     moves */
-  const onPythonChessCheckboxChange = (e) => {
-    if (e && e.target?.name === 'usePythonChessCheckbox') {
-      const checked = e.target.checked;
+  /* Handles changes to NewGame Form */
+  const onGameNewFormChange = e => {
+    parentState.imports.clearFormErrors(parentRefs);
 
-      if (checked) {
-        parentState.setUsePythonChessForPossibleMoves(true);
-      } else {
-        parentState.setUsePythonChessForPossibleMoves(false);
-      }
-    } 
+    if (parentState.imports.constants) {
+      const selectedColor = parentState.imports.constants.COLOR_OPTIONS[e.target.value];
+      parentState.setFormData({ ...parentState.formData, [e.target.name]: selectedColor });
+    }
   }
   
   /* Handles changes to UserForm */
@@ -377,6 +373,7 @@ const FormManager = ({
         handleJoinGameClicked    : handleJoinGameClicked,
         handleNewGameClicked     : handleNewGameClicked,
         handleSignOutClicked     : handleSignOutClicked,
+        onGameNewFormChange      : onGameNewFormChange,
       }}/>
     );
   } else if (
@@ -393,7 +390,6 @@ const FormManager = ({
         handleSuggestMoveClicked          : handleSuggestMoveClicked,
         handleQuitGameClicked             : handleQuitGameClicked,
         handleToggleFileRankLabelsClicked : handleToggleFileRankLabelsClicked,
-        onPythonChessCheckboxChange       : onPythonChessCheckboxChange,
       }}/>
     );
   } else if (

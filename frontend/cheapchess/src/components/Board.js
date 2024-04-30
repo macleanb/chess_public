@@ -141,23 +141,13 @@ const Board = (
       let active = true;
 
       const getPossibleMoves = async () => {
-
-        /* Declare a variable to hold possible moves.  It will be set either
-           locally (from gameDataFromServer) or via an API call, depending
-           on whether the user checks a box to use Python Chess for 
-           possible moves */
-        let newPossibleMoves;
-        if (parentState?.usePythonChessForPossibleMoves) {
-          newPossibleMoves = parentState.gameDataFromServer['possible_moves'][referenceOriginSquare.file + referenceOriginSquare.rank];
-        } else {
-          newPossibleMoves = await parentState.imports.apiGetPossibleMoves(
-            pieceData.color,
-            pieceData.first_move_made,
-            pieceData.current_file,
-            pieceData.current_rank,
-            pieceData.piece_type
-          );
-        }
+        const newPossibleMoves = await parentState.imports.apiGetPossibleMoves(
+          pieceData.color,
+          pieceData.first_move_made,
+          pieceData.current_file,
+          pieceData.current_rank,
+          pieceData.piece_type
+        );
 
         if (active && newPossibleMoves) {
           setPossibleMoves({
