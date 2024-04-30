@@ -23,10 +23,6 @@ const joinGame = async (gameID, formData, setMessages) => {
       }
     );
 
-    // test
-    console.log('Here in joinGame');
-    console.log(response);
-
     return await response.data;
   } catch (e) {
     console.log(e);
