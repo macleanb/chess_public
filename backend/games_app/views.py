@@ -353,7 +353,8 @@ class GameView(APIView):
             # print (updated_piece.current_file, updated_piece.current_rank)
             updated_piece.current_file = destination_square_id[0]
             updated_piece.current_rank = destination_square_id[1]
-            pieces = updated_game.pieces.all()
+            # pieces = updated_game.pieces.all()
+            pieces = updated_game.pieces.filter(on_board = True)
             # print(pieces)
 
             updated_piece_new_position = [updated_piece.current_file, updated_piece.current_rank]
@@ -364,7 +365,10 @@ class GameView(APIView):
                 if [x.current_file, x.current_rank] == updated_piece_new_position:
                     piece_info = PieceSerializer(x).data
                     piece_info['on_board'] = False
+                    x.on_board = False
                     print(piece_info)
+                    # piece_info.save()
+                    # return piece_info
             
             # once we have that info, set that piece on_board to False.
             
@@ -378,6 +382,7 @@ class GameView(APIView):
             else:
                 updated_game.whose_turn = updated_game.player1
             updated_game.save()
+            
 
             
 
@@ -388,8 +393,9 @@ class GameView(APIView):
             serialized_pieces = [PieceSerializer(piece).data for piece in pieces]
             serialized_pieces_dict = {}
             for serialized_piece in serialized_pieces:
-                key = serialized_piece['current_file'] + serialized_piece['current_rank']
-                serialized_pieces_dict[key] = serialized_piece
+                if serialized_piece['on_board'] == True:
+                    key = serialized_piece['current_file'] + serialized_piece['current_rank']
+                    serialized_pieces_dict[key] = serialized_piece
             
             serialized_game = GameSerializer(updated_game).data
             serialized_game['pieces'] = serialized_pieces_dict
@@ -408,7 +414,7 @@ class GameView(APIView):
             # Create pieces, add icons, and pass new_game to their game fields
             # Serialize each piece, 
             # add each piece to pieces dict (keyed by square i.e. 'a1')
-            pieces = game.pieces.all()
+            pieces = game.pieces.filter(on_board = True)
             serialized_pieces = [PieceSerializer(piece).data for piece in pieces]
             serialized_pieces_dict = {}
             for serialized_piece in serialized_pieces:
