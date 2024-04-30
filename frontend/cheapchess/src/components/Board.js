@@ -33,23 +33,25 @@ const Board = (
     e.preventDefault();
     e.stopPropagation();
   
+    
     /* If the game isnt' started yet, pop up a message to the user */
-    if ( 
-      !parentState.gameDataFromServer ||
-      parentState.gameDataFromServer?.game_status === 'not_started'
-      )
-    {
-      parentState.setMessages({'Error' : "The game hasn't started yet!  You may need to login first or allow another player to join..."});
-    }
+    // if ( 
+    //   !parentState.gameDataFromServer ||
+    //   parentState.gameDataFromServer?.game_status === 'not_started'
+    //   )
+    // {
+    //   parentState.setMessages({'Error' : "The game hasn't started yet!  You may need to login first or allow another player to join..."});
+    // }
     /* If it isn't our turn, pop up a message to the user */
-    else if (
-      parentState.gameDataFromServer?.whose_turn &&
-      parentState.gameDataFromServer.whose_turn.id !== parentState.auth.user.id
-      )
-    {
-      parentState.setMessages({'Nice try' : 'wait your turn!'});
-    /* It IS our turn.  Perform additional validation */
-    } else {
+    // else
+    //  if (
+    //   parentState.gameDataFromServer?.whose_turn &&
+    //   parentState.gameDataFromServer.whose_turn.id !== parentState.auth.user.id
+    //   )
+    // {
+    //   parentState.setMessages({'Nice try' : 'wait your turn!'});
+    // /* It IS our turn.  Perform additional validation */
+    // } else {
       const userIsPlayer1 = parentState.gameDataFromServer.player1.id === parentState.auth.user.id;
       const playerColor = userIsPlayer1
                           ?
@@ -94,7 +96,7 @@ const Board = (
           ) {
           parentState.setMessages({'Nice try' : "you can't move there...or maybe you can...but OpenAI isn't always right!"});
         }
-      }
+      // }
     }
   };
 
