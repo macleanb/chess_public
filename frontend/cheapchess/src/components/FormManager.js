@@ -238,21 +238,19 @@ const FormManager = ({
     parentState.setShowFileRankLabels(!parentState.showFileRankLabels);
   }
 
-  /* Handles changes to NewGame Form */
-  // const onGameNewFormChange = e => {
-  //   parentState.imports.clearFormErrors(parentRefs);
-  //   console.log("does this work?")
-  //   if (parentState.imports.constants) {
-  //     if (e.target.name === "player1Color") {
-  //       /* Handle selected color */
-  //       console.log("new if statement and branch works")
-  //       const selectedColor = parentState.imports.constants.COLOR_OPTIONS[e.target.value];
-  //       parentState.setFormData({ ...parentState.formData, [e.target.name]: selectedColor });
-  //     }
+  /* Handle changes to the checkbox for using Python Chess to select possible
+     moves */
+  const onPythonChessCheckboxChange = (e) => {
+    if (e && e.target?.name === 'usePythonChessCheckbox') {
+      const checked = e.target.checked;
 
-      
-  //   }
-  // }
+      if (checked) {
+        parentState.setUsePythonChessForPossibleMoves(true);
+      } else {
+        parentState.setUsePythonChessForPossibleMoves(false);
+      }
+    } 
+  }
   
   /* Handles changes to UserForm */
   const onUserFormChange = e => {
@@ -379,7 +377,6 @@ const FormManager = ({
         handleJoinGameClicked    : handleJoinGameClicked,
         handleNewGameClicked     : handleNewGameClicked,
         handleSignOutClicked     : handleSignOutClicked,
-        // onGameNewFormChange      : onGameNewFormChange,
       }}/>
     );
   } else if (
@@ -396,6 +393,7 @@ const FormManager = ({
         handleSuggestMoveClicked          : handleSuggestMoveClicked,
         handleQuitGameClicked             : handleQuitGameClicked,
         handleToggleFileRankLabelsClicked : handleToggleFileRankLabelsClicked,
+        onPythonChessCheckboxChange       : onPythonChessCheckboxChange,
       }}/>
     );
   } else if (
