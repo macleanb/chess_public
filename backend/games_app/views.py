@@ -1,4 +1,5 @@
 # External Imports
+from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -8,10 +9,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework import permissions, status
-from django.utils import timezone
 
 # Internal Imports
 from .create_pieces_for_new_game import create_pieces_for_new_game
+from .get_possible_moves import get_possible_moves
 from .models import Game
 from .serializers import GameSerializer, PieceSerializer, Piece
 
@@ -71,10 +72,10 @@ class GamesView(APIView):
                 'moves' : [
                     # {
                     #  'player_id' : int,
-                    #  'origin_rank' : int,
+                    #  'origin_rank' : char,
                     #  'origin_file' : char,
-                    #  'destination_rank' : int,
-                    #  'destination_file' : int,
+                    #  'destination_rank' : char,
+                    #  'destination_file' : char,
                     #  'moving_piece_id' : int,
                     #  'captured_piece_id' : int (or null) 
                     # }, ...
@@ -87,6 +88,11 @@ class GamesView(APIView):
             serialized_game = GameSerializer(new_game).data
 
             serialized_game['pieces'] = serialized_pieces_dict
+            serialized_game['moves_made'] = new_game.moves_made['moves']
+
+            # Add possible moves from Python-Chess
+            possible_moves = get_possible_moves(new_game.moves_made['moves'])
+            serialized_game['possible_moves'] = possible_moves
 
             return Response(serialized_game)
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -111,9 +117,22 @@ class GameView(APIView):
 
             updated_piece = Piece.objects.get(pk=piece_id)
 
+            # Before updating the Piece, create a move record
+            move_dict = {
+                'origin_file'      : updated_piece.current_file,
+                'origin_rank'      : updated_piece.current_rank,
+                'destination_file' : destination_square_id[0],
+                'destination_rank' : destination_square_id[1],
+            }
+
+            # Update piece's current file, rank, and first_move_made
             updated_piece.current_file = destination_square_id[0]
             updated_piece.current_rank = destination_square_id[1]
+            updated_piece.first_move_made = True
             updated_piece.save()
+
+            # Update the moves_made field
+            updated_game.moves_made['moves'].append(move_dict)
 
             if updated_game.whose_turn == updated_game.player1:
                 updated_game.whose_turn = updated_game.player2
@@ -146,6 +165,11 @@ class GameView(APIView):
             
             serialized_game = GameSerializer(updated_game).data
             serialized_game['pieces'] = serialized_pieces_dict
+            serialized_game['moves_made'] = updated_game.moves_made['moves']
+
+            # Add possible moves from Python-Chess
+            possible_moves = get_possible_moves(updated_game.moves_made['moves'])
+            serialized_game['possible_moves'] = possible_moves
 
             return Response(serialized_game)
         except Game.DoesNotExist:
@@ -167,9 +191,14 @@ class GameView(APIView):
             for serialized_piece in serialized_pieces:
                 key = serialized_piece['current_file'] + serialized_piece['current_rank']
                 serialized_pieces_dict[key] = serialized_piece
-            
+
             serialized_game = GameSerializer(game).data
             serialized_game['pieces'] = serialized_pieces_dict
+            serialized_game['moves_made'] = game.moves_made['moves']
+
+            # Add possible moves from Python-Chess
+            possible_moves = get_possible_moves(game.moves_made['moves'])
+            serialized_game['possible_moves'] = possible_moves
 
             return Response(serialized_game, status=status.HTTP_200_OK)
         except Game.DoesNotExist:
@@ -205,6 +234,11 @@ class GameView(APIView):
             
             serialized_game = GameSerializer(game).data
             serialized_game['pieces'] = serialized_pieces_dict
+            serialized_game['moves_made'] = game.moves_made['moves']
+
+            # Add possible moves from Python-Chess
+            possible_moves = get_possible_moves(game.moves_made['moves'])
+            serialized_game['possible_moves'] = possible_moves
 
             return Response(serialized_game, status=status.HTTP_200_OK)
         
