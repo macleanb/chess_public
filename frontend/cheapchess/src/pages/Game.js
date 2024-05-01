@@ -326,6 +326,7 @@ const Game = () =>
       gameDataFromServer,
       playerColor,
     );
+
     /* handles deselection of the origin square and piece after move is made
     and removes the green highlight from recommended squares.*/
     for (const highlightedSquare of highlightedSquares) {
@@ -343,9 +344,15 @@ const Game = () =>
     setBoardData(updatedBoardData);
     }
 
-    /* TODO: Refresh the board every 5s */
+    /* Display a message if the game has been won */
+    if (gameDataFromServer?.game_winner) {
+      setMessages({'CHECK MATE': `Congratulations ${gameDataFromServer.game_winner.first_name}, you won the game!`});
+    }
+
+    /* Refresh the board every 5s */
     if (
       gameDataFromServer &&
+      gameDataFromServer.game_status !== 'ENDED' &&
       (
         gameDataFromServer.whose_turn?.id !== auth?.user?.id ||
         gameDataFromServer.game_status === 'not_started'
