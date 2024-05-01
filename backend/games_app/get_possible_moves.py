@@ -4,8 +4,10 @@
 import chess
 
 def get_possible_moves(moves_made):
-    """ This method takes in a list of pieces and creates a 
-        Python-Chess board representation with those pieces.
+    """ This method takes in a list of moves and creates a 
+        Python-Chess board representation with pieces in the 
+        current configuration given the moves that have been
+        made.
         
         It then gets the legal moves for the board and returns them
         as a dict, keyed by the origin square, where values are
@@ -14,7 +16,7 @@ def get_possible_moves(moves_made):
     # Create a Board object from Python-Chess
     board = chess.Board()
 
-    # Update the board by making moves for each piece that
+    # Update the board by making moves for each move that
     # was provided on the current board
     for move in moves_made:
         # Update the Python-Chess board to reflect where each

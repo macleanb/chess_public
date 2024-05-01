@@ -13,6 +13,7 @@ from rest_framework import permissions, status
 # Internal Imports
 from .create_pieces_for_new_game import create_pieces_for_new_game
 from .get_possible_moves import get_possible_moves
+from .is_checkmate import is_checkmate
 from .models import Game
 from .serializers import GameSerializer, PieceSerializer, Piece
 
@@ -94,6 +95,10 @@ class GamesView(APIView):
             possible_moves = get_possible_moves(new_game.moves_made['moves'])
             serialized_game['possible_moves'] = possible_moves
 
+            # Add boolean value for is_checkmate from Python-Chess
+            game_is_checkmate = is_checkmate(new_game.moves_made['moves'])
+            serialized_game['is_checkmate'] = game_is_checkmate
+
             return Response(serialized_game)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -163,7 +168,7 @@ class GameView(APIView):
             for serialized_piece in serialized_pieces:
                 key = serialized_piece['current_file'] + serialized_piece['current_rank']
                 serialized_pieces_dict[key] = serialized_piece
-            
+
             serialized_game = GameSerializer(updated_game).data
             serialized_game['pieces'] = serialized_pieces_dict
             serialized_game['moves_made'] = updated_game.moves_made['moves']
@@ -172,10 +177,21 @@ class GameView(APIView):
             possible_moves = get_possible_moves(updated_game.moves_made['moves'])
             serialized_game['possible_moves'] = possible_moves
 
+            # Add boolean value for is_checkmate from Python-Chess
+            # if is_checkmate == True, set fields appropriately to end the game
+            game_is_checkmate = is_checkmate(updated_game.moves_made['moves'])
+            if game_is_checkmate:
+                updated_game.whose_turn = None
+                updated_game.ended_datetime = timezone.now()
+                updated_game.game_status = 'ENDED'
+                updated_game.game_winner = request.user
+                updated_game.save()
+            serialized_game['is_checkmate'] = game_is_checkmate
+
             return Response(serialized_game)
         except Game.DoesNotExist:
             return Response(status=404)
-        
+
     def get(self, request, game_id):
         """
         Continuing game
@@ -201,10 +217,14 @@ class GameView(APIView):
             possible_moves = get_possible_moves(game.moves_made['moves'])
             serialized_game['possible_moves'] = possible_moves
 
+            # Add boolean value for is_checkmate from Python-Chess
+            game_is_checkmate = is_checkmate(game.moves_made['moves'])
+            serialized_game['is_checkmate'] = game_is_checkmate
+
             return Response(serialized_game, status=status.HTTP_200_OK)
         except Game.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
     def post(self, request, game_id):
         """
         Joining specific game as second player
@@ -215,7 +235,7 @@ class GameView(APIView):
             # if game.player1 == request.user:
                 # return Response({'error': 'You are already player 1 in this game.'}, status=status.HTTP_400_BAD_REQUEST)
                 # which shouldn't happen due to filtering playable games where user is player 1
-            
+
             game.player2 = request.user
             game.player2_color = 'light' if game.player1_color == 'dark' else 'dark'
             game.started_datetime = timezone.now()
@@ -241,11 +261,14 @@ class GameView(APIView):
             possible_moves = get_possible_moves(game.moves_made['moves'])
             serialized_game['possible_moves'] = possible_moves
 
+            # Add boolean value for is_checkmate from Python-Chess
+            game_is_checkmate = is_checkmate(game.moves_made['moves'])
+            serialized_game['is_checkmate'] = game_is_checkmate
+
             return Response(serialized_game, status=status.HTTP_200_OK)
-        
         except Game.DoesNotExist:
             return Response({'error': 'Game not found or not joinable.'}, status=status.HTTP_404_NOT_FOUND)
-            
+
 
 class PlayableGamesView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
