@@ -15,3 +15,29 @@
 .borderColor{
   border: 5px solid rgb(255, 170, 0);
 }
+
+.shakeError{
+  border: 5px solid rgb(251, 17, 17);
+  animation: .5s shake linear;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(-8%);
+  }
+  10%{
+      transform: translateX(8%);
+  }
+  20% {
+      transform: translateX(-8%);
+  }
+  30% {
+      transform: translateX(8%);
+  }
+  40%{
+    transform: translateX(-8%);
+  }
+  50% {
+      transform: translateX(8%);
+  }
+}

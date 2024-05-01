@@ -17,6 +17,8 @@ const Board = (
   /* Store possible moves once received from API */
   const [ possibleMoves, setPossibleMoves ] = useState();
 
+  const [ shakeError, setShakeError ] = useState(false)
+
   //////////////////////
   /// Event Handlers ///
   //////////////////////
@@ -94,7 +96,7 @@ const Board = (
             squareData.piece.color !== playerColor // an attempt was made to capture opponent piece
           )
           ) {
-          parentState.setMessages({'Nice try' : "you can't move there...or maybe you can...but OpenAI isn't always right!"});
+          // parentState.setMessages({'Nice try' : "you can't move there...or maybe you can...but OpenAI isn't always right!"});
         }
       }
     }
@@ -241,6 +243,14 @@ const Board = (
     }
   }, [possibleMoves]);
 
+  useEffect(() => {
+    if (shakeError) {
+      setTimeout(() => 
+        setShakeError(false), 1000
+      )
+    }
+  }, [shakeError])
+
   //////////////
   /// Render ///
   //////////////
@@ -265,7 +275,8 @@ const Board = (
                                 ...parentState,
                                 squareData          :   squareData,
                                 handlePieceClicked  :   handlePieceClicked,
-                                handleSquareClicked :   handleSquareClicked
+                                handleSquareClicked :   handleSquareClicked,
+                                shouldIShake        :   shakeError && parentState?.selectedOriginSquare.piece === squareData.piece
                               }}/>
                             </parentState.imports.Col>
                           )
