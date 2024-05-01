@@ -33,6 +33,7 @@ const Board = (
     e.preventDefault();
     e.stopPropagation();
   
+    
     /* If the game isnt' started yet, pop up a message to the user */
     if ( 
       !parentState.gameDataFromServer ||
@@ -42,7 +43,8 @@ const Board = (
       parentState.setMessages({'Error' : "The game hasn't started yet!  You may need to login first or allow another player to join..."});
     }
     /* If it isn't our turn, pop up a message to the user */
-    else if (
+    else
+     if (
       parentState.gameDataFromServer?.whose_turn &&
       parentState.gameDataFromServer.whose_turn.id !== parentState.auth.user.id
       )
