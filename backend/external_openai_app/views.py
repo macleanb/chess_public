@@ -8,6 +8,7 @@ from openai import OpenAI
 # Internal Imports
 from .prompt_builder import build_possible_moves_prompt
 from .prompt_builder import build_suggested_move_prompt
+from .prompt_builder import make_move_for_computer_prompt
 
 class PossibleMoves(APIView):
     """
@@ -44,6 +45,37 @@ class PossibleMoves(APIView):
             messages=[
                 {"role": "system", "content": "You are a chess tutor, skilled at suggesting " \
                                               "chess moves to a novice chess player."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+
+        # Update server status to console
+        print(f'response message: {completion.choices[0].message.content}')
+
+        post_response = [completion.choices[0].message, {
+            'request_data' : request.data,
+        }]
+        return Response(post_response)
+
+
+class FaceComputer(APIView):
+
+    def post(self, request):
+        """
+        Return a JSON dict containing
+        a move that the computer can make, based on Difficulty lvl
+        """
+        comp_difficulty = request.data['comp_difficulty']
+        prompt = make_move_for_computer_prompt(request.data)
+
+
+        load_dotenv()
+
+        client = OpenAI()
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a chess player."},
                 {"role": "user", "content": prompt}
             ]
         )

@@ -118,6 +118,8 @@ class GameView(APIView):
         try:
             put_data = request.data.copy()
             updated_game = Game.objects.get(pk=game_id)
+            # Accounts for type of game: PvP or PvC?
+            game_type = updated_game.game_type
 
             piece_id = put_data['piece_id']
             destination_square_id = put_data['destination_square_id']
@@ -140,10 +142,18 @@ class GameView(APIView):
 
             # Update the moves_made field
             updated_game.moves_made['moves'].append(move_dict)
-
-            if updated_game.whose_turn == updated_game.player1:
+            #PvP and Player 1 just moved
+            if game_type == 'HUMAN V. HUMAN' and updated_game.whose_turn == updated_game.player1:
                 updated_game.whose_turn = updated_game.player2
-            else:
+            #PvP and Player 2 just moved
+            elif game_type == 'HUMAN V. HUMAN' and updated_game.whose_turn == updated_game.player2:
+                updated_game.whose_turn = updated_game.player1
+            #PvC and Player 1 (Human) just moved
+            elif game_type == 'HUMAN V. COMPUTER' and updated_game.whose_turn == updated_game.player1:
+                updated_game.whose_turn = None
+            #PvC and Player 2 (Computer) just moved
+            # Or elif game_type == 'HUMAN V. COMPUTER' and updated_game.whose_turn == None:
+            else: 
                 updated_game.whose_turn = updated_game.player1
             updated_game.save()
 
@@ -280,8 +290,8 @@ class PlayableGamesView(APIView):
         Method for getting all playable Game objects
         """
         try:
-            # Get all open games that do not have this user as player 1
-            open_games = Game.objects.filter(player2 = None)#.exclude(player1 = request.user.id)
+            # Get all open games that do not have this user as player 1 AND is PvP
+            open_games = Game.objects.filter(player2 = None, game_type = 'HUMAN V. HUMAN')#.exclude(player1 = request.user.id)
 
             # Get all games where user is either player1 or player2
             user_games_as_player_1 = Game.objects.filter(player1 = request.user.id)

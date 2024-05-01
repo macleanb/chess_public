@@ -53,6 +53,13 @@ const Form_GameControls = ({
           :
             <h5>{`Waiting for opponent to join...`}</h5>
         }
+        {  //for when it's the computer's turn
+          parentState?.gameDataFromServer?.whose_turn == null && parentState.gameDataFromServer?.game_type === 'HUMAN V. COMPUTER'
+          ?
+            <h5>{"It's the Computer's turn"}</h5>
+          :  //for when it's a human's turn
+            <h5>{`It's ${parentState.gameDataFromServer.whose_turn.first_name}'s turn`}</h5>
+        }
       </div>
       <br/>
       {

@@ -249,6 +249,33 @@ const Board = (
     }
   }, [possibleMoves]);
 
+
+  useEffect(() => {
+    /* to see when it's computer's turn, so that it can make the api call for getting comp move*/
+    if (
+      parentState?.gameDataFromServer?.whose_turn === null &&
+      parentState.gameDataFromServer?.game_type === 'HUMAN V. COMPUTER'
+    ) {
+      const response = makeMove(
+        parentState.gameDataFromServer.id, //gameDataFromServer
+        null,  //selectedOriginSquare.piece
+        null,  // squareData.file, squareData.rank
+        parentState.iconData,  //iconData
+        parentState.setGameDataFromServer,  //setGameDataFromServer
+        parentState.setMessages, //setMessages
+        
+        console.log('Board.js data is being shown', 
+        parentState.gameDataFromServer.id, //gameDataFromServer
+        null,  //selectedOriginSquare.piece
+        null,  // squareData.file, squareData.rank
+        parentState.iconData,  //iconData
+        parentState.setGameDataFromServer,  //setGameDataFromServer
+        parentState.setMessages  //setMessages
+      )
+    )
+    }
+  }, [gameDataFromServer?.whose_turn, gameDataFromServer?.game_type]);
+
   //////////////
   /// Render ///
   //////////////
