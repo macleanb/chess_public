@@ -50,6 +50,10 @@ For aspiring chess players who find personal tutoring cost-prohibitive, CheapChe
 * cd into backend directory
 * ```python manage.py loaddata icons_app/fixtures/icon_data.json```
 
+### Backend - import auth permissions / group into database
+* cd into backend directory
+* ```python manage.py loaddata chess_users/fixtures/auth_data.json```
+
 ### Download Free Chess Images
 * You can download free chess images from flaticon.com.  Once you download them, you can import them into your database
 by logging into your database as an admin.
