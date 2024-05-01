@@ -37,7 +37,7 @@ const Square = (
 
   return (
     <div
-      className={ `${ parentState?.squareData?.color ? parentState.squareData.color : ''} ${parentState?.squareData === parentState?.selectedOriginSquare ? styles.borderColor : ''} ${styles.relativesquare} square` }
+      className={ `${ parentState?.squareData?.color ? parentState.squareData.color : ''} ${parentState?.squareData === parentState?.selectedOriginSquare ? styles.borderColor : ''} ${styles.relativesquare} ${parentState?.shouldIShake ? styles.shakeError : ''} square` }
       onClick={ parentState?.handleSquareClicked && parentState?.squareData
         ?
         (e) => {
