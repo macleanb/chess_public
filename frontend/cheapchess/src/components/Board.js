@@ -96,8 +96,8 @@ const Board = (
             squareData.piece.color !== playerColor // an attempt was made to capture opponent piece
           )
           ) {
+          /* If move is not valid turns the animation for set time referred in a UseEffect */
           setShakeError(true)
-          // parentState.setMessages({'Nice try' : "you can't move there...or maybe you can...but OpenAI isn't always right!"});
         }
       }
     }
