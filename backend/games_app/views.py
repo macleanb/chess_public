@@ -122,7 +122,7 @@ class GameView(APIView):
             if captured_piece_set.count() > 1:
                 raise Exception("ERROR: There is more than one piece on the destination square")
             
-            elif captured_piece_set.count == 1:
+            elif captured_piece_set.count() == 1:
                 captured_piece = captured_piece_set.first()
                 captured_piece.on_board = False
                 captured_piece.current_file = ''
