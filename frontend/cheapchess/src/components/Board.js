@@ -17,6 +17,7 @@ const Board = (
   /* Store possible moves once received from API */
   const [ possibleMoves, setPossibleMoves ] = useState();
 
+  /* Lets the shakeError know when to stop animation with invalid move */
   const [ shakeError, setShakeError ] = useState(false)
 
   //////////////////////
@@ -89,13 +90,13 @@ const Board = (
             parentState.setGameDataFromServer,
             parentState.setMessages
           );
-        } else if (
-          parentState.selectedOriginSquare && // user may be attempting to make an invalid move
+        } else if (parentState.selectedOriginSquare && // user may be attempting to make an invalid move
           (
             squareData.piece === null || // an attempt was made to move to an empty square
             squareData.piece.color !== playerColor // an attempt was made to capture opponent piece
           )
           ) {
+          setShakeError(true)
           // parentState.setMessages({'Nice try' : "you can't move there...or maybe you can...but OpenAI isn't always right!"});
         }
       }
