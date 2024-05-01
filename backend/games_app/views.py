@@ -111,37 +111,43 @@ class GameView(APIView):
         try:
             put_data = request.data.copy()
             updated_game = Game.objects.get(pk=game_id) 
-            piece_id = put_data['piece_id']
             destination_square_id = put_data['destination_square_id']
-            updated_piece = Piece.objects.get(pk=piece_id)
-            original_pieces = updated_game.pieces.filter(on_board = True)
+
+            # now handle captured piece
+            captured_piece_set = updated_game.pieces.filter(
+                current_file = destination_square_id[0],
+                current_rank = destination_square_id[1]
+            )
+
+            if captured_piece_set.count() > 1:
+                raise Exception("ERROR: There is more than one piece on the destination square")
+            
+            elif captured_piece_set.count == 1:
+                captured_piece = captured_piece_set.first()
+                captured_piece.on_board = False
+                captured_piece.current_file = ''
+                captured_piece.current_rank = ''
+                captured_piece.save()
+
+            moving_piece_id = put_data['piece_id']
+            moving_piece = Piece.objects.get(pk=moving_piece_id)
 
             # Before updating the Piece, create a move record
-            move_dict = {
-                'origin_file'      : updated_piece.current_file,
-                'origin_rank'      : updated_piece.current_rank,
+            move_record_dict = {
+                'origin_file'      : moving_piece.current_file,
+                'origin_rank'      : moving_piece.current_rank,
                 'destination_file' : destination_square_id[0],
                 'destination_rank' : destination_square_id[1],
             }
 
-            # Update piece's current file, rank, and first_move_made
-            updated_piece.current_file = destination_square_id[0]
-            updated_piece.current_rank = destination_square_id[1]
-            updated_piece.first_move_made = True
-            updated_piece.save()
-
-            # now handle captured piece
-            captured_piece = updated_game.pieces.filter(
-                current_file = destination_square_id[0],
-                current_rank = destination_square_id[1]
-            ).exclude(pk=updated_piece.id).first()
-
-            if captured_piece:
-                captured_piece.on_board = False
-                captured_piece.save()
+            # Update the moving piece's current file, rank, and first_move_made
+            moving_piece.current_file = destination_square_id[0]
+            moving_piece.current_rank = destination_square_id[1]
+            moving_piece.first_move_made = True
+            moving_piece.save()
 
             # Update the moves_made field
-            updated_game.moves_made['moves'].append(move_dict)
+            updated_game.moves_made['moves'].append(move_record_dict)
 
             if updated_game.whose_turn == updated_game.player1:
                 updated_game.whose_turn = updated_game.player2
@@ -149,10 +155,9 @@ class GameView(APIView):
                 updated_game.whose_turn = updated_game.player1
             updated_game.save()
 
-            # Create pieces, add icons, and pass new_game to their game fields
-            # Serialize each piece, 
-            # add each piece to pieces dict (keyed by square i.e. 'a1')
+            # now that captured piece is removed, serialize the current pieces on board.
             updated_pieces = updated_game.pieces.filter(on_board = True)
+            # add each piece to pieces dict (keyed by square i.e. 'a1')
             serialized_pieces = [PieceSerializer(piece).data for piece in updated_pieces]
             serialized_pieces_dict = {}
             for serialized_piece in serialized_pieces:
