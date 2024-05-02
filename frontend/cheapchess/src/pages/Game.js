@@ -40,6 +40,9 @@ const Game = () =>
   */
   const [ boardInitializationState, setBoardInitializationState ] = useState(constants.STATUS_NOT_INITIALIZED);
 
+  /* Stores the difficulty level of the computer opponent */
+  const [compDifficulty, setCompDifficulty] = useState( )
+
   /* Stores data as state for any form being displayed */
   const [ formData, setFormData ] = useState();
 

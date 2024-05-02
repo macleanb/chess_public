@@ -17,9 +17,13 @@ const Board = (
   /* Store possible moves once received from API */
   const [ possibleMoves, setPossibleMoves ] = useState();
 
+  /* toggles shake animation on/off */
+  const [shakeError, setShakeError ] = useState(false)
+
   //////////////////////
   /// Event Handlers ///
   //////////////////////
+
 
   /* Get and display possible moves when a piece is clicked */
   const handlePieceClicked = async (e, pieceData) => {
@@ -33,6 +37,7 @@ const Board = (
     e.preventDefault();
     e.stopPropagation();
   
+    
     /* If the game isnt' started yet, pop up a message to the user */
     if ( 
       !parentState.gameDataFromServer ||
@@ -42,7 +47,8 @@ const Board = (
       parentState.setMessages({'Error' : "The game hasn't started yet!  You may need to login first or allow another player to join..."});
     }
     /* If it isn't our turn, pop up a message to the user */
-    else if (
+    else
+     if (
       parentState.gameDataFromServer?.whose_turn &&
       parentState.gameDataFromServer.whose_turn.id !== parentState.auth.user.id
       )
@@ -92,7 +98,7 @@ const Board = (
             squareData.piece.color !== playerColor // an attempt was made to capture opponent piece
           )
           ) {
-          parentState.setMessages({'Nice try' : "you can't move there...or maybe you can...but OpenAI isn't always right!"});
+          setShakeError(true)
         }
       }
     }
@@ -249,32 +255,42 @@ const Board = (
     }
   }, [possibleMoves]);
 
+  useEffect(() => {
+    if (shakeError) {
+      setTimeout(() => 
+        setShakeError(false), 1000
+      )
+    }
+  }, [shakeError])
 
-  // useEffect(() => {
-  //   /* to see when it's computer's turn, so that it can make the api call for getting comp move*/
-  //   if (
-  //     parentState?.gameDataFromServer?.whose_turn === null &&
-  //     parentState.gameDataFromServer?.game_type === 'HUMAN V. COMPUTER'
-  //   ) {
-  //     const response = makeMove(
-  //       parentState.gameDataFromServer.id, //gameDataFromServer
-  //       null,  //selectedOriginSquare.piece
-  //       null,  // squareData.file, squareData.rank
-  //       parentState.iconData,  //iconData
-  //       parentState.setGameDataFromServer,  //setGameDataFromServer
-  //       parentState.setMessages, //setMessages
+
+  useEffect(() => {
+    /* to see when it's computer's turn, so that it can make the api call for getting comp move*/
+    if (
+      parentState?.gameDataFromServer?.whose_turn === null &&
+      parentState.gameDataFromServer?.game_type === 'HUMAN V. COMPUTER'
+    ) {
+      const response = makeMove(
+        parentState.gameDataFromServer.id, //gameDataFromServer
+        null,  //selectedOriginSquare.piece
+        null,  // squareData.file, squareData.rank
+        parentState.iconData, 
+        parentState.setGameDataFromServer,  
+        parentState.setMessages
+      )
         
-  //       console.log('Board.js data is being shown', 
-  //       parentState.gameDataFromServer.id, //gameDataFromServer
-  //       null,  //selectedOriginSquare.piece
-  //       null,  // squareData.file, squareData.rank
-  //       parentState.iconData,  //iconData
-  //       parentState.setGameDataFromServer,  //setGameDataFromServer
-  //       parentState.setMessages  //setMessages
-  //     )
-  //   )
-  //   }
-  // }, [parentState.gameDataFromServer?.whose_turn, parentState.gameDataFromServer?.game_type]);
+        console.log('Board.js data is being shown', 
+        parentState.gameDataFromServer.id, //gameDataFromServer
+        null,  //selectedOriginSquare.piece
+        null,  // squareData.file, squareData.rank
+        parentState.iconData, 
+        parentState.setGameDataFromServer,  
+        parentState.setMessages 
+        )
+      } 
+  }, [parentState.gameDataFromServer?.whose_turn, parentState.gameDataFromServer?.game_type]);
+
+
 
   //////////////
   /// Render ///
@@ -300,7 +316,8 @@ const Board = (
                                 ...parentState,
                                 squareData          :   squareData,
                                 handlePieceClicked  :   handlePieceClicked,
-                                handleSquareClicked :   handleSquareClicked
+                                handleSquareClicked :   handleSquareClicked,
+                                shouldIShake        :   shakeError && parentState?.selectedOriginSquare.piece === squareData.piece
                               }}/>
                             </parentState.imports.Col>
                           )

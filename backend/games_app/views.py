@@ -41,23 +41,45 @@ class GamesView(APIView):
         """
         # user_id = request.user.id
         updated_data = request.data.copy()
+        play_computer = updated_data['play_computer'] #Has either 'true' or false' value
 
+        # player1 = updated_data['player1']
+        # player2 = updated_data['player2']
+        player1_color = updated_data['player1_color']
+        
+        print("The backend receives the data") 
+        print(f"player1_color: {player1_color}, play_computer: {play_computer}")
+        print(updated_data)
+        
         # Couldn't get this to work with nested serializer
         #updated_data['player1'] = request.user
         updated_data['player1'] = request.user.id
-        updated_data['player2'] = None
+        updated_data['player2'] = None  #Possibly make this Computer?
 
-        player1 = updated_data['player1']
-        player2 = updated_data['player2']
         player1_color = updated_data['player1_color']
-        play_computer = updated_data['play_computer']
-        print("The backend receives the data") 
-        print(f"player1_color: {player1_color}, play_computer: {play_computer}, player1: {player1}, player2: {player2}, player1first_name: {updated_data.player1.first_name}, player2first_name: {updated_data.player1.first_name},")
-
         if player1_color == 'light':
             updated_data['whose_turn'] = request.user.id
         else:
             updated_data['whose_turn'] = None
+
+        if play_computer == 'true':
+            updated_data['game_type'] = 'HUMAN V. COMPUTER'
+        else:
+            updated_data['game_type'] = 'HUMAN V. HUMAN'  
+
+        print("The backend gives the data") 
+        print(f"player1_color: {player1_color}, play_computer: {play_computer}, updated_data['game_type']")
+        print(updated_data)
+    
+        #Is it player1/light's turn?
+        # if player1_color == 'light' and updated_data['whose_turn'] == None:
+        #     updated_data['whose_turn'] = request.user.id
+        # elif player1_color == 'dark' and updated_data['whose_turn'] == None:
+        #     updated_data['whose_turn'] = None
+        # elif player1_color == 'light' and updated_data['whose_turn'] == request.user.id:
+        #     updated_data['whose_turn'] = request.user.id
+        # else:
+        #     updated_data['whose_turn'] = None
 
         # serializer = GameSerializer(data=request.data)
         serializer = GameSerializer(data=updated_data)
@@ -128,24 +150,41 @@ class GameView(APIView):
             piece_id = put_data['piece_id']
             destination_square_id = put_data['destination_square_id']
 
-            updated_piece = Piece.objects.get(pk=piece_id)
+            # now handle captured piece
+            captured_piece_set = updated_game.pieces.filter(
+                current_file = destination_square_id[0],
+                current_rank = destination_square_id[1]
+            )
+
+            if captured_piece_set.count() > 1:
+                raise Exception("ERROR: There is more than one piece on the destination square")
+            
+            elif captured_piece_set.count() == 1:
+                captured_piece = captured_piece_set.first()
+                captured_piece.on_board = False
+                captured_piece.current_file = ''
+                captured_piece.current_rank = ''
+                captured_piece.save()
+
+            moving_piece_id = put_data['piece_id']
+            moving_piece = Piece.objects.get(pk=moving_piece_id)
 
             # Before updating the Piece, create a move record
-            move_dict = {
-                'origin_file'      : updated_piece.current_file,
-                'origin_rank'      : updated_piece.current_rank,
+            move_record_dict = {
+                'origin_file'      : moving_piece.current_file,
+                'origin_rank'      : moving_piece.current_rank,
                 'destination_file' : destination_square_id[0],
                 'destination_rank' : destination_square_id[1],
             }
 
-            # Update piece's current file, rank, and first_move_made
-            updated_piece.current_file = destination_square_id[0]
-            updated_piece.current_rank = destination_square_id[1]
-            updated_piece.first_move_made = True
-            updated_piece.save()
+            # Update the moving piece's current file, rank, and first_move_made
+            moving_piece.current_file = destination_square_id[0]
+            moving_piece.current_rank = destination_square_id[1]
+            moving_piece.first_move_made = True
+            moving_piece.save()
 
             # Update the moves_made field
-            updated_game.moves_made['moves'].append(move_dict)
+            updated_game.moves_made['moves'].append(move_record_dict)
             #PvP and Player 1 just moved
             if game_type == 'HUMAN V. HUMAN' and updated_game.whose_turn == updated_game.player1:
                 updated_game.whose_turn = updated_game.player2
@@ -161,24 +200,10 @@ class GameView(APIView):
                 updated_game.whose_turn = updated_game.player1
             updated_game.save()
 
-            # Alternative logic to the above that enforces player
-            # changes on whose_turn based on who is logged in
-            # user_is_player1 = True
-            # if updated_game.player1 != request.user:
-            #     user_is_player1 = False
-
-            # print(user_is_player1)
-
-            # if user_is_player1:
-            #     updated_game.whose_turn = updated_game.player2
-            # else:
-            #     updated_game.whose_turn = updated_game.player1
-
-            # Create pieces, add icons, and pass new_game to their game fields
-            # Serialize each piece, 
+            # now that captured piece is removed, serialize the current pieces on board.
+            updated_pieces = updated_game.pieces.filter(on_board = True)
             # add each piece to pieces dict (keyed by square i.e. 'a1')
-            pieces = updated_game.pieces.all()
-            serialized_pieces = [PieceSerializer(piece).data for piece in pieces]
+            serialized_pieces = [PieceSerializer(piece).data for piece in updated_pieces]
             serialized_pieces_dict = {}
             for serialized_piece in serialized_pieces:
                 key = serialized_piece['current_file'] + serialized_piece['current_rank']
@@ -217,7 +242,7 @@ class GameView(APIView):
             # Create pieces, add icons, and pass new_game to their game fields
             # Serialize each piece, 
             # add each piece to pieces dict (keyed by square i.e. 'a1')
-            pieces = game.pieces.all()
+            pieces = game.pieces.filter(on_board = True)
             serialized_pieces = [PieceSerializer(piece).data for piece in pieces]
             serialized_pieces_dict = {}
             for serialized_piece in serialized_pieces:

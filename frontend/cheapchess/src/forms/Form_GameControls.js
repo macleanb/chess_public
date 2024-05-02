@@ -33,18 +33,36 @@ const Form_GameControls = ({
       <br/>
       <div>
         {
-          parentState?.gameDataFromServer?.player1?.first_name
+          parentState?.gameDataFromServer?.player1?.first_name &&
+          parentState?.gameDataFromServer?.game_type === 'HUMAN V. HUMAN'
           ?
             <h5>{`Player 1: ${parentState.gameDataFromServer.player1.first_name}`}</h5>
           :
             <h5>{`Player 1: Open`}</h5>
         }
         {
-          parentState?.gameDataFromServer?.player2?.first_name
+          parentState?.gameDataFromServer?.player2?.first_name &&
+          parentState?.gameDataFromServer?.game_type === 'HUMAN V. HUMAN'
           ?
             <h5>{`Player 2: ${parentState.gameDataFromServer.player2.first_name}`}</h5>
           :
             <h5>{`Player 2: Open`}</h5>
+        }
+        {
+          parentState?.gameDataFromServer?.player1?.first_name &&
+          parentState?.gameDataFromServer?.game_type === 'HUMAN V. COMPUTER' &&
+            <>
+              <h5>{`Player 1: ${parentState.gameDataFromServer.player1.first_name}`}</h5>
+              <h5>{`Player 2: Computer`}</h5>
+            </>
+        }
+        {
+          parentState?.gameDataFromServer?.player2?.first_name &&
+          parentState?.gameDataFromServer?.game_type === 'HUMAN V. COMPUTER' &&
+            <>
+              <h5>{`Player 1: Computer`}</h5>
+              <h5>{`Player 2: ${parentState.gameDataFromServer.player2.first_name}`}</h5>
+            </>
         }
         {
           parentState?.gameDataFromServer?.whose_turn && parentState.gameDataFromServer?.player2
