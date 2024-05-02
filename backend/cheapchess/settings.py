@@ -28,18 +28,29 @@ SECRET_KEY = env.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'http://localhost', # for jest
+    'http://127.0.0.1',
+    'https://127.0.0.1'
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://*.127.0.0.1', 'http://localhost:3000']
+# Does this contradict the line above?
+CORS_ORIGIN_ALLOW_ALL = True
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.127.0.0.1',
+    'http://127.0.0.1',
+    'https://127.0.0.1',
+    'http://localhost:3000',
+    'https://13.59.53.188/', # AWS elastic IP
+    'https://ai-chess.duckdns.org', # secure site
+    ]
 
 CORS_ALLOW_CREDENTIALS = True
-
 
 # Application definition
 
