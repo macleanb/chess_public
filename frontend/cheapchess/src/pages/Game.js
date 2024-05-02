@@ -386,12 +386,12 @@ const Game = () =>
   // }, [boardData]);
 
   // For dev/test: prints gameDataFromServer whenever it changes
-  // useEffect(() => {
-  //   console.log(`here in game, game data updated!`);
-  //   if (gameDataFromServer) {
-  //     console.log(gameDataFromServer);
-  //   }
-  // }, [gameDataFromServer]);
+  useEffect(() => {
+    console.log(`here in game, game data updated!`);
+    if (gameDataFromServer) {
+      console.log(gameDataFromServer);
+    }
+  }, [gameDataFromServer]);
 
   // For dev/test: prints gameDataFromServer whenever it changes
   // useEffect(() => {

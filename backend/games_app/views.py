@@ -41,8 +41,10 @@ class GamesView(APIView):
         """
         # user_id = request.user.id
         updated_data = request.data.copy()
-        play_computer = updated_data['play_computer'] #Has either 'true' or false' value
-
+        play_computer = updated_data['play_computer'] #Has either 'true' or false' string value
+        # game_status = updated_data['game_status']
+        # print(f"Here in POST, play_computer == 'true' {play_computer == 'true'}")
+        # print(f"Here in POST, play_computer is a string {isinstance(play_computer, str)}")
         # player1 = updated_data['player1']
         # player2 = updated_data['player2']
         player1_color = updated_data['player1_color']
@@ -53,21 +55,37 @@ class GamesView(APIView):
         
         # Couldn't get this to work with nested serializer
         #updated_data['player1'] = request.user
+        # updated_data['player1'] = request.user.id
+        # updated_data['player2'] = None  #Possibly make this Computer?
+
+        # if play_computer == 'true':
+        #     updated_data['game_type'] = 'HUMAN V. COMPUTER'
+        # else:
+        #     updated_data['game_type'] = 'HUMAN V. HUMAN'  
         updated_data['player1'] = request.user.id
-        updated_data['player2'] = None  #Possibly make this Computer?
 
         player1_color = updated_data['player1_color']
-        if player1_color == 'light':
-            updated_data['whose_turn'] = request.user.id
-        else:
-            updated_data['whose_turn'] = None
-
         if play_computer == 'true':
+            updated_data['game_status'] = 'ACTIVE'
             updated_data['game_type'] = 'HUMAN V. COMPUTER'
+            updated_data['started_datetime'] = timezone.now()
         else:
-            updated_data['game_type'] = 'HUMAN V. HUMAN'  
+            updated_data['game_type'] = 'HUMAN V. HUMAN'
 
-        print("The backend gives the data") 
+        # Now handle color assignment and whose turn 
+        if player1_color == 'light' and play_computer == 'true':
+            updated_data['player2_color'] = 'dark'
+            updated_data['whose_turn'] = request.user.id
+        elif player1_color == 'dark' and play_computer == 'true':
+            updated_data['player2_color'] = 'light'
+        elif player1_color == 'light' and play_computer == 'false':
+            updated_data['player2_color'] = 'dark'
+            updated_data['whose_turn'] = request.user.id
+        elif player1_color == 'dark' and play_computer == 'false':
+            updated_data['player2_color'] = 'light'
+
+
+        print("The backend is SAVING the data") 
         print(f"player1_color: {player1_color}, play_computer: {play_computer}, updated_data['game_type']")
         print(updated_data)
     
