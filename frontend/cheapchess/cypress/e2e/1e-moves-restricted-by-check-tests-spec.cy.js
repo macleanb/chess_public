@@ -424,6 +424,12 @@ describe("1d-Moves Restricted by Check Tests", () => {
     /* Wait for page load*/
     cy.wait(1000);
 
+    /* Verify no piece is on square d3 */
+    cy.get(".board .square").eq(43).find(".piece").should('not.exist');
+
+    /* Verify a pawn is on square d2 */
+    cy.get(".board .square").eq(51).find("[alt='a light pawn chess piece']").should('exist');
+
     /* Click on the pawn in square d2 */
     cy.get(".board .square").eq(51).click();
 
@@ -436,16 +442,8 @@ describe("1d-Moves Restricted by Check Tests", () => {
     /* Wait for page load*/
     cy.wait(1000);
 
-    /* Ensure a modal is displayed with appropriate error message */
-    cy.get(".modal-body").should("have.text", "Nice try: you can't move there...or maybe you can...but OpenAI isn't always right!");
-    cy.get("div button")
-      .filter(':contains("Acknowledge")')
-      .should("have.length", 1)
-      .first()
-      .click();
-
-    /* Wait for page to load */
-    cy.wait(1000);
+    /* Verify no piece is on square d3 */
+    cy.get(".board .square").eq(43).find(".piece").should('not.exist');
 
     /* Click signout button and ensure we return to Sign In component */
     cy.get("form button").contains('Quit Game').click();
