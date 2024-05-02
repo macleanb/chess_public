@@ -47,8 +47,12 @@ class GamesView(APIView):
         updated_data['player1'] = request.user.id
         updated_data['player2'] = None
 
+        player1 = updated_data['player1']
+        player2 = updated_data['player2']
         player1_color = updated_data['player1_color']
         play_computer = updated_data['play_computer']
+        print("The backend receives the data") 
+        print(f"player1_color: {player1_color}, play_computer: {play_computer}, player1: {player1}, player2: {player2}, player1first_name: {updated_data.player1.first_name}, player2first_name: {updated_data.player1.first_name},")
 
         if player1_color == 'light':
             updated_data['whose_turn'] = request.user.id

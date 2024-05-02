@@ -58,7 +58,7 @@ const Form_GameControls = ({
           ?
             <h5>{"It's the Computer's turn"}</h5>
           :  //for when it's a human's turn
-            <h5>{`It's ${parentState.gameDataFromServer.whose_turn.first_name}'s turn`}</h5>
+            <h5>{`It's your turn to move`}</h5>
         }
       </div>
       <br/>
