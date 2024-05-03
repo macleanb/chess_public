@@ -2,7 +2,6 @@
     given a list of moves that have been made so far """
 from dotenv import dotenv_values
 import requests # <== import requests so we can utilize it within our CBV to make API calls
-import pprint
 import chess
 
 def get_best_move(moves_made):
@@ -50,12 +49,7 @@ def get_best_move(moves_made):
         'X-RapidAPI-Host': 'chess-stockfish-16-api.p.rapidapi.com'
     }
     response = requests.post(url=url, data=data, headers=headers)
-    pp = pprint.PrettyPrinter(indent=2, depth=2)
     responseJSON = response.json()
     best_move = responseJSON['bestmove']
-
-    # test
-    print(f'Here in get_best Move, FEN: {FEN}')
-    pp.pprint(responseJSON)
 
     return best_move
