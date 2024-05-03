@@ -183,31 +183,31 @@ const constants = {
   STATUS_INITIALIZED: 'INITIALIZED',
 
   /* URLs for development & test */
-  URL_AUTHENTICATED_USER: 'http://localhost:8000/users/authenticateduser',
-  URL_BACKEND_BASE: 'http://localhost:8000', // was 127.0.0
-  URL_GAMES: 'http://localhost:8000/games/',
-  URL_ICONS: 'http://localhost:8000/icons/', // was 127.0.0
-  URL_LOGIN: 'http://localhost:8000/users/login',
-  URL_LOGOUT: 'http://localhost:8000/users/logout',
-  URL_OPENAI: 'https://api.openai.com/v1/completions',
-  URL_REGISTER: 'http://localhost:8000/users/register',
-  URL_USERS: 'http://localhost:8000/users/',
-  URL_GAME: 'http://localhost:8000/games/',
-  IMAGE_URL: 'http://localhost:8000/',
+  // URL_AUTHENTICATED_USER: 'http://localhost:8000/users/authenticateduser',
+  // URL_BACKEND_BASE: 'http://localhost:8000', // was 127.0.0
+  // URL_GAMES: 'http://localhost:8000/games/',
+  // URL_ICONS: 'http://localhost:8000/icons/', // was 127.0.0
+  // URL_LOGIN: 'http://localhost:8000/users/login',
+  // URL_LOGOUT: 'http://localhost:8000/users/logout',
+  // URL_OPENAI: 'https://api.openai.com/v1/completions',
+  // URL_REGISTER: 'http://localhost:8000/users/register',
+  // URL_USERS: 'http://localhost:8000/users/',
+  // URL_GAME: 'http://localhost:8000/games/',
+  // IMAGE_URL: 'http://localhost:8000/',
 
   /* For secure site production & deployment */
-  // //BASE_URL: 'https://ai-chess.duckdns.org/',
-  // URL_AUTHENTICATED_USER: 'https://ai-chess.duckdns.org/users/authenticateduser',
-  // URL_BACKEND_BASE: 'https://ai-chess.duckdns.org',
-  // URL_GAMES: 'https://ai-chess.duckdns.org/games/',
-  // URL_ICONS: 'https://ai-chess.duckdns.org/icons/', // was 127.0.0
-  // URL_LOGIN: 'https://ai-chess.duckdns.org/users/login',
-  // URL_LOGOUT: 'https://ai-chess.duckdns.org/users/logout',
-  // URL_OPENAI: 'https://api.openai.com/v1/completions',
-  // URL_REGISTER: 'https://ai-chess.duckdns.org/users/register',
-  // URL_USERS: 'https://ai-chess.duckdns.org/users/',
-  // URL_GAME: 'https://ai-chess.duckdns.org/games/',
-  // IMAGE_URL: 'https://ai-chess.duckdns.org/',
+  //BASE_URL: 'https://ai-chess.duckdns.org/',
+  URL_AUTHENTICATED_USER: 'https://ai-chess.duckdns.org/users/authenticateduser',
+  URL_BACKEND_BASE: 'https://ai-chess.duckdns.org',
+  URL_GAMES: 'https://ai-chess.duckdns.org/games/',
+  URL_ICONS: 'https://ai-chess.duckdns.org/icons/', // was 127.0.0
+  URL_LOGIN: 'https://ai-chess.duckdns.org/users/login',
+  URL_LOGOUT: 'https://ai-chess.duckdns.org/users/logout',
+  URL_OPENAI: 'https://api.openai.com/v1/completions',
+  URL_REGISTER: 'https://ai-chess.duckdns.org/users/register',
+  URL_USERS: 'https://ai-chess.duckdns.org/users/',
+  URL_GAME: 'https://ai-chess.duckdns.org/games/',
+  IMAGE_URL: 'https://ai-chess.duckdns.org/',
 };
 
 /* Composite constants that rely on existing ones */
