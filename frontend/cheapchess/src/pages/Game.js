@@ -147,20 +147,22 @@ const Game = () =>
     /* For each square in the response ([<origin_squareID>, <dest_squareID>]),
        color the square on our board blue */
     const newHighlightedSquares = [];
-    for (const squareID of suggestedMove) {
-      const boardSquareData = appState.imports.getSquareData(
-        tempBoardData,
-        squareID,
-        playerColor
-        );
-
-      const originalSquareColor = boardSquareData.color;
-      boardSquareData.color = 'bluesquare';
-
-      newHighlightedSquares.push({
-        square         : squareID,
-        originalColor  : originalSquareColor
-      });
+    if (Array.isArray(suggestedMove)) {
+      for (const squareID of suggestedMove) {
+        const boardSquareData = appState.imports.getSquareData(
+          tempBoardData,
+          squareID,
+          playerColor
+          );
+  
+        const originalSquareColor = boardSquareData.color;
+        boardSquareData.color = 'bluesquare';
+  
+        newHighlightedSquares.push({
+          square         : squareID,
+          originalColor  : originalSquareColor
+        });
+      }
     }
 
     setBoardData(tempBoardData);

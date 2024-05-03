@@ -50,6 +50,11 @@ def get_best_move(moves_made):
     }
     response = requests.post(url=url, data=data, headers=headers)
     responseJSON = response.json()
-    best_move = responseJSON['bestmove']
+
+    best_move = None
+    try:
+        best_move = responseJSON['bestmove']
+    except KeyError:
+        print(f'No best move for FEN: "{FEN}"')
 
     return best_move

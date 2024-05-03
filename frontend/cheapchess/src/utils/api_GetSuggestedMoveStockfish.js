@@ -1,5 +1,6 @@
 /* Internal Imports */
 import getClient from "./api_GetClient";
+import getCSRFToken from "./api_GetCSRFToken";
 import getURL_Suggestion from './getURL_Suggestion';
 
 /**
@@ -14,13 +15,16 @@ const apiGetSuggestedMoveStockfish = async (
   try {
     const url = getURL_Suggestion(gameID);
     const client = getClient();
+    const csrfToken = getCSRFToken();
 
     const response = await client.get(
       url,
       {
         headers: {
           'Content-Type' : 'application/json',
+          "X-CSRFToken": csrfToken
         },
+        withCredentials: true,
       },
     );
 

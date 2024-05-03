@@ -23,4 +23,3 @@ class SuggestedMove(APIView):
             return Response({'best_move': best_move})
         except Game.DoesNotExist:
             return Response(status=404)
-
