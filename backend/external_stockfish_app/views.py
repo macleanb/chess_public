@@ -18,8 +18,10 @@ class SuggestedMove(APIView):
         Return a string containing a suggested move for a given game.
         """
         try:
+            print('Building and processing a suggested move...')
             game = Game.objects.get(id=game_id)
             best_move = get_best_move(game.moves_made['moves'])
+            print(f'recommended move: {best_move}')
             return Response({'best_move': best_move})
         except Game.DoesNotExist:
             return Response(status=404)

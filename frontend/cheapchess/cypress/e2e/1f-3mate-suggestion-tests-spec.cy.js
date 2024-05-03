@@ -215,7 +215,7 @@ describe("1f-3mate Suggestion Tests", () => {
     cy.get("form button").contains("Suggest Move").click();
 
     /* Wait for page load*/
-    cy.wait(2000);
+    cy.wait(3000);
 
     /* Verify a pawn is NOT on square f5 */
     cy.get(".board .square").eq(34).find("[alt='a dark pawn chess piece']").should('not.exist');
@@ -371,7 +371,7 @@ describe("1f-3mate Suggestion Tests", () => {
     cy.get("form button").contains("Suggest Move").click();
 
     /* Wait for page load*/
-    cy.wait(2000);
+    cy.wait(3000);
 
     /* Click on the pawn in square g7 */
     cy.get(".board .square").eq(49).click();
@@ -436,8 +436,8 @@ describe("1f-3mate Suggestion Tests", () => {
     /* Ensure Player information is populated correctly */
     cy.get("h5").should("have.text", "Player 1: AdaPlayer 2: CharlesIt's Ada's turn");
 
-    /* Select the checkbox to use Python Chess for Possible Moves/Suggested Moves */
-    cy.get(".form-check-input").first().check();
+    /* Select the checkbox to use Stockfish for Suggested Moves */
+    cy.get(".form-check-input").check();
 
     /* Wait for page load*/
     cy.wait(1000);

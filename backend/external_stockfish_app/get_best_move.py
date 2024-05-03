@@ -1,5 +1,7 @@
 """ This module returns an optimal move for a chess board,
-    given a list of moves that have been made so far """
+    given a list of moves that have been made so far
+Reference: https://stockfish.online/docs.php
+"""
 from dotenv import dotenv_values
 import requests # <== import requests so we can utilize it within our CBV to make API calls
 import chess
@@ -36,25 +38,40 @@ def get_best_move(moves_made):
     env = dotenv_values(".env") # sets the value of `env` to an OrderedDictionary
     API_KEY = env.get("RAPIDAPI_KEY")
 
-    url = "https://chess-stockfish-16-api.p.rapidapi.com/chess/api"
+    # for rapidapi version
+    #url = "https://chess-stockfish-16-api.p.rapidapi.com/chess/api"
     # data = {
-    #     "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+    #     "fen": FEN
     # }
-    data = {
-        "fen": FEN
-    }
-    headers = {
-        'content-type': "application/x-www-form-urlencoded",
-        'X-RapidAPI-Key': API_KEY,
-        'X-RapidAPI-Host': 'chess-stockfish-16-api.p.rapidapi.com'
-    }
-    response = requests.post(url=url, data=data, headers=headers)
+
+    # for stockfish.online version
+    url = "https://stockfish.online/api/s/v2.php" + f'?fen={FEN}&depth={15}'
+
+    # for rapidapi version
+    # headers = {
+    #     'content-type': "application/x-www-form-urlencoded",
+    #     'X-RapidAPI-Key': API_KEY,
+    #     'X-RapidAPI-Host': 'chess-stockfish-16-api.p.rapidapi.com'
+    # }
+
+    # for rapidapi version
+    # response = requests.post(url=url, data=data, headers=headers)
+
+    # for stockfish online version
+    response = requests.get(url=url)
     responseJSON = response.json()
 
     best_move = None
-    try:
-        best_move = responseJSON['bestmove']
-    except KeyError:
-        print(f'No best move for FEN: "{FEN}"')
+
+    # for stockfish online version
+    if 'success' in responseJSON:
+        best_move_str = responseJSON['bestmove']
+        best_move = best_move_str.split()[1]
+
+    # for rapidapi version
+    # try:
+    #     best_move = responseJSON['bestmove']
+    # except KeyError:
+    #     print(f'No best move for FEN: "{FEN}"')
 
     return best_move
