@@ -93,6 +93,9 @@ const Game = () =>
   /* Stores whether to use Python-Chess for displaying possible moves */
   const [ usePythonChessForPossibleMoves, setUsePythonChessForPossibleMoves ] = useState();
 
+  /* Stores whether to use Stockfish for displaying suggested moves */
+  const [ useStockfishForSuggestedMoves, setUseStockfishForSuggestedMoves ] = useState();
+
   /* Ref Declarations */
   const inputEmailRef = useRef(null);
   const inputPasswordRef = useRef(null);
@@ -446,8 +449,10 @@ const Game = () =>
                   setShowFileRankLabels                       : setShowFileRankLabels,
                   setSelectedOriginSquare                     : setSelectedOriginSquare,
                   setUsePythonChessForPossibleMoves           : setUsePythonChessForPossibleMoves,
+                  setUseStockfishForSuggestedMoves            : setUseStockfishForSuggestedMoves,
                   showFileRankLabels                          : showFileRankLabels,
                   usePythonChessForPossibleMoves              : usePythonChessForPossibleMoves,
+                  useStockfishForSuggestedMoves               : useStockfishForSuggestedMoves,
                 }}
                 parentRefs={{
                   inputEmailRef       : inputEmailRef,
@@ -472,6 +477,7 @@ const Game = () =>
                 selectedOriginSquare             :   selectedOriginSquare,
                 setSelectedOriginSquare          :   setSelectedOriginSquare,
                 usePythonChessForPossibleMoves   :   usePythonChessForPossibleMoves,
+                useStockfishForSuggestedMoves    :   useStockfishForSuggestedMoves,
               }}/>
           </div>
           <div>
