@@ -28,6 +28,7 @@ class PossibleMoves(APIView):
         """
         prompt = None
         request_type = request.data['request_type']
+        # print(f'I AM IN VIEWS right now request.data: {request.data}')
 
         match request_type:
             case 'POSSIBLE_MOVES':

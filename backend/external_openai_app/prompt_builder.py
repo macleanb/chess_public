@@ -46,6 +46,7 @@ def build_suggested_move_prompt(data):
     """ Returns a string prompt for requesting a suggested chess move """
     piece_color = data['pieceColor']
     piece_locations = data['allPieceLocations']
+    # print(f"Here is my ERROR in Prompt Builder: {piece_locations}")
 
     # Update server status to console
     print(f'Building and processing a suggested move for {piece_color}...')
@@ -86,6 +87,7 @@ def make_move_for_computer_prompt(data):
         return  "The Computer is making a move and requires your help. The Computer is playing " \
                 "at an easy level of difficulty." \
                 f"The Computer is playing with the [{piece_color}] colored pieces." \
+                "light is equivalent to white and dark is equivalent to black." \
                 "The Computer will now describe the current locations " \
                 "of all chess pieces on a chessboard.  Then the Computer will ask you which " \
                 "is a beginner/noob move the Computer should make, that is still a legal move." \
@@ -109,6 +111,7 @@ def make_move_for_computer_prompt(data):
         return  "The Computer is making a move and requires your help. The Computer is playing" \
                 " at a medium level of difficulty. " \
                 f"The Computer is playing with the [{piece_color}] colored pieces." \
+                "light is equivalent to white and dark is equivalent to black." \
                 "The Computer will now describe the current locations " \
                 "of all chess pieces on a chessboard.  Then the Computer will ask you which " \
                 "is an alright or medium-level move, but not the best move, the Computer should " \
@@ -132,6 +135,7 @@ def make_move_for_computer_prompt(data):
         return  "The Computer is making a move and requires your help. The Computer is playing " \
                 " at a hard level of difficulty. " \
                 f"The Computer is playing with the [{piece_color}] colored pieces." \
+                "light is equivalent to white and dark is equivalent to black." \
                 "The Computer will now describe the current locations " \
                 "of all chess pieces on a chessboard.  Then the Computer will ask you which " \
                 "is a good move (high-level move), but NOT the best move, the Computer should make in" \
@@ -155,6 +159,7 @@ def make_move_for_computer_prompt(data):
         return "The Computer is making a move and requires your help. The Computer is playing " \
                 "at a GrandMaster level of difficulty." \
                 f"The Computer is playing with the [{piece_color}] colored pieces." \
+                "light is equivalent to white and dark is equivalent to black." \
                 "The Computer will now describe the current locations " \
                 "of all chess pieces on a chessboard.  Then the Computer will ask you which " \
                 "is the best possible move the Computer should make in order to win, or at  " \

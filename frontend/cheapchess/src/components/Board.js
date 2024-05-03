@@ -264,31 +264,87 @@ const Board = (
   }, [shakeError])
 
 
-  useEffect(() => {
-    /* to see when it's computer's turn, so that it can make the api call for getting comp move*/
-    if (
-      parentState?.gameDataFromServer?.whose_turn === null &&
-      parentState.gameDataFromServer?.game_type === 'HUMAN V. COMPUTER'
-    ) {
-      const response = makeMove(
-        parentState.gameDataFromServer.id, //gameDataFromServer
-        null,  //selectedOriginSquare.piece
-        null,  // squareData.file, squareData.rank
-        parentState.iconData, 
-        parentState.setGameDataFromServer,  
-        parentState.setMessages
-      )
+  // useEffect(() => {
+  //   /* to see when it's computer's turn, so that it can make the api call for getting comp move*/
+  //   if (
+  //     parentState?.gameDataFromServer?.whose_turn === null &&
+  //     parentState.gameDataFromServer?.game_type === 'HUMAN V. COMPUTER'
+  //   ) {
+  //     const response = makeMove(
+  //       parentState.gameDataFromServer.id, //gameDataFromServer
+  //       null,  //selectedOriginSquare.piece
+  //       null,  // squareData.file, squareData.rank
+  //       parentState.iconData, 
+  //       parentState.setGameDataFromServer,  
+  //       parentState.setMessages
+  //     )
         
-        console.log('Board.js data is being shown', 
-        parentState.gameDataFromServer.id, //gameDataFromServer
-        null,  //selectedOriginSquare.piece
-        null,  // squareData.file, squareData.rank
-        parentState.iconData, 
-        parentState.setGameDataFromServer,  
-        parentState.setMessages 
-        )
-      } 
-  }, [parentState.gameDataFromServer?.whose_turn, parentState.gameDataFromServer?.game_type]);
+  //       console.log('Board.js data is being shown', 
+  //       parentState.gameDataFromServer.id, //gameDataFromServer
+  //       null,  //selectedOriginSquare.piece
+  //       null,  // squareData.file, squareData.rank
+  //       parentState.iconData, 
+  //       parentState.setGameDataFromServer,  
+  //       parentState.setMessages 
+  //       )
+  //     } 
+  // }, [parentState.gameDataFromServer?.whose_turn, parentState.gameDataFromServer?.game_type]);
+
+
+  useEffect(() => {
+    const executeComputerMove = async () => {
+      if (
+        parentState?.gameDataFromServer?.whose_turn === null &&
+        parentState.gameDataFromServer?.game_type === 'HUMAN V. COMPUTER'
+      ) {
+        try {
+          // const computerColor = parentState.playerColor === 'light' ? 'dark' : 'light';
+          // Step 1: Obtain necessary data
+          // const pieceColor = parentState.playerColor;
+          const allPieceLocations = parentState.imports.getAllPieceLocations(
+            parentState.boardData,
+            parentState.gameDataFromServer.player2_color
+          );
+
+          const suggestedMove = await parentState.imports.apiGetSuggestedMove(
+            parentState.gameDataFromServer.player2_color,
+            allPieceLocations
+          );
+        
+          console.log(`This is my SuGeStEd MoVe: ${suggestedMove}, ${parentState.gameDataFromServer.player2_color}`)
+      
+          // const moveIsValid = parentState.gameDataFromServer.possible_moves.includes(suggestedMove);
+          // console.log(`This is my moveIsValid: ${moveIsValid}`)
+          
+          if (suggestedMove && suggestedMove.length === 2) {
+            const originSquareID = suggestedMove[0];
+            const destinationSquareID = suggestedMove[1];
+            console.log(`This is my SuGeStEd MoVe: ${originSquareID} to ${destinationSquareID}, possibleMoves: ${parentState?.gameDataFromServer['possible_moves']}`)
+          
+            if(suggestedMove && possibleMoves?.moves.includes(suggestedMove.to)){
+              await makeMove(
+                console.log(`${parentState.gameDataFromServer.id}, ${suggestedMove.pieceID}, ${destinationSquareID}, ${parentState.iconData}, ${parentState.setGameDataFromServer}, ${parentState.setMessages}`),
+                parentState.gameDataFromServer.id,
+                suggestedMove.pieceID,
+                // suggestedMove.to,
+                // originSquareID, 
+                destinationSquareID, 
+                parentState.iconData,
+                parentState.setGameDataFromServer,
+                parentState.setMessages
+            );
+          }
+          } else {
+            parentState.setMessages({ error: "Invalid or no move suggested by the AI." });
+          }
+        } catch (error) {
+          parentState.setMessages({ error: "Failed to make a move for the computer." });
+        }
+      }
+    }
+    
+    executeComputerMove();
+  }, [parentState?.gameDataFromServer, parentState.setGameDataFromServer, parentState.setMessages]);
 
 
 

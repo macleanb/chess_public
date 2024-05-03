@@ -79,7 +79,7 @@ const Game = () =>
   const [ iconData, setIconData ] = useState();
 
   /* State for determing if you're playing against a Computer or Opponent */
-  const [isComputerOpponent, setIsComputerOpponent] = useState(false);
+  const [ isComputerOpponent, setIsComputerOpponent ] = useState(false);
 
   /* Stores all games that the logged-in user can play */
   const [ playableGames, setPlayableGames ] = useState();

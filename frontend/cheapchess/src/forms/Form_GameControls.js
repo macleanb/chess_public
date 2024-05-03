@@ -55,14 +55,15 @@ const Form_GameControls = ({
           </>
         }
         {
-          parentState?.gameDataFromServer?.whose_turn?.id === parentState.auth.user.id 
+          parentState?.gameDataFromServer?.whose_turn?.id === parentState.auth.user.id &&
+          parentState?.gameDataFromServer?.game_type !== 'HUMAN V. COMPUTER'
           ?
             <h5>{"It's your turn"}</h5>
           :
             parentState?.gameDataFromServer?.whose_turn ?
               <h5>{`It's ${parentState.gameDataFromServer.whose_turn.first_name}'s turn`}</h5>
             :
-              <h5>{"Waiting for the other player..."}</h5>
+              <h5>{"It's your opponent's turn..."}</h5>
         }
         {/* {
           parentState?.gameDataFromServer?.player1?.first_name &&

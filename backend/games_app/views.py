@@ -85,7 +85,7 @@ class GamesView(APIView):
             updated_data['player2_color'] = 'light'
 
 
-        print("The backend is SAVING the data") 
+        print("The backend is SAVING this data") 
         print(f"player1_color: {player1_color}, play_computer: {play_computer}, updated_data['game_type']")
         print(updated_data)
     
