@@ -193,8 +193,10 @@ const constants = {
   // URL_REGISTER: 'http://localhost:8000/users/register',
   // URL_USERS: 'http://localhost:8000/users/',
   // URL_GAME: 'http://localhost:8000/games/',
+  // IMAGE_URL: 'http://localhost:8000/',
 
   /* For secure site production & deployment */
+  //BASE_URL: 'https://ai-chess.duckdns.org/',
   URL_AUTHENTICATED_USER: 'https://ai-chess.duckdns.org/users/authenticateduser',
   URL_BACKEND_BASE: 'https://ai-chess.duckdns.org',
   URL_GAMES: 'https://ai-chess.duckdns.org/games/',
@@ -205,8 +207,7 @@ const constants = {
   URL_REGISTER: 'https://ai-chess.duckdns.org/users/register',
   URL_USERS: 'https://ai-chess.duckdns.org/users/',
   URL_GAME: 'https://ai-chess.duckdns.org/games/',
-  //BASE_URL: 'https://ai-chess.duckdns.org/api/v1',
-  //IMAGE_URL: 'https://ai-chess.duckdns.org/',
+  IMAGE_URL: 'https://ai-chess.duckdns.org/',
 };
 
 /* Composite constants that rely on existing ones */

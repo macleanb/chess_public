@@ -41,6 +41,7 @@ import getPlayableGames from './utils/api_GetPlayableGames';
 import getRankFileStr from "./utils/getRankFileStr";
 import getSquaresBetween from './utils/board_getSquaresBetween';
 import getSquareData from './utils/board_getSquareData';
+import getURL_BackendImage from "./utils/getURL_BackendImage";
 import initializeBoardData from "./utils/board_initializeBoardData";
 import isValidMove from './utils/board_isValidMove';
 import joinGame from './utils/api_JoinGame';
@@ -103,6 +104,7 @@ function App() {
     getRankFileStr                   : getRankFileStr,
     getSquaresBetween                : getSquaresBetween,
     getSquareData                    : getSquareData,
+    getURL_BackendImage              : getURL_BackendImage,
     initializeBoardData              : initializeBoardData,
     isValidMove                      : isValidMove,
     joinGame                         : joinGame,
