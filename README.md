@@ -28,6 +28,7 @@ For aspiring chess players who find personal tutoring cost-prohibitive, CheapChe
 * Create a .env file on the backend and add .env to .gitignore
 * The OPENAI API key will be stored here with one line - export OPEN_AI_KEY="abcdefg..."
 * The Django secret key will also be stored here with one line - DJANGO_SECRET_KEY = '...' (note: leave off 'export')
+* The RapidAPI key will be stored like so: RAPIDAPI_KEY='abcdefg...'
 
 ### Backend - create and activate Virtual Environment
 * Navigate to wherever your virtual environment directory is located (i.e. ~ or CheapChess/backend/)
