@@ -161,7 +161,10 @@ class GameView(APIView):
         """
         try:
             put_data = request.data.copy()
-            updated_game = Game.objects.get(pk=game_id)
+
+            # updated_game = Game.objects.get(pk=game_id)
+            updated_game = Game.objects.get(id=game_id)
+            print("Received game_id:", game_id)
             # Accounts for type of game: PvP or PvC?
             game_type = updated_game.game_type
 
@@ -256,7 +259,8 @@ class GameView(APIView):
         """
         try:
             game = Game.objects.get(id=game_id)
-
+            # print("Received game_id:", game_id)
+            # print("")
             # Create pieces, add icons, and pass new_game to their game fields
             # Serialize each piece, 
             # add each piece to pieces dict (keyed by square i.e. 'a1')
@@ -288,7 +292,8 @@ class GameView(APIView):
         Joining specific game as second player
         """
         try:
-            game = Game.objects.get(id=game_id, player2__isnull=True)
+            # game = Game.objects.get(id=game_id, player2__isnull=True)
+            game = Game.objects.filter(id=game_id, player2__isnull=True, game_type='HUMAN V. HUMAN')
             # if game.player1 == request.user.id:
             # if game.player1 == request.user:
                 # return Response({'error': 'You are already player 1 in this game.'}, status=status.HTTP_400_BAD_REQUEST)
