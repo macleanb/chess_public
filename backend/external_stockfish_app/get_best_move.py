@@ -35,8 +35,10 @@ def get_best_move(moves_made):
 
     # Now the board should be all up to date with moves that have been made.
     # Now, query the API to get the best move
-    env = dotenv_values(".env") # sets the value of `env` to an OrderedDictionary
-    API_KEY = env.get("RAPIDAPI_KEY")
+
+    # for rapidapi version
+    # env = dotenv_values(".env") # sets the value of `env` to an OrderedDictionary
+    # API_KEY = env.get("RAPIDAPI_KEY")
 
     # for rapidapi version
     #url = "https://chess-stockfish-16-api.p.rapidapi.com/chess/api"
