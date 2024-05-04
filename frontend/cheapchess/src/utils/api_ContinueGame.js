@@ -22,8 +22,15 @@ const continueGame = async (gameID, formData, setMessages) => {
     );
     return await response.data;
   } catch (e) {
+    /* It is possible for a user to logout after a game data
+       refresh timeout has been set in Game.js.  If this happens,
+       the backend will return an error 403 since the user
+       is no longer authenticated by the time the fetch request
+       is called. No need to display an error message in that case. */
+    if (e?.response?.status !== 403) {
+      setMessages(getResponseError(e));
+    }
     console.log(e);
-    setMessages(getResponseError(e));
   }
 };
 
