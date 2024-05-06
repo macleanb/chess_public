@@ -487,7 +487,7 @@ const Game = () =>
                 useStockfishForSuggestedMoves    :   useStockfishForSuggestedMoves,
               }}/>
           </div>
-          <div>
+          {/* <div>
             Board icons sourced from:
             <div>
               <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by apien - Flaticon</a> (Dark Knight)
@@ -498,7 +498,7 @@ const Game = () =>
               <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by SBTS2018 - Flaticon</a> (Light Knight)
               <a href="https://www.flaticon.com/free-icons/chess-piece" title="chess piece icons">Chess piece icons created by rizal2109 - Flaticon</a> (Light Bishop)
             </div>
-          </div>
+          </div> */}
         </div>
       : 'Imports not loaded...'
     }
