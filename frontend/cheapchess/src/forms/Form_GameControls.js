@@ -92,6 +92,16 @@ const Form_GameControls = ({
                   checked={ parentState?.usePythonChessForPossibleMoves ? parentState?.usePythonChessForPossibleMoves : false }
                 />
               </div>
+              <div className="d-flex justify-content-around mt-2 mb-2">
+                <parentState.imports.Form.Check
+                  className=""
+                  type="checkbox"
+                  name="useStockfishCheckbox"
+                  label="Use Stockfish for Suggested Moves"
+                  onChange={ parentState.onStockfishCheckboxChange }
+                  checked={ parentState?.useStockfishForSuggestedMoves ? parentState?.useStockfishForSuggestedMoves : false }
+                />
+              </div>
               {/* ChatBox inserted here */}
               <div className="d-flex justify-content-around mt-2">
                 <ChatBox
