@@ -314,6 +314,11 @@ const Game = () =>
 
   /* Whenever gameDataFromServer changes, update boardData (will update UI). */
   useEffect(() => {
+    /* Create 'active' variable for clean-up up purposes.
+       It will ensure that state setters are not called
+       if the app is closed while an async process is executing */
+    let active = true;
+
     if (
       gameDataFromServer &&
       boardData &&
@@ -363,7 +368,7 @@ const Game = () =>
       ) {
       setTimeout(() => {
         appState.imports.continueGame(gameDataFromServer.id, {}, setMessages).then((continuedGameData) => {
-          if (continuedGameData?.pieces) {
+          if (continuedGameData?.pieces && active) {
             const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
             setGameDataFromServer(updatedContinuedGameData);
           }
