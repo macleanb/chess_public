@@ -93,6 +93,9 @@ const Game = () =>
   /* Stores whether to use Python-Chess for displaying possible moves */
   const [ usePythonChessForPossibleMoves, setUsePythonChessForPossibleMoves ] = useState();
 
+  /* Stores whether to use Stockfish for displaying suggested moves */
+  const [ useStockfishForSuggestedMoves, setUseStockfishForSuggestedMoves ] = useState();
+
   /* Ref Declarations */
   const inputEmailRef = useRef(null);
   const inputPasswordRef = useRef(null);
@@ -144,20 +147,22 @@ const Game = () =>
     /* For each square in the response ([<origin_squareID>, <dest_squareID>]),
        color the square on our board blue */
     const newHighlightedSquares = [];
-    for (const squareID of suggestedMove) {
-      const boardSquareData = appState.imports.getSquareData(
-        tempBoardData,
-        squareID,
-        playerColor
-        );
-
-      const originalSquareColor = boardSquareData.color;
-      boardSquareData.color = 'bluesquare';
-
-      newHighlightedSquares.push({
-        square         : squareID,
-        originalColor  : originalSquareColor
-      });
+    if (Array.isArray(suggestedMove)) {
+      for (const squareID of suggestedMove) {
+        const boardSquareData = appState.imports.getSquareData(
+          tempBoardData,
+          squareID,
+          playerColor
+          );
+  
+        const originalSquareColor = boardSquareData.color;
+        boardSquareData.color = 'bluesquare';
+  
+        newHighlightedSquares.push({
+          square         : squareID,
+          originalColor  : originalSquareColor
+        });
+      }
     }
 
     setBoardData(tempBoardData);
@@ -451,8 +456,10 @@ const Game = () =>
                   setShowFileRankLabels                       : setShowFileRankLabels,
                   setSelectedOriginSquare                     : setSelectedOriginSquare,
                   setUsePythonChessForPossibleMoves           : setUsePythonChessForPossibleMoves,
+                  setUseStockfishForSuggestedMoves            : setUseStockfishForSuggestedMoves,
                   showFileRankLabels                          : showFileRankLabels,
                   usePythonChessForPossibleMoves              : usePythonChessForPossibleMoves,
+                  useStockfishForSuggestedMoves               : useStockfishForSuggestedMoves,
                 }}
                 parentRefs={{
                   inputEmailRef       : inputEmailRef,
@@ -477,6 +484,7 @@ const Game = () =>
                 selectedOriginSquare             :   selectedOriginSquare,
                 setSelectedOriginSquare          :   setSelectedOriginSquare,
                 usePythonChessForPossibleMoves   :   usePythonChessForPossibleMoves,
+                useStockfishForSuggestedMoves    :   useStockfishForSuggestedMoves,
               }}/>
           </div>
           <div>
