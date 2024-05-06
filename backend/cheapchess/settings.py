@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'games_app',
     'icons_app',
     'external_openai_app',
+    'external_stockfish_app',
     'chess_users',
 ]
 

@@ -215,7 +215,11 @@ const FormManager = ({
         parentState.playerColor
       );
 
-      if (
+      if (parentState?.useStockfishForSuggestedMoves) {
+        const gameID = parentState.gameDataFromServer.id;
+        const response = await parentState.imports.apiGetSuggestedMoveStockfish(gameID);
+        parentState.handleSuggestedMoveReceived(response);
+      } else if (
         parentState?.imports?.apiGetSuggestedMove &&
         parentState?.playerColor
         ) {
@@ -223,7 +227,6 @@ const FormManager = ({
           parentState.playerColor,
           allPieceLocations
         );
-
         parentState.handleSuggestedMoveReceived(response);
       }
     }
@@ -250,6 +253,20 @@ const FormManager = ({
         parentState.setUsePythonChessForPossibleMoves(false);
       }
     } 
+  }
+
+  /* Handle changes to the checkbox for using Stockfish to suggest
+     moves */
+    const onStockfishCheckboxChange = (e) => {
+    if (e && e.target?.name === 'useStockfishCheckbox') {
+      const checked = e.target.checked;
+
+      if (checked) {
+        parentState.setUseStockfishForSuggestedMoves(true);
+      } else {
+        parentState.setUseStockfishForSuggestedMoves(false);
+      }
+    }
   }
   
   /* Handles changes to UserForm */
@@ -394,6 +411,7 @@ const FormManager = ({
         handleQuitGameClicked             : handleQuitGameClicked,
         handleToggleFileRankLabelsClicked : handleToggleFileRankLabelsClicked,
         onPythonChessCheckboxChange       : onPythonChessCheckboxChange,
+        onStockfishCheckboxChange         : onStockfishCheckboxChange,
       }}/>
     );
   } else if (

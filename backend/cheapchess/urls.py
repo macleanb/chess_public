@@ -28,6 +28,7 @@ urlpatterns = [
     path('games/', include('games_app.urls')),
     path('help/', include('external_openai_app.urls')),
     path('icons/', include('icons_app.urls')),
+    path('suggestion/', include('external_stockfish_app.urls')),
     path('users/', include('chess_users.urls')),
 ]
 
