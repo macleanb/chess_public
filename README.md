@@ -13,6 +13,8 @@ For aspiring chess players who find personal tutoring cost-prohibitive, CheapChe
                        - Judith Sol Dyess\
                        _Strategic Consultant_
 
+![Featured Technologies](./resources/techstack.png)
+
 ## Feature Map
 ![Feature Map](./resources/Moscow.png)
 
