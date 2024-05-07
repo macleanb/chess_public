@@ -4,6 +4,5 @@ from django.urls import path
 app_name = 'external_openai_app'
 
 urlpatterns = [
-    path('', PossibleMoves.as_view(), name='possiblemoves'),
-    path('computer_move/', FaceComputer.as_view(), name='computermove'),
+    path('', PossibleMoves.as_view(), name='possiblemoves')
 ]
