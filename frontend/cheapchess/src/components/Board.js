@@ -181,7 +181,11 @@ const Board = (
     }
   }, [parentState?.selectedOriginSquare]);
 
-  /* Whenever possibleMoves changes, highlight appropriate squares */
+  /* Whenever possibleMoves changes AND an origin square has
+     been selected, highlight appropriate squares.  possibleMoves
+     here refers specifically to the possibleMoves provided by
+     OpenAI and does not refer to possibleMoves provided by
+     Python-Chess */
   useEffect(() => {
     /* Check to ensure the referenceSquare hasn't been deselected by
         the time a promise resolves or selected to a different square.

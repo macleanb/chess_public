@@ -31,7 +31,15 @@ const ListOfPlayableGames = ({ parentState }) => {
                                 >
                                     Join
                                 </Button> <br />
-                                {game.player1?.email} vs {game.player2?.email || 'Waiting for player to join'}
+                                {game.player1?.email} vs {
+                                    game.player2?.email
+                                    ?
+                                        game.player2.email
+                                    :   game.game_type === 'HUMAN V. COMPUTER'
+                                        ?
+                                            'Computer'
+                                        : 'Waiting for player to join'
+                                    }
                             </li>
                         ))}
                     </ul>

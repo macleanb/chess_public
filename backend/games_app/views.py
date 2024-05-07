@@ -292,13 +292,7 @@ class GameView(APIView):
         Joining specific game as second player
         """
         try:
-            # game = Game.objects.get(id=game_id, player2__isnull=True)
-            game = Game.objects.filter(id=game_id, player2__isnull=True, game_type='HUMAN V. HUMAN')
-            # if game.player1 == request.user.id:
-            # if game.player1 == request.user:
-                # return Response({'error': 'You are already player 1 in this game.'}, status=status.HTTP_400_BAD_REQUEST)
-                # which shouldn't happen due to filtering playable games where user is player 1
-
+            game = Game.objects.get(id=game_id, player2__isnull=True)
             game.player2 = request.user
             game.player2_color = 'light' if game.player1_color == 'dark' else 'dark'
             game.started_datetime = timezone.now()
