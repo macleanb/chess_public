@@ -99,6 +99,9 @@ const Game = () =>
   /* Stores whether to use Python-Chess for displaying possible moves */
   const [ usePythonChessForPossibleMoves, setUsePythonChessForPossibleMoves ] = useState();
 
+  /* Stores whether to use Stockfish for displaying suggested moves */
+  const [ useStockfishForSuggestedMoves, setUseStockfishForSuggestedMoves ] = useState();
+
   /* Ref Declarations */
   const inputEmailRef = useRef(null);
   const inputPasswordRef = useRef(null);
@@ -150,20 +153,22 @@ const Game = () =>
     /* For each square in the response ([<origin_squareID>, <dest_squareID>]),
        color the square on our board blue */
     const newHighlightedSquares = [];
-    for (const squareID of suggestedMove) {
-      const boardSquareData = appState.imports.getSquareData(
-        tempBoardData,
-        squareID,
-        playerColor
-        );
-
-      const originalSquareColor = boardSquareData.color;
-      boardSquareData.color = 'bluesquare';
-
-      newHighlightedSquares.push({
-        square         : squareID,
-        originalColor  : originalSquareColor
-      });
+    if (Array.isArray(suggestedMove)) {
+      for (const squareID of suggestedMove) {
+        const boardSquareData = appState.imports.getSquareData(
+          tempBoardData,
+          squareID,
+          playerColor
+          );
+  
+        const originalSquareColor = boardSquareData.color;
+        boardSquareData.color = 'bluesquare';
+  
+        newHighlightedSquares.push({
+          square         : squareID,
+          originalColor  : originalSquareColor
+        });
+      }
     }
 
     setBoardData(tempBoardData);
@@ -315,6 +320,11 @@ const Game = () =>
 
   /* Whenever gameDataFromServer changes, update boardData (will update UI). */
   useEffect(() => {
+    /* Create 'active' variable for clean-up up purposes.
+       It will ensure that state setters are not called
+       if the app is closed while an async process is executing */
+    let active = true;
+
     if (
       gameDataFromServer &&
       boardData &&
@@ -364,7 +374,7 @@ const Game = () =>
       ) {
       setTimeout(() => {
         appState.imports.continueGame(gameDataFromServer.id, {}, setMessages).then((continuedGameData) => {
-          if (continuedGameData?.pieces) {
+          if (continuedGameData?.pieces && active) {
             const updatedContinuedGameData = appState.imports.updateIconURLs(continuedGameData, iconData);
             setGameDataFromServer(updatedContinuedGameData);
           }
@@ -454,8 +464,10 @@ const Game = () =>
                   setShowFileRankLabels                       : setShowFileRankLabels,
                   setSelectedOriginSquare                     : setSelectedOriginSquare,
                   setUsePythonChessForPossibleMoves           : setUsePythonChessForPossibleMoves,
+                  setUseStockfishForSuggestedMoves            : setUseStockfishForSuggestedMoves,
                   showFileRankLabels                          : showFileRankLabels,
                   usePythonChessForPossibleMoves              : usePythonChessForPossibleMoves,
+                  useStockfishForSuggestedMoves               : useStockfishForSuggestedMoves,
                 }}
                 parentRefs={{
                   inputEmailRef       : inputEmailRef,
@@ -480,9 +492,10 @@ const Game = () =>
                 selectedOriginSquare             :   selectedOriginSquare,
                 setSelectedOriginSquare          :   setSelectedOriginSquare,
                 usePythonChessForPossibleMoves   :   usePythonChessForPossibleMoves,
+                useStockfishForSuggestedMoves    :   useStockfishForSuggestedMoves,
               }}/>
           </div>
-          <div>
+          {/* <div>
             Board icons sourced from:
             <div>
               <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by apien - Flaticon</a> (Dark Knight)
@@ -493,7 +506,7 @@ const Game = () =>
               <a href="https://www.flaticon.com/free-icons/chess" title="chess icons">Chess icons created by SBTS2018 - Flaticon</a> (Light Knight)
               <a href="https://www.flaticon.com/free-icons/chess-piece" title="chess piece icons">Chess piece icons created by rizal2109 - Flaticon</a> (Light Bishop)
             </div>
-          </div>
+          </div> */}
         </div>
       : 'Imports not loaded...'
     }

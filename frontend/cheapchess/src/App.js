@@ -15,6 +15,7 @@ import getCSRFToken from './utils/api_GetCSRFToken';
 import apiGetResponseError from './utils/api_GetResponseError';
 import apiGetPossibleMoves from './utils/api_GetPossibleMoves';
 import apiGetSuggestedMove from "./utils/api_GetSuggestedMove";
+import apiGetSuggestedMoveStockfish from "./utils/api_GetSuggestedMoveStockfish";
 import './App.css';
 import { AuthProvider } from "./contexts/AuthProvider";
 import Board from './components/Board';
@@ -73,6 +74,7 @@ function App() {
     apiGetPossibleMoves              : apiGetPossibleMoves,
     apiGetResponseError              : apiGetResponseError,
     apiGetSuggestedMove              : apiGetSuggestedMove,
+    apiGetSuggestedMoveStockfish     : apiGetSuggestedMoveStockfish,
     Board                            : Board,
     Button                           : Button,
     boardDataIsInitialized           : boardDataIsInitialized,

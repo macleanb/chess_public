@@ -1,5 +1,6 @@
 /* Internal Imports */
 import getClient from "./api_GetClient";
+import getCSRFToken from "./api_GetCSRFToken";
 import getURL_Help from './getURL_Help';
 import isSquare from './square_isSquare';
 
@@ -168,6 +169,7 @@ const apiGetPossibleMoves = async (
   try {
     const url = getURL_Help();
     const client = getClient();
+    const csrfToken = getCSRFToken();
     const requestData = {
       pieceColor           :   pieceColor,
       pieceFirstMoveMade   :   pieceFirstMoveMade,
@@ -183,7 +185,9 @@ const apiGetPossibleMoves = async (
       {
         headers: {
           'Content-Type' : 'application/json',
+          "X-CSRFToken": csrfToken
         },
+        withCredentials: true,
       },
     );
 
