@@ -8,7 +8,6 @@ from openai import OpenAI
 # Internal Imports
 from .prompt_builder import build_possible_moves_prompt
 from .prompt_builder import build_suggested_move_prompt
-from .prompt_builder import make_move_for_computer_prompt
 
 class PossibleMoves(APIView):
     """

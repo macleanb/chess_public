@@ -116,17 +116,18 @@ const Form_GameMenu = ({
                   : ''
                 }
               </div>
-              <div>
-              <parentState.imports.Form.Check
-                className=""
-                type="checkbox"
-                name="playComputerCheckbox"
-                label={<b className="">Play Against Computer</b>}
-                onChange= {(e) => { 
-                  parentState.setIsComputerOpponent(e.target.checked) 
-                }}
-                checked={ parentState.isComputerOpponent ? parentState.isComputerOpponent : false }
-              />
+              <div className="d-flex justify-content-start mt-2 ms-4">
+                <parentState.imports.Form.Label className="me-4"><b>Play against computer?</b></parentState.imports.Form.Label>
+                <parentState.imports.Form.Check
+                  className=""
+                  autofocus
+                  type="checkbox"
+                  name="playComputerCheckbox"
+                  onChange= {(e) => { 
+                    parentState.setIsComputerOpponent(e.target.checked) 
+                  }}
+                  checked={ parentState.isComputerOpponent ? parentState.isComputerOpponent : false }
+                />
               </div>
             </parentState.imports.Form.Group>
             <ListOfPlayableGames parentState = { parentState } /> 
