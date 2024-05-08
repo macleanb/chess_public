@@ -381,7 +381,7 @@ const Board = (
             parentState.setMessages({ error: "Invalid or no move suggested by the AI." });
           }
         } catch (error) {
-          parentState.setMessages({ error: "Failed to make a move for the computer." });
+          console.log(error);
         }
       }
     }
