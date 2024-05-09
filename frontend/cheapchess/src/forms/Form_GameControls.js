@@ -103,12 +103,12 @@ const Form_GameControls = ({
                 />
               </div>
               {/* ChatBox inserted here */}
-              <div className="d-flex justify-content-around mt-2">
+              {/* <div className="d-flex justify-content-around mt-2">
                 <ChatBox
                     onMessageSubmit={onMessageSubmit}
                     userName={ parentState?.auth?.user?.first_name }
                 />
-              </div>
+              </div> */}
               <div className="d-flex mt-5 justify-content-around">
                 <parentState.imports.Button variant="primary" className="h-40 w-80 mt-1 mb-1" onClick={ parentState.handleQuitGameClicked }>
                   Quit Game
