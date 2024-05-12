@@ -46,6 +46,7 @@ def build_suggested_move_prompt(data):
     """ Returns a string prompt for requesting a suggested chess move """
     piece_color = data['pieceColor']
     piece_locations = data['allPieceLocations']
+    # print(f"Here is my ERROR in Prompt Builder: {piece_locations}")
 
     # Update server status to console
     print(f'Building and processing a suggested move for {piece_color}...')

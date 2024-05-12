@@ -5,20 +5,23 @@
  * @param {int} gameID
  * @param {string} requestedGameType // Should be one of the values in constants
  * @param {boolean} playComputer
+//  * @param {string} compDifficulty // Should be 4 choices: 'Easy', 'Medium', 'Hard', 'Grandmaster'
  * @returns {Object}
  */
 const createGameFetchDataObj = (
   requestedPlayerColor,
   gameID, 
   requestedGameType,
-  playComputer
+  playComputer,
+  //compDifficulty
 ) =>
 {
   return {
     requestedPlayerColor : requestedPlayerColor,
     gameID               : gameID,
     requestedGameType    : requestedGameType,
-    playComputer         : playComputer
+    playComputer         : playComputer,
+    // compDifficulty       : compDifficulty
   };
 };
 

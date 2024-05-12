@@ -24,6 +24,7 @@ const Board = (
   /// Event Handlers ///
   //////////////////////
 
+
   /* Get and display possible moves when a piece is clicked */
   const handlePieceClicked = async (e, pieceData) => {
     e.preventDefault();
@@ -180,7 +181,11 @@ const Board = (
     }
   }, [parentState?.selectedOriginSquare]);
 
-  /* Whenever possibleMoves changes, highlight appropriate squares */
+  /* Whenever possibleMoves changes AND an origin square has
+     been selected, highlight appropriate squares.  possibleMoves
+     here refers specifically to the possibleMoves provided by
+     OpenAI and does not refer to possibleMoves provided by
+     Python-Chess */
   useEffect(() => {
     /* Check to ensure the referenceSquare hasn't been deselected by
         the time a promise resolves or selected to a different square.
@@ -261,6 +266,130 @@ const Board = (
       )
     }
   }, [shakeError])
+
+
+  // useEffect(() => {
+  //   /* to see when it's computer's turn, so that it can make the api call for getting comp move*/
+  //   if (
+  //     parentState?.gameDataFromServer?.whose_turn === null &&
+  //     parentState.gameDataFromServer?.game_type === 'HUMAN V. COMPUTER'
+  //   ) {
+  //     const response = makeMove(
+  //       parentState.gameDataFromServer.id, //gameDataFromServer
+  //       null,  //selectedOriginSquare.piece
+  //       null,  // squareData.file, squareData.rank
+  //       parentState.iconData, 
+  //       parentState.setGameDataFromServer,  
+  //       parentState.setMessages
+  //     )
+        
+  //       console.log('Board.js data is being shown', 
+  //       parentState.gameDataFromServer.id, //gameDataFromServer
+  //       null,  //selectedOriginSquare.piece
+  //       null,  // squareData.file, squareData.rank
+  //       parentState.iconData, 
+  //       parentState.setGameDataFromServer,  
+  //       parentState.setMessages 
+  //       )
+  //     } 
+  // }, [parentState.gameDataFromServer?.whose_turn, parentState.gameDataFromServer?.game_type]);
+
+
+  useEffect(() => {
+    const executeComputerMove = async () => {
+      if (
+        parentState?.gameDataFromServer &&
+        parentState?.gameDataFromServer?.whose_turn === null &&
+        parentState.gameDataFromServer?.game_type === 'HUMAN V. COMPUTER'
+      ) {
+        try {
+          // const computerColor = parentState.player1Color === 'light' ? 'dark' : 'light';
+          // Step 1: Obtain necessary data
+          // const pieceColor = parentState.playerColor;
+          console.log(`Here in Board.js, ${parentState.gameDataFromServer} `)
+          //get the moving piece
+          const boardData = parentState.boardData;
+          
+
+          const allPieceLocations = parentState.imports.getAllPieceLocations(
+            parentState.boardData,
+            parentState.gameDataFromServer.player2_color
+          );
+
+          const suggestedMove = await parentState.imports.apiGetSuggestedMove(
+            parentState.gameDataFromServer.player2_color,
+            allPieceLocations
+          );
+        
+          console.log(`This is the SuGeStEd MoVe: ${suggestedMove}, ${parentState.gameDataFromServer.player2_color}`)
+          console.log(`This is the gAmE iD: ${parentState.gameDataFromServer.id}`)
+          // const moveIsValid = parentState.gameDataFromServer.possible_moves.includes(suggestedMove);
+          // console.log(`This is my moveIsValid: ${moveIsValid}`)
+          const possibleMoves = parentState.gameDataFromServer.possible_moves;
+
+          if (suggestedMove && suggestedMove.length === 2) {
+            const originSquareID = suggestedMove[0];
+            const destinationSquareID = suggestedMove[1];
+            // console.log(`This is the SuGeStEd MoVe: ${originSquareID} to ${destinationSquareID}, possibleMoves: ${parentState?.gameDataFromServer['possible_moves']}`)
+            // console.log(`Does possibleMove include originSquare? ${possibleMoves?.moves.includes(originSquareID)}`)
+    
+            // Check if the origin square is in the keys of possible moves and the destination is within the move list
+            if (possibleMoves[originSquareID] && possibleMoves[originSquareID].includes(destinationSquareID)) {
+              // console.log(parentState.gameDataFromServer.player2_color);
+              const originSquare = parentState.imports.getSquareData(
+                boardData, 
+                originSquareID, 
+                parentState.gameDataFromServer.player1_color
+              );
+              const movingPiece = originSquare.piece;
+              
+              await makeMove(
+                // console.log(`This is the SuGeStEd MoVe: ${originSquareID} to ${destinationSquareID}`),
+                parentState.gameDataFromServer.id,
+                movingPiece.id,
+                destinationSquareID,
+                parentState.iconData,
+                parentState.setGameDataFromServer,
+                parentState.setMessages
+              );
+            } else if (possibleMoves) {
+              // Select a random move if the suggested one is invalid
+              const validOrigins = Object.keys(possibleMoves);
+              const randomOrigin = validOrigins[Math.floor(Math.random() * validOrigins.length)];
+              const randomMove = possibleMoves[randomOrigin][Math.floor(Math.random() * possibleMoves[randomOrigin].length)];
+              console.log(`randomOrigin`, randomOrigin)
+              console.log(`randomMove`, randomMove)
+              const originSquare = parentState.imports.getSquareData(
+                boardData, 
+                randomOrigin, 
+                parentState.gameDataFromServer.player1_color
+              );
+              const movingPiece = originSquare.piece;
+              console.log(`This is my OrIgInSquaRe `, originSquare); 
+
+              await makeMove(
+                // console.log(`This is the rAnDom move: ${randomOrigin} to ${randomMove}`),
+                parentState.gameDataFromServer.id,
+                movingPiece.id,
+                randomMove,
+                parentState.iconData,
+                parentState.setGameDataFromServer,
+                parentState.setMessages
+              );
+            }
+          } else {
+            parentState.setMessages({ error: "Invalid or no move suggested by the AI." });
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+    
+    executeComputerMove();
+  }, [parentState?.gameDataFromServer, parentState?.setGameDataFromServer, parentState?.setMessages]);
+
+
 
   //////////////
   /// Render ///

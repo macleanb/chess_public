@@ -134,7 +134,7 @@ const FormManager = ({
       selectedColor,
       null, // GameID
       parentState.imports.constants.GAME_FETCH_NEW,
-      false // playComputer
+      parentState.isComputerOpponent // playComputer
     );
 
     parentState.setGameFetchData(gameFetchDataObj);

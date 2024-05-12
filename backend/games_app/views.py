@@ -41,17 +41,63 @@ class GamesView(APIView):
         """
         # user_id = request.user.id
         updated_data = request.data.copy()
-
+        play_computer = updated_data['play_computer'] #Has either 'true' or false' string value
+        # game_status = updated_data['game_status']
+        # print(f"Here in POST, play_computer == 'true' {play_computer == 'true'}")
+        # print(f"Here in POST, play_computer is a string {isinstance(play_computer, str)}")
+        # player1 = updated_data['player1']
+        # player2 = updated_data['player2']
+        player1_color = updated_data['player1_color']
+        
+        print("The backend receives the data") 
+        print(f"player1_color: {player1_color}, play_computer: {play_computer}")
+        print(updated_data)
+        
         # Couldn't get this to work with nested serializer
         #updated_data['player1'] = request.user
+        # updated_data['player1'] = request.user.id
+        # updated_data['player2'] = None  #Possibly make this Computer?
+
+        # if play_computer == 'true':
+        #     updated_data['game_type'] = 'HUMAN V. COMPUTER'
+        # else:
+        #     updated_data['game_type'] = 'HUMAN V. HUMAN'  
         updated_data['player1'] = request.user.id
-        updated_data['player2'] = None
 
         player1_color = updated_data['player1_color']
-        if player1_color == 'light':
-            updated_data['whose_turn'] = request.user.id
+        if play_computer == 'true':
+            updated_data['game_status'] = 'ACTIVE'
+            updated_data['game_type'] = 'HUMAN V. COMPUTER'
+            updated_data['started_datetime'] = timezone.now()
         else:
-            updated_data['whose_turn'] = None
+            updated_data['game_type'] = 'HUMAN V. HUMAN'
+
+        # Now handle color assignment and whose turn 
+        if player1_color == 'light' and play_computer == 'true':
+            updated_data['player2_color'] = 'dark'
+            updated_data['whose_turn'] = request.user.id
+        elif player1_color == 'dark' and play_computer == 'true':
+            updated_data['player2_color'] = 'light'
+        elif player1_color == 'light' and play_computer == 'false':
+            updated_data['player2_color'] = 'dark'
+            updated_data['whose_turn'] = request.user.id
+        elif player1_color == 'dark' and play_computer == 'false':
+            updated_data['player2_color'] = 'light'
+
+
+        print("The backend is SAVING this data") 
+        print(f"player1_color: {player1_color}, play_computer: {play_computer}, updated_data['game_type']")
+        print(updated_data)
+    
+        #Is it player1/light's turn?
+        # if player1_color == 'light' and updated_data['whose_turn'] == None:
+        #     updated_data['whose_turn'] = request.user.id
+        # elif player1_color == 'dark' and updated_data['whose_turn'] == None:
+        #     updated_data['whose_turn'] = None
+        # elif player1_color == 'light' and updated_data['whose_turn'] == request.user.id:
+        #     updated_data['whose_turn'] = request.user.id
+        # else:
+        #     updated_data['whose_turn'] = None
 
         # serializer = GameSerializer(data=request.data)
         serializer = GameSerializer(data=updated_data)
@@ -115,7 +161,14 @@ class GameView(APIView):
         """
         try:
             put_data = request.data.copy()
-            updated_game = Game.objects.get(pk=game_id) 
+
+            # updated_game = Game.objects.get(pk=game_id)
+            updated_game = Game.objects.get(id=game_id)
+            print("Received game_id:", game_id)
+            # Accounts for type of game: PvP or PvC?
+            game_type = updated_game.game_type
+
+            piece_id = put_data['piece_id']
             destination_square_id = put_data['destination_square_id']
 
             # now handle captured piece
@@ -153,10 +206,18 @@ class GameView(APIView):
 
             # Update the moves_made field
             updated_game.moves_made['moves'].append(move_record_dict)
-
-            if updated_game.whose_turn == updated_game.player1:
+            #PvP and Player 1 just moved
+            if game_type == 'HUMAN V. HUMAN' and updated_game.whose_turn == updated_game.player1:
                 updated_game.whose_turn = updated_game.player2
-            else:
+            #PvP and Player 2 just moved
+            elif game_type == 'HUMAN V. HUMAN' and updated_game.whose_turn == updated_game.player2:
+                updated_game.whose_turn = updated_game.player1
+            #PvC and Player 1 (Human) just moved
+            elif game_type == 'HUMAN V. COMPUTER' and updated_game.whose_turn == updated_game.player1:
+                updated_game.whose_turn = None
+            #PvC and Player 2 (Computer) just moved
+            # Or elif game_type == 'HUMAN V. COMPUTER' and updated_game.whose_turn == None:
+            else: 
                 updated_game.whose_turn = updated_game.player1
             updated_game.save()
 
@@ -198,7 +259,8 @@ class GameView(APIView):
         """
         try:
             game = Game.objects.get(id=game_id)
-
+            # print("Received game_id:", game_id)
+            # print("")
             # Create pieces, add icons, and pass new_game to their game fields
             # Serialize each piece, 
             # add each piece to pieces dict (keyed by square i.e. 'a1')
@@ -231,11 +293,6 @@ class GameView(APIView):
         """
         try:
             game = Game.objects.get(id=game_id, player2__isnull=True)
-            # if game.player1 == request.user.id:
-            # if game.player1 == request.user:
-                # return Response({'error': 'You are already player 1 in this game.'}, status=status.HTTP_400_BAD_REQUEST)
-                # which shouldn't happen due to filtering playable games where user is player 1
-
             game.player2 = request.user
             game.player2_color = 'light' if game.player1_color == 'dark' else 'dark'
             game.started_datetime = timezone.now()
@@ -279,8 +336,8 @@ class PlayableGamesView(APIView):
         Method for getting all playable Game objects
         """
         try:
-            # Get all open games that do not have this user as player 1
-            open_games = Game.objects.filter(player2 = None)#.exclude(player1 = request.user.id)
+            # Get all open games that do not have this user as player 1 AND is PvP
+            open_games = Game.objects.filter(player2 = None, game_type = 'HUMAN V. HUMAN')#.exclude(player1 = request.user.id)
 
             # Get all games where user is either player1 or player2
             user_games_as_player_1 = Game.objects.filter(player1 = request.user.id)

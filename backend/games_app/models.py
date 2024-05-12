@@ -97,7 +97,7 @@ class Game(models.Model):
         default='not_started'
         )
 
-    game_type = models.CharField( # for future use
+    game_type = models.CharField( # for PvP or PvC
         max_length=200,
         blank=True,
         null=True
@@ -116,9 +116,11 @@ class Game(models.Model):
 
     def __str__(self):
         return f'Game(ID: {self.id} ' \
+               f'Game Type: {self.game_type}' \
                f'Player 1: {self.player1} ' \
                f'Player 2: {self.player2}) ' \
-               f'Status: {self.game_status} '
+               f'Status: {self.game_status} ' 
+               
 
 
 class Piece(models.Model):
